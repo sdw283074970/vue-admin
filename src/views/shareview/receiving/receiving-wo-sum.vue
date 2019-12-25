@@ -1,0 +1,131 @@
+<template>
+  <div>
+    <h1>Receiving Work Order Page</h1>
+    <el-button @click="btnBackClicked">Back</el-button>
+    <el-button class="gb-button" :disabled="step<5" @click="onCommingSoonClicked">Download WO</el-button>
+    <el-button class="gb-button" :disabled="step<7" @click="onCommingSoonClicked">Download Receipt</el-button>
+    <div style="margin-top:20px">
+      <el-steps :active="step" finish-status="success" align-center>
+        <el-step title="Step1: New Order" description="Waiting for uploading" />
+        <el-step title="Step2: Uploading" description="Waiting for drafting" />
+        <el-step title="Step3: Draft" description="Waiting for pushing" />
+        <el-step title="Step4: Pushed" description="Waiting for arriving" />
+        <el-step title="Step5: Arrived" description="Waiting for receiving" />
+        <el-step title="Step6: Received" description="Waiting for processing" />
+        <el-step title="Step7: Processing" description="Waiting for registering" />
+        <el-step title="Step8: Registered" description="Waiting for allocating" />
+        <el-step title="Step9: Allocated" description="Waiting for shipping" />
+        <!-- <el-step title="Step8: Cleared Out"></el-step> -->
+      </el-steps>
+    </div>
+    <div>
+      <h2>Summary</h2>
+      <el-form label-position="left" inline class="gb-table-expand">
+        <el-form-item label="Container #">
+          <span>{{ masterOrder.container }}</span>
+        </el-form-item>
+        <el-form-item label="Grand #">
+          <span>{{ masterOrder.grandNumber }}</span>
+        </el-form-item>
+        <el-form-item label="Customer Code">
+          <span>{{ masterOrder.customerCode }}</span>
+        </el-form-item>
+        <el-form-item label="Sub-customer">
+          <span>{{ masterOrder.subCustomer }}</span>
+        </el-form-item>
+        <el-form-item label="Inbound Type">
+          <span>{{ masterOrder.inboundType }}</span>
+        </el-form-item>
+        <el-form-item label="Unloading Type">
+          <span>{{ masterOrder.unloadingType }}</span>
+        </el-form-item>
+        <el-form-item label="Storage Type">
+          <span>{{ masterOrder.storageType }}</span>
+        </el-form-item>
+        <el-form-item label="Palletizing">
+          <span>{{ masterOrder.palletizing }}</span>
+        </el-form-item>
+        <el-form-item label="Carrier">
+          <span>{{ masterOrder.carrier }}</span>
+        </el-form-item>
+        <el-form-item label="Container Size">
+          <span>{{ masterOrder.containerSize }}</span>
+        </el-form-item>
+        <el-form-item label="Original Plts">
+          <span>{{ masterOrder.originalPlts }}</span>
+        </el-form-item>
+        <el-form-item label="Dock #">
+          <span>{{ masterOrder.dockNumber }}</span>
+        </el-form-item>
+        <el-form-item label="Lumper">
+          <span>{{ masterOrder.lumper }}</span>
+        </el-form-item>
+        <el-form-item label="Is Damaged">
+          <span>{{ masterOrder.isDamaged }}</span>
+        </el-form-item>
+        <el-form-item label="Verified By">
+          <span>{{ masterOrder.verifiedBy }}</span>
+        </el-form-item>
+        <el-form-item label="Quick Instruction">
+          <span>{{ masterOrder.instruction }}</span>
+        </el-form-item>
+        <el-form-item label="ETA">
+          <span>{{ masterOrder.eta }}</span>
+        </el-form-item>
+        <el-form-item label="Place Date">
+          <span>{{ transferDate(masterOrder.pushTime) }}</span>
+        </el-form-item>
+        <el-form-item label="Inbound Date">
+          <span>{{ transferDate(masterOrder.inboundDate) }}</span>
+        </el-form-item>
+        <el-form-item label="Start Date">
+          <span>{{ transferDate(masterOrder.unloadStartTime) }}</span>
+        </el-form-item>
+        <el-form-item label="Finish Date">
+          <span>{{ transferDate(masterOrder.unloadFinishTime) }}</span>
+        </el-form-item>
+        <el-form-item label="Out Date">
+          <span>{{ transferDate(masterOrder.outTime) }}</span>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
+</template>
+
+<script>
+/* eslint-disable vue/require-default-prop */
+/* eslint-disable vue/require-prop-types */
+
+export default {
+  props: {
+    masterOrder: {},
+    step: Number,
+    orderDetails: Array
+  },
+  data() {
+    return {
+    }
+  },
+  mounted() {
+
+  },
+  methods: {
+    transferDate: function(date) {
+      return date === undefined ? '' : (date.substring(0, 4) === 1900 ? '-' : date.substring(0, 10))
+    },
+    btnBackClicked: function() {
+      this.$router.go(-1)
+    },
+    onCommingSoonClicked() {
+      this.$message({
+        message: 'Feature comming soon',
+        type: 'warning'
+      })
+    }
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+
+</style>

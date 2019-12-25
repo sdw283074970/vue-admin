@@ -1,0 +1,172 @@
+<template>
+  <div>
+    <!-- <h2>{{ isEdit ? 'Create New Shipping Order' : 'Edit Shipping Order' }}</h2> -->
+    <el-form ref="form-required" :rules="rules" :model="formData" label-width="150px">
+      <el-form-item label="Ship Order #" prop="shipOrderNumber">
+        <el-input v-model="formData.shipOrderNumber" :disabled="formData.status=='Picking'||formData.status=='New Created'?false:true" />
+      </el-form-item>
+      <el-form-item label="Customer Code" prop="customerCode">
+        <el-select
+          v-model="formData.customerCode"
+          filterable
+          placeholder="Input key word"
+        >
+          <el-option
+            v-for="item in customerCodeOptions"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Order Type">
+        <el-radio-group v-model="formData.orderType">
+          <el-radio label="Standard" />
+          <el-radio label="Ecommerce" />
+          <el-radio label="LooseCarton" />
+          <el-radio label="Adjustment" />
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="ETS" prop="ets">
+        <el-col :span="7">
+          <el-date-picker v-model="formData.ets" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width: 100%;" />
+        </el-col>
+        <el-col class="line" :span="1">-</el-col>
+        <el-col :span="7">
+          <el-input v-model="formData.etsTimeRange" placeholder="Input Time Range" style="width: 100%;" />
+        </el-col>
+      </el-form-item>
+      <el-form-item label="Invoice Status">
+        <el-radio-group v-model="formData.invoiceStatus">
+          <el-radio label="Await" />
+          <el-radio label="Closed" />
+        </el-radio-group>
+      </el-form-item>
+    </el-form>
+    <div>
+      <el-form ref="form" :model="formData" label-width="150px" style="float:left">
+        <el-form-item label="POD Status">
+          <el-switch
+            v-model="formData.podStatus"
+            style="margin-left:10px"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="Back"
+            inactive-text="Not Back"
+          />
+        </el-form-item>
+        <el-form-item label="Destination">
+          <el-select
+            v-model="formData.destination"
+            filterable
+            allow-create
+            default-first-option
+            placeholder="Input key word"
+          >
+            <el-option
+              v-for="item in destinationOptions"
+              :key="item.warehouseCode"
+              :label="item.warehouseCode"
+              :value="item.warehouseCode"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Pick Reference">
+          <el-input v-model="formData.pickReference" />
+        </el-form-item>
+        <el-form-item label="Carrier">
+          <el-input v-model="formData.carrier" />
+        </el-form-item>
+        <el-form-item label="Batch #">
+          <el-input v-model="formData.batchNumber" />
+        </el-form-item>
+      </el-form>
+      <el-form ref="form" :model="formData" label-width="150px" style="float:right;margin-right:30px">
+        <el-form-item label="BOL #">
+          <el-input v-model="formData.bolNumber" />
+        </el-form-item>
+        <el-form-item label="Pick #">
+          <el-input v-model="formData.pickNumber" />
+        </el-form-item>
+        <el-form-item label="Sub-customer">
+          <el-input v-model="formData.subCustomer" />
+        </el-form-item>
+        <el-form-item label="PO #">
+          <el-input v-model="formData.purchaseOrderNumber" />
+        </el-form-item>
+        <el-form-item label="Quick Instruction">
+          <el-input v-model="formData.instruction" />
+        </el-form-item>
+      </el-form>
+    </div>
+    <div style="margin-bottom:20px;margin-left:40px">
+      <el-button v-if="!isEdit" type="primary" @click="createHandler">Create</el-button>
+      <el-button v-if="isEdit" type="primary" @click="updateHandler">Update</el-button>
+      <el-button @click="onCancelClicked">Cancel</el-button>
+    </div>
+  </div>
+</template>
+
+<script>
+/* eslint-disable */
+
+export default {
+  props: {
+    formData: Object,
+    shipOrderStatus: String,
+    isEdit: Boolean,
+    customerCodeOptions: Array,
+    destinationOptions: Array
+  },
+  data(){
+    return{
+        loading: false,
+        rules: {
+          shipOrderNumber: [
+            { required: true, message: 'Please input ship order number', trigger: 'change' }
+          ],
+          customerCode: [
+            { required: true, message: 'Please select customer code', trigger: 'change' }
+          ],
+          ets: [
+            { required: true, message: 'Please select a date', trigger: 'change' }
+          ]
+        }
+    }
+  },
+  methods:{
+      createHandler: function(){
+        this.$refs['form-required'].validate((valid) => {
+            if (valid) {
+                this.$emit('onCreateConfirmedClicked');
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
+      },
+      updateHandler: function(){
+        this.$refs['form-required'].validate((valid) => {
+            if (valid) {
+                this.$emit('onEditConfirmedClicked', this.formData.id);
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
+      },
+      onCancelClicked: function(){
+          this.$emit('onCancelClicked')
+      }
+  },
+  mounted() {
+
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+    .input-bar{
+      text-align: right
+    }
+</style>
