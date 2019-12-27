@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     transferDate: function(date) {
-      return date === undefined ? '' : (date.substring(0, 4) === 1900 ? '-' : date.substring(0, 10))
+      return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
     },
     btnBackClicked: function() {
       this.$router.go(-1)

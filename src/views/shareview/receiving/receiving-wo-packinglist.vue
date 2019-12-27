@@ -16,6 +16,7 @@
     <el-table
       ref="table"
       :data="orderDetails"
+      show-summary
       stripe
       border
       style="width: 100%"

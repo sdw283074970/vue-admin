@@ -41,7 +41,7 @@
       inactive-text="Plt View"
     />
     <location-ctns :is-ctn-view="isCtnView" :fba-ctn-inventories="inventoryResults.fbaCtnInventories" @onCtnHistoryClicked="onCtnHistoryClicked" />
-    <location-plts :is-ctn-view="isCtnView" :fba-plt-inventories="inventoryResults.fbaPalletGroupInventories" />
+    <location-plts :is-ctn-view="isCtnView" :fba-plt-inventories="inventoryResults.fbaPalletGroupInventories" @onCtnHistoryClicked="onCtnHistoryClicked" />
     <el-dialog
       title="Ctn Outbound History"
       :visible.sync="ctnHistoryVisible"

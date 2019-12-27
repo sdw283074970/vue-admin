@@ -34,14 +34,14 @@ export function getPickDetails(id) {
 
 export function getPltsInventory(id, container, sku, amzRef, warehouseCode) {
   return request({
-    url: 'api/fba/fbainventory/?shipOrderId=' + id + '&container=' + container + '&sku=' + sku + '&amzRef=' + amzRef + '&warehouseCode=' + warehouseCode + '&inventoryType=Pallet',
+    url: 'api/fba/fbainventory/?shipOrderId=' + id + '&container=' + encodeURIComponent(container) + '&sku=' + encodeURIComponent(sku) + '&amzRef=' + encodeURIComponent(amzRef) + '&warehouseCode=' + encodeURIComponent(warehouseCode) + '&inventoryType=Pallet',
     method: 'get'
   })
 }
 
 export function getCtnsInventory(id, container, sku, amzRef, warehouseCode) {
   return request({
-    url: 'api/fba/fbainventory/?shipOrderId=' + id + '&container=' + container + '&sku=' + sku + '&amzRef=' + amzRef + '&warehouseCode=' + warehouseCode + '&inventoryType=Carton',
+    url: 'api/fba/fbainventory/?shipOrderId=' + id + '&container=' + encodeURIComponent(container) + '&sku=' + encodeURIComponent(sku) + '&amzRef=' + encodeURIComponent(amzRef) + '&warehouseCode=' + encodeURIComponent(warehouseCode) + '&inventoryType=Carton',
     method: 'get'
   })
 }
@@ -114,7 +114,7 @@ export function resetInstructions(shipOrderId) {
 
 export function createNewInstruction(shipOrderNumber, description, isChargingItem) {
   return request({
-    url: 'api/fbainvoicedetail/?reference=' + shipOrderNumber + '&invoiceType=ShipOrder&description=' + description + '&isChargingItem=' + isChargingItem,
+    url: 'api/fbainvoicedetail/?reference=' + encodeURIComponent(shipOrderNumber) + '&invoiceType=ShipOrder&description=' + encodeURIComponent(description) + '&isChargingItem=' + isChargingItem,
     method: 'post'
   })
 }
@@ -128,14 +128,14 @@ export function deleteInstruction(id) {
 
 export function updateInstruction(id, description, isChargingItem) {
   return request({
-    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + description + '&isChargingItem=' + isChargingItem + '&operation=UpdateInstruction',
+    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=' + isChargingItem + '&operation=UpdateInstruction',
     method: 'put'
   })
 }
 
 export function resultInstruction(id, description) {
   return request({
-    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + description + '&isChargingItem=true&operation=UpdateResult',
+    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=true&operation=UpdateResult',
     method: 'put'
   })
 }

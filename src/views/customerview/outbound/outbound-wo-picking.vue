@@ -13,6 +13,7 @@
     <el-table
       ref="table"
       :data="pickDetails"
+      show-summary
       stripe
       border
       style="width: 100%"
