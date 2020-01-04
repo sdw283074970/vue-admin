@@ -18,6 +18,12 @@
       border
       style="width: 100%"
     >
+      <el-table-column
+        sortable
+        prop="id"
+        label="Id"
+        width="60"
+      />
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table
@@ -74,7 +80,6 @@
               label="Picking Ctns"
               width="120"
             />
-            />
             <el-table-column
               prop="labelFileNumbers"
               label="Label Files"
@@ -91,8 +96,8 @@
                     Operations<i class="el-icon-arrow-down el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="onUploadClicked(scope.row.id)">Upload Label Files</el-dropdown-item>
-                    <el-dropdown-item @click.native="onDownloadClicked(scope.row.id)">Download Label Files</el-dropdown-item>
+                    <el-dropdown-item @click.native="onUploadClicked(scope.row.fbaPickDetailCartonId)">Upload Label Files</el-dropdown-item>
+                    <el-dropdown-item @click.native="onDownloadClicked(scope.row.fbaPickDetailCartonId)">Download Label Files</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </template>
@@ -100,12 +105,6 @@
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column
-        sortable
-        prop="id"
-        label="Id"
-        width="60"
-      />
       <el-table-column
         prop="container"
         label="Container #"
@@ -222,6 +221,7 @@
       <generic-labelfiles
         :label-files="labelFiles"
         :order-detail-id="orderDetailId"
+        :fba-pick-detail-carton-id="fbaPickDetailCartonId"
         @onLabelDeleteSuccess="onLabelDeleteSuccess"
       />
     </el-dialog>
@@ -230,8 +230,8 @@
 
 <script>
 /* eslint-disable */
-import { getSO, putbackPickDetail, getUploadLabelAction, getOrderDetailId } from '@/api/shipping'
-import { getLabelFileList, downloadFile } from '@/api/receiving'
+import { getSO, putbackPickDetail, getUploadLabelAction, getLabelFileList, downloadFile, getOrderDetailId } from '@/api/shipping'
+// import {  } from '@/api/receiving'
 
 export default {
   props: {
@@ -271,7 +271,8 @@ export default {
           uploadAction: '',
           labelFiles: [],
           orderDetailId: 0,
-          cartonId: 0
+          cartonId: 0,
+          fbaPickDetailCartonId: 0
       };
   },
   methods:{
@@ -304,26 +305,25 @@ export default {
     },
     onUploadClicked(id) {
       this.uploadVisible = true;
+      this.fbaPickDetailCartonId = id;
       this.uploadAction = getUploadLabelAction(id);
     },
     onDownloadClicked(id) {
       this.labelFilesVisible = true;
-      this.cartonId = id;
+      this.fbaPickDetailCartonId = id;
 
-      getOrderDetailId(id).then(body => {
-        this.orderDetailId = body.data.orderDetailId;
-        getLabelFileList(body.data.orderDetailId).then(body => {
-          this.labelFiles = body.data;
-        }).catch(e => {
-          alert(JSON.stringify(e))
-        });
-      })
+      getLabelFileList(id).then(body => {
+        this.labelFiles = body.data;
+      }).catch(e => {
+        alert(JSON.stringify(e))
+      });
     },
     uploadSuccessHandler(response, file, fileList) {
       let obj = {}
+      let that = this
       this.pickDetails.forEach(function(x){
         obj = x.fbaCartonLocations.find(function (c) {
-          return (c.id === this.cartonId)
+          return (c.fbaPickDetailCartonId === that.fbaPickDetailCartonId)
         })
       })
 
@@ -334,11 +334,12 @@ export default {
           center: true
       })
     },
-    onLabelDeleteSuccess(orderDetailId) {
+    onLabelDeleteSuccess() {
       let obj = {}
+      let that = this
       this.pickDetails.forEach(function(x){
         obj = x.fbaCartonLocations.find(function (c) {
-          return (c.id === 133)
+          return (c.fbaPickDetailCartonId === that.fbaPickDetailCartonId)
         })
       })
 

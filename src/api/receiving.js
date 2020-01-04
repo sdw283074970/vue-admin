@@ -190,3 +190,24 @@ export function CallbackWO(id) {
     method: 'put'
   })
 }
+
+export function getEfiles(reference) {
+  return request({
+    url: '/api/fba/FBAEfolder/?reference=' + reference + '&orderType=MasterOrder',
+    method: 'get'
+  })
+}
+
+export function discardFile(id) {
+  return request({
+    url: '/api/fba/fbaefolder/?fileId=' + id,
+    method: 'put'
+  })
+}
+
+export function downloadEfile(id) {
+  return request({
+    url: '/api/fba/fbaefolder/?fileId=' + id,
+    method: 'get'
+  })
+}

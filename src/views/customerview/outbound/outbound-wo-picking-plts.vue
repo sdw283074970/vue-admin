@@ -1,11 +1,10 @@
-/* eslint-disable no-array-constructor */
 <template>
   <div>
     <label>Container: </label><el-input v-model="container" placeholder="Container No." />
     <label>SKU: </label><el-input v-model="sku" placeholder="SKU No." />
     <label>Amz Ref: </label><el-input v-model="amzRef" placeholder="Amz Ref Id" />
     <label>warehouse: </label><el-input v-model="warehouseCode" placeholder="Warehouse Code" />
-    <el-button type="primary" @click="searchHandler()">Search</el-button>
+    <el-button type="primary" :loading="loading" @click="searchHandler()">Search</el-button>
     <el-table
       ref="pick-table-plts"
       :data="pltsInventory"
@@ -173,7 +172,8 @@ export default {
       warehouseCode: '',
       inventoryPlts: 0,
       newPlts: 0,
-      tableHight: window.innerHeight * 0.7
+      tableHight: window.innerHeight * 0.7,
+      loading: false
     }
   },
   mounted() {
@@ -227,8 +227,20 @@ export default {
       })
     },
     searchHandler() {
+      this.loading = true
       getPltsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode).then(body => {
         this.pltsInventory = body.data
+        this.loading = false
+        this.$message({
+          message: 'Search complete',
+          type: 'success'
+        }).catch(e => {
+          this.$message({
+            message: 'Search failed',
+            type: 'warning'
+          })
+          this.loading = false
+        })
       })
     }
   }

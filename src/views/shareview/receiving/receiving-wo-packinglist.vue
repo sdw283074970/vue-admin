@@ -318,10 +318,19 @@ export default {
       // let index = this.orderDetails.map(x => x.id).indexOf(response.orderDetailId);
       let obj = this.orderDetails.find(function(x) {return x.id == response.orderDetailId});
       obj.labelFileNumbers += 1;
+      this.$message({
+          message: 'Upload success',
+          type: 'success',
+          center: true
+      })
     },
     onLabelDeleteSuccess(orderDetailId) {
       let obj = this.orderDetails.find(function(x) {return x.id == orderDetailId});
       obj.labelFileNumbers -= 1;
+      this.$message({
+          message: 'Delete success',
+          type: 'success'
+      })
     },
     onCommingSoonClicked() {
         this.$message({

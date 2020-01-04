@@ -7,6 +7,7 @@
       :loading="loading"
       @onEditClicked="onEidtClicked"
       @onCreateClicked="onCreateClicked"
+      @onEfilesClicked="onEfilesClicked"
       @onSearchChanged="onSearchChanged"
     />
     <div>
@@ -29,12 +30,27 @@
         />
       </el-dialog>
     </div>
+    <div>
+      <el-dialog
+        title="Manage Efiles"
+        :visible.sync="efileVisible"
+        width="800px"
+        top="5vh"
+        :lock-scroll="false"
+      >
+        <generic-efiles
+          :efiles="efiles"
+          :reference="reference"
+          :order-type="orderType"
+        />
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo } from '@/api/receiving'
+import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles } from '@/api/receiving'
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 
 export default {
@@ -50,6 +66,10 @@ export default {
             filteredData: [],
             dialogFormVisible : false,
             shipOrderStatus: '',
+            efileVisible: false,
+            efiles: [],
+            reference: '',
+            orderType: 'MasterOrder',
             formData: {
               id : 0,
               status: '',
@@ -79,7 +99,8 @@ export default {
     },
     components:{
         "receiving-index-edit-form": () => import('@/views/officeview/receiving/index-edit-form'),
-        "receiving-index-table": () => import('@/views/officeview/receiving/index-table')
+        "receiving-index-table": () => import('@/views/officeview/receiving/index-table'),
+        "generic-efiles": () => import('@/views/shareview/generic/generic-efiles')
     },
     watch:{
       search: function(val, oldVal){
@@ -159,6 +180,13 @@ export default {
         getReceivingOrderInfo(id).then(body => {
           this.formData = body.data
         })
+      },
+      onEfilesClicked(reference) {
+        this.efileVisible = true;
+        this.reference = reference;
+        getEfiles(reference).then(body => {
+          this.efiles = body.data
+        })
       }
     },
     mounted() {
@@ -173,13 +201,11 @@ export default {
                 //     var newObj = {"text" : element.customerCode, "value" : element.customerCode};
                 //     this.customerCodeFilter.push(newObj);
                 // });
-            }
-        ),
-      getCustomerCodes().then(
-        body => {
-          this.customerCodeOptions = body.data
-        }
-      )
+        }),
+        getCustomerCodes().then(
+          body => {
+            this.customerCodeOptions = body.data
+        })
     }
 }
 </script>

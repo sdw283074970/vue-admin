@@ -170,7 +170,7 @@
         label="operation"
       >
         <template slot-scope="scope">
-          <el-button @click="editHandler(scope.row.id, scope.$index)">eFiles</el-button>
+          <el-button @click="onEfilesClicked(scope.row.container)">eFiles</el-button>
           <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
           <el-button @click="woHandler(scope.row.id)">WO</el-button>
           <el-button type="danger" plain @click="editHandler(scope.row.id, scope.$index)">Delete</el-button>
@@ -236,7 +236,7 @@ export default {
         this.$emit('onCreateClicked');
       },
       woHandler: function(id){
-        this.$router.push({path: '/shipping/shipping-wo/' + id});
+        this.$router.push({path: '/receiving/receiving-wo/' + id});
       },
       changeStatusColor: function(status) {
         if (status == 'New Created')
@@ -255,6 +255,9 @@ export default {
             return 'darkcyan';
         else
             return 'black';
+      },
+      onEfilesClicked(reference) {
+        this.$emit('onEfilesClicked', reference)
       }
     },
     mounted() {

@@ -168,13 +168,27 @@ export function submitShipOrder(id) {
   })
 }
 
-export function getUploadLabelAction(id) {
-  return baseURL + '/api/fba/FBAPickDetail/?cartonId=' + id
-}
-
 export function getOrderDetailId(id) {
   return request({
     url: '/api/FBAPickDetail/?cartonId=' + id,
     method: 'get'
+  })
+}
+
+export function getUploadLabelAction(id) {
+  return baseURL + '/api/fba/FBAPickDetail/?pickDetailCartonId=' + id
+}
+
+export function getLabelFileList(id) {
+  return request({
+    url: '/api/fba/FBAPickDetail/?pickDetailCartonId=' + id + '&operation=Labels',
+    method: 'get'
+  })
+}
+
+export function deleteLabelFile(id, fileName) {
+  return request({
+    url: '/api/fba/FBAPickDetail/?pickDetailCartonId=' + id + '&fileName=' + encodeURIComponent(fileName),
+    method: 'delete'
   })
 }

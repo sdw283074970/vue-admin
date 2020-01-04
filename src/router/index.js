@@ -226,7 +226,7 @@ export const asyncRoutes = [
       {
         path: '/reports/inventory/index',
         name: 'InventoryReport',
-        component: () => import('@/views/officeview/reports/inventory/index'),
+        component: () => import('@/views/shareview/inventory/location'),
         meta: { title: 'Inventory Report', icon: 'table' }
       },
       {
@@ -310,7 +310,7 @@ export const asyncRoutes = [
     path: '/MyInventory',
     component: Layout,
     name: 'My Inventory',
-    meta: { title: 'My Inventory', icon: 'table', role: ['customer'] },
+    meta: { title: 'My Inventory', icon: 'table', role: ['office', 'customer'] },
     children: [
       {
         path: 'location',

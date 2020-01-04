@@ -8,15 +8,22 @@
       style="width:250px"
       size="large"
       placeholder="Search..."
+      disabled=""
     />
     <el-table
       ref="table"
       :data="pickDetails"
-      stripe
       show-summary
+      stripe
       border
       style="width: 100%"
     >
+      <el-table-column
+        sortable
+        prop="id"
+        label="Id"
+        width="60"
+      />
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table
@@ -29,7 +36,7 @@
               sortable
               prop="id"
               label="Ctn Id"
-              width="80"
+              width="100"
             />
             <el-table-column
               sortable
@@ -73,15 +80,31 @@
               label="Picking Ctns"
               width="120"
             />
+            <el-table-column
+              prop="labelFileNumbers"
+              label="Label Files"
+              width="120"
+            />
+            <el-table-column
+              prop="operation"
+              label="operation"
+              width="130"
+            >
+              <template slot-scope="scope">
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    Operations<i class="el-icon-arrow-down el-icon--right" />
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="onUploadClicked(scope.row.fbaPickDetailCartonId)">Upload Label Files</el-dropdown-item>
+                    <el-dropdown-item @click.native="onDownloadClicked(scope.row.fbaPickDetailCartonId)">Download Label Files</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </template>
+            </el-table-column>
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column
-        sortable
-        prop="id"
-        label="Id"
-        width="60"
-      />
       <el-table-column
         prop="container"
         label="Container #"
@@ -140,13 +163,13 @@
         width="130"
       >
         <template slot-scope="scope">
-          <el-dropdown v-if="operationVisible">
+          <el-dropdown>
             <span class="el-dropdown-link">
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="pickVisible" @click.native="putbackHandler(scope.row.id)">Put back</el-dropdown-item>
-              <el-dropdown-item>Adjust</el-dropdown-item>
+              <el-dropdown-item disabled>Adjust</el-dropdown-item>
+              <el-dropdown-item :disabled="step>1" @click.native="putbackHandler(scope.row.id)">Put back</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -170,12 +193,45 @@
     >
       <picking-ctns />
     </el-dialog>
+    <el-dialog
+      title="Upload Label Files"
+      :visible.sync="uploadVisible"
+      width="400px"
+      :lock-scroll="false"
+    >
+      <el-upload
+        class="upload-demo"
+        drag
+        :on-success="uploadSuccessHandler"
+        :action="uploadAction"
+        :multiple="false"
+      >
+        <i class="el-icon-upload" />
+        <div class="el-upload__text">Drag file here or <em>Click</em> to upload</div>
+        <div slot="tip" class="el-upload__tip">Only accept zip /rar /pdf format files which less than 1 MB</div>
+        <div slot="tip" class="el-upload__tip">One file per time</div>
+      </el-upload>
+    </el-dialog>
+    <el-dialog
+      title="Manage Label Files"
+      :visible.sync="labelFilesVisible"
+      width="800px"
+      :lock-scroll="false"
+    >
+      <generic-labelfiles
+        :label-files="labelFiles"
+        :order-detail-id="orderDetailId"
+        :fba-pick-detail-carton-id="fbaPickDetailCartonId"
+        @onLabelDeleteSuccess="onLabelDeleteSuccess"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { getSO, putbackPickDetail } from '@/api/shipping'
+import { getSO, putbackPickDetail, getUploadLabelAction, getLabelFileList, downloadFile, getOrderDetailId } from '@/api/shipping'
+// import {  } from '@/api/receiving'
 
 export default {
   props: {
@@ -194,7 +250,8 @@ export default {
   },
   components:{
     "picking-plts": () => import('@/views/officeview/shipping/shipping-wo-picking-plts'),
-    "picking-ctns": () => import('@/views/officeview/shipping/shipping-wo-picking-ctns')
+    "picking-ctns": () => import('@/views/officeview/shipping/shipping-wo-picking-ctns'),
+    "generic-labelfiles": () => import('@/views/shareview/generic/generic-labelfiles')
   },
   data() {
       return {
@@ -208,7 +265,14 @@ export default {
           pltsTableVisible : false,
           ctnsTableVisible : false,
           formLabelWidth : '200px',
-          customerCodeFilter : []
+          customerCodeFilter : [],
+          uploadVisible: false,
+          labelFilesVisible: false,
+          uploadAction: '',
+          labelFiles: [],
+          orderDetailId: 0,
+          cartonId: 0,
+          fbaPickDetailCartonId: 0
       };
   },
   methods:{
@@ -233,11 +297,57 @@ export default {
           let index = this.pickDetails.map(o => o.id).indexOf(id)
           this.pickDetails.splice(index, 1);
           this.$message({
-            message: 'Pick Id ' + id + ' has been put back successfully',
+            message: 'Put back success',
             type: 'success'
           });
         }
       )
+    },
+    onUploadClicked(id) {
+      this.uploadVisible = true;
+      this.fbaPickDetailCartonId = id;
+      this.uploadAction = getUploadLabelAction(id);
+    },
+    onDownloadClicked(id) {
+      this.labelFilesVisible = true;
+      this.fbaPickDetailCartonId = id;
+
+      getLabelFileList(id).then(body => {
+        this.labelFiles = body.data;
+      }).catch(e => {
+        alert(JSON.stringify(e))
+      });
+    },
+    uploadSuccessHandler(response, file, fileList) {
+      let obj = {}
+      let that = this
+      this.pickDetails.forEach(function(x){
+        obj = x.fbaCartonLocations.find(function (c) {
+          return (c.fbaPickDetailCartonId === that.fbaPickDetailCartonId)
+        })
+      })
+
+      obj.labelFileNumbers += 1;
+      this.$message({
+          message: 'Upload success',
+          type: 'success',
+          center: true
+      })
+    },
+    onLabelDeleteSuccess() {
+      let obj = {}
+      let that = this
+      this.pickDetails.forEach(function(x){
+        obj = x.fbaCartonLocations.find(function (c) {
+          return (c.fbaPickDetailCartonId === that.fbaPickDetailCartonId)
+        })
+      })
+
+      obj.labelFileNumbers -= 1;
+      this.$message({
+          message: 'Delete success',
+          type: 'success'
+      })
     },
     referashPickDetails(){
       this.$emit('referashPickDetails');

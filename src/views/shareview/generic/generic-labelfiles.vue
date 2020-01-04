@@ -50,11 +50,13 @@
 
 <script>
 /* eslint-disable */
-import { deleteLabelFile, downloadFile } from '@/api/receiving'
+import { downloadFile, deleteLabelFile as deleteReceivingLabelFile } from '@/api/receiving'
+import { deleteLabelFile as deleteShippingLabelFile } from '@/api/shipping'
 
 export default {
   props: {
     orderDetailId: Number,
+    fbaPickDetailCartonId: Number,
     labelFiles: Array
   },
   methods:{
@@ -63,11 +65,23 @@ export default {
         downloadFile(rootPath, 'Label')
     },
     onDeleteClicked(nameInSystem) {
-        deleteLabelFile(this.orderDetailId, nameInSystem).then(body => {
+      if (this.fbaPickDetailCartonId)
+      {
+        deleteShippingLabelFile(this.fbaPickDetailCartonId, nameInSystem).then(body => {
+            let index = this.labelFiles.map(x => x.nameInSystem).indexOf(nameInSystem);
+            this.labelFiles.splice(index, 1);
+            this.$emit('onLabelDeleteSuccess');
+        });
+      }
+
+      if (this.orderDetailId)
+      {
+        deleteReceivingLabelFile(this.orderDetailId, nameInSystem).then(body => {
             let index = this.labelFiles.map(x => x.nameInSystem).indexOf(nameInSystem);
             this.labelFiles.splice(index, 1);
             this.$emit('onLabelDeleteSuccess', this.orderDetailId);
         });
+      }
     },
     transferDate: function(date){
         return date.substring(0,10);
