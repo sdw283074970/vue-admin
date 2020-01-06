@@ -1,168 +1,173 @@
-  <template>
-    <div>
-        <div class="input-bar">
-            <el-button @click="createHandler" type="primary" icon="el-icon-plus">New Outbound Order</el-button>
-            <el-button @click="clearFilter">Clear All Filters</el-button>
-            <el-input
-            v-model="search"
-            style="width:250px"
-            size="large"
-            placeholder="Search..."/>
-        </div>
-        <el-table
-            :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-            ref="table"
-            v-loading="loading"
-            @filter-change="filterChange"
-            stripe
-            border
-            fit=""
-            :height="tableHeight"
-            style="width: 100%">
-            <el-table-column type="expand">
-            <template slot-scope="props">
-                <el-form label-position="left" inline class="gb-table-expand">
-                <el-form-item label="Order #">
-                    <span>{{ props.row.shipOrderNumber }}</span>
-                </el-form-item>
-                <el-form-item label="Order Type">
-                    <span>{{ props.row.orderType }}</span>
-                </el-form-item>
-                <el-form-item label="Pick Reference">
-                    <span>{{ props.row.pickReference }}</span>
-                </el-form-item>
-                <el-form-item label="BOL #">
-                    <span>{{ props.row.bolNumber }}</span>
-                </el-form-item>
-                <el-form-item label="Pick #">
-                    <span>{{ props.row.pickNumber }}</span>
-                </el-form-item>
-                <el-form-item label="PO #">
-                    <span>{{ props.row.purchaseOrderNumber }}</span>
-                </el-form-item>
-                <el-form-item label="Carrier">
-                    <span>{{ props.row.carrier }}</span>
-                </el-form-item>
-                <el-form-item label="Push Date">
-                    <span>{{ props.row.placeTime.substring(0, 4)==1900?'-':props.row.placeTime.substring(0, 10) }}</span>
-                </el-form-item>
-                <el-form-item label="Start Time">
-                    <span>{{ props.row.startedTime.substring(0, 4)==1900?'-':props.row.startedTime.substring(0, 10) }}</span>
-                </el-form-item>
-                <el-form-item label="Ready Time">
-                    <span>{{ props.row.readyTime.substring(0, 4)==1900?'-':props.row.readyTime.substring(0, 10) }}</span>
-                </el-form-item>
-                <el-form-item label="Released Date">
-                    <span>{{ props.row.releasedDate.substring(0, 4)==1900?'-':props.row.releasedDate.substring(0, 10) }}</span>
-                </el-form-item>
-                <el-form-item label="Shipped Date">
-                    <span>{{ props.row.shipDate.substring(0, 4)==1900?'-':props.row.shipDate.substring(0, 10) }}</span>
-                </el-form-item>
-                <el-form-item label="Quick Instruction">
-                    <span>{{ props.row.instruction }}</span>
-                </el-form-item>
-                <el-form-item label="Created By">
-                    <span>{{ props.row.createBy }}</span>
-                </el-form-item>
-                <el-form-item label="Closed By">
-                    <span>{{ props.row.confirmedBy }}</span>
-                </el-form-item>
-                </el-form>
-            </template>
-            </el-table-column>
-            <el-table-column
-            sortable
-            fixed=""
-            prop="id"
-            label="Id"
-            min-width="10%">
-            </el-table-column>
-            <el-table-column
-            sortable
-            fixed
-            prop="status"
-            label="Status"
-            min-width="20%">
-            <template slot-scope="scope">
-                <font :color="changeStatusColor(scope.row.status)">{{ scope.row.status}}</font>
-            </template>
-            </el-table-column>
-            <el-table-column
-            prop="shipOrderNumber"
-            label="Order #"
-            fixed
-            sortable
-            min-width="40%">
-            </el-table-column>
-            <el-table-column
-            prop="batchNumber"
-            label="Batch #"
-            sortable
-            min-width="20%">
-            </el-table-column>
-            <el-table-column
-            prop="customerCode"
-            label="Code"
-            sortable
-            :column-key="'code'"
-            :filters="customerCodeFilter"
-            min-width="20%">
-            </el-table-column>
-            <el-table-column
-            prop="subCustomer"
-            label="Sub-code"
-            sortable
-            min-width="20%">
-            </el-table-column>
-            <el-table-column
-            prop="destination"
-            label="Dest"
-            sortable
-            min-width="20%">
-            </el-table-column>
-            <el-table-column
-            prop="ets"
-            label="ETS"
-            sortable
-            min-width="20%">
-            <template slot-scope="scope">
-                <font>{{ scope.row.ets.substring(0, 10)}}</font>
-            </template>
-            </el-table-column>
-            <el-table-column
-            prop="totalCtns"
-            label="Total Ctns"
-            min-width="20%">
-            </el-table-column>
-            <el-table-column
-            prop="totalPlts"
-            label="Total Plts"
-            min-width="20%">
-            </el-table-column>
-            <el-table-column
-            prop="operation"
-            label="operation">
-            <template slot-scope="scope">
-                <el-button disabled="">eFiles</el-button>
-                <el-button @click="editHandler(scope.row.id)" :disabled="scope.row.status != 'New Created' && scope.row.status != 'Picking'">Edit</el-button>
-                <el-button @click="woHandler(scope.row.id)">WO</el-button>
-                <el-button type="danger" plain disabled>Delete</el-button>
-            </template>
-            </el-table-column>
-        </el-table>
+<template>
+  <div>
+    <div class="input-bar">
+      <el-button type="primary" icon="el-icon-plus" @click="createHandler">New Outbound Order</el-button>
+      <el-button @click="clearFilter">Clear All Filters</el-button>
+      <el-input
+        v-model="search"
+        style="width:250px"
+        size="large"
+        placeholder="Search..."
+      />
+    </div>
+    <el-table
+      ref="table"
+      v-loading="loading"
+      :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      stripe
+      border
+      fit=""
+      :height="tableHeight"
+      style="width: 100%"
+      @filter-change="filterChange"
+    >
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="gb-table-expand">
+            <el-form-item label="Order #">
+              <span>{{ props.row.shipOrderNumber }}</span>
+            </el-form-item>
+            <el-form-item label="Order Type">
+              <span>{{ props.row.orderType }}</span>
+            </el-form-item>
+            <el-form-item label="Pick Reference">
+              <span>{{ props.row.pickReference }}</span>
+            </el-form-item>
+            <el-form-item label="BOL #">
+              <span>{{ props.row.bolNumber }}</span>
+            </el-form-item>
+            <el-form-item label="Pick #">
+              <span>{{ props.row.pickNumber }}</span>
+            </el-form-item>
+            <el-form-item label="PO #">
+              <span>{{ props.row.purchaseOrderNumber }}</span>
+            </el-form-item>
+            <el-form-item label="Carrier">
+              <span>{{ props.row.carrier }}</span>
+            </el-form-item>
+            <el-form-item label="Push Date">
+              <span>{{ props.row.placeTime.substring(0, 4)==1900?'-':props.row.placeTime.substring(0, 10) }}</span>
+            </el-form-item>
+            <el-form-item label="Start Time">
+              <span>{{ props.row.startedTime.substring(0, 4)==1900?'-':props.row.startedTime.substring(0, 10) }}</span>
+            </el-form-item>
+            <el-form-item label="Ready Time">
+              <span>{{ props.row.readyTime.substring(0, 4)==1900?'-':props.row.readyTime.substring(0, 10) }}</span>
+            </el-form-item>
+            <el-form-item label="Released Date">
+              <span>{{ props.row.releasedDate.substring(0, 4)==1900?'-':props.row.releasedDate.substring(0, 10) }}</span>
+            </el-form-item>
+            <el-form-item label="Shipped Date">
+              <span>{{ props.row.shipDate.substring(0, 4)==1900?'-':props.row.shipDate.substring(0, 10) }}</span>
+            </el-form-item>
+            <el-form-item label="Quick Instruction">
+              <span>{{ props.row.instruction }}</span>
+            </el-form-item>
+            <el-form-item label="Created By">
+              <span>{{ props.row.createBy }}</span>
+            </el-form-item>
+            <el-form-item label="Closed By">
+              <span>{{ props.row.confirmedBy }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column
+        sortable
+        fixed=""
+        prop="id"
+        label="Id"
+        min-width="10%"
+      />
+      <el-table-column
+        sortable
+        fixed
+        prop="status"
+        label="Status"
+        min-width="20%"
+      >
+        <template slot-scope="scope">
+          <font :color="changeStatusColor(scope.row.status)">{{ scope.row.status }}</font>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="shipOrderNumber"
+        label="Order #"
+        fixed
+        sortable
+        min-width="40%"
+      />
+      <el-table-column
+        prop="batchNumber"
+        label="Batch #"
+        sortable
+        min-width="20%"
+      />
+      <el-table-column
+        prop="customerCode"
+        label="Code"
+        sortable
+        :column-key="'code'"
+        :filters="customerCodeFilter"
+        min-width="20%"
+      />
+      <el-table-column
+        prop="subCustomer"
+        label="Sub-code"
+        sortable
+        min-width="20%"
+      />
+      <el-table-column
+        prop="destination"
+        label="Dest"
+        sortable
+        min-width="20%"
+      />
+      <el-table-column
+        prop="ets"
+        label="ETS"
+        sortable
+        min-width="20%"
+      >
+        <template slot-scope="scope">
+          <font>{{ scope.row.ets.substring(0, 10) }}</font>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="totalCtns"
+        label="Total Ctns"
+        min-width="20%"
+      />
+      <el-table-column
+        prop="totalPlts"
+        label="Total Plts"
+        min-width="20%"
+      />
+      <el-table-column
+        prop="operation"
+        label="operation"
+      >
+        <template slot-scope="scope">
+          <!-- <el-button disabled="">eFiles</el-button> -->
+          <el-button :disabled="scope.row.status != 'New Created' && scope.row.status != 'Picking'" @click="editHandler(scope.row.id)">Edit</el-button>
+          <el-button @click="woHandler(scope.row.id)">WO</el-button>
+          <el-button type="danger" plain disabled>Delete</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-        <el-pagination
-            style="margin-top:10px"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 50, 100]"
-            :page-size="20"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalEntries">
-        </el-pagination>
-      </div>
-  </template>
+    <el-pagination
+      style="margin-top:10px"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="20"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="totalEntries"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
+</template>
 <script>
 /* eslint-disable */
 export default {

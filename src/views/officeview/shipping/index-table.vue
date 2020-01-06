@@ -157,7 +157,7 @@
         label="operation"
       >
         <template slot-scope="scope">
-          <el-button @click="editHandler(scope.row.id, scope.$index)">eFiles</el-button>
+          <el-button @click="onEfilesClicked(scope.row.shipOrderNumber)">eFiles</el-button>
           <el-button @click="editHandler(scope.row.id, scope.$index)">Fee</el-button>
           <el-button @click="editHandler(scope.row.id)">Edit</el-button>
           <el-button @click="woHandler(scope.row.id)">WO</el-button>
@@ -241,6 +241,9 @@ export default {
             return 'blue';
         else
             return 'black';
+      },
+      onEfilesClicked(reference) {
+        this.$emit('onEfilesClicked', reference)
       }
     },
     mounted() {

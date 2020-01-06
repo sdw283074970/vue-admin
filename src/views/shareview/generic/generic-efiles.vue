@@ -17,6 +17,7 @@
       :data="efiles"
       stripe
       border
+      height="500"
       style="width: 100%"
     >
       <el-table-column
@@ -84,7 +85,7 @@ export default {
   },
   computed: {
       uploadAction: function() {
-          return '/api/fba/FBAEfolder/?reference=' + this.reference + '&orderType=MasterOrder&fileName=File&version=V1'
+          return '/api/fba/FBAEfolder/?reference=' + this.reference + '&orderType=' + this.orderType + '&fileName=File&version=V1'
       }
   },
   methods:{
@@ -104,15 +105,16 @@ export default {
         // alert('success!')
         // alert(JSON.stringify(response))
         this.efiles.push({
-            id: 'New',
-            customizedFileName: response.data.customizedFileName,
-            fileNmae: transferDate(response.data.fileName),
-            uploadDate: response.data.uploadDate,
+            id: response.id,
+            customizedFileName: response.customizedFileName,
+            fileName: response.fileName,
+            uploadDate: response.uploadDate,
             status: 'Valid',
             rootPath: '',
             discardBy: '',
             uploadBy: ''
-        })
+        });
+        // alert(JSON.stringify(this.efiles))
     },
     transferDate: function(date){
         return date.substring(0,10);

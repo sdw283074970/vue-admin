@@ -5,6 +5,7 @@
       :filtered-data="filteredData"
       :total-entries="totalEntries"
       :loading="loading"
+      @onEfilesClicked="onEfilesClicked"
       @onEditClicked="onEidtClicked"
       @onCreateClicked="onCreateClicked"
       @onSearchChanged="onSearchChanged"
@@ -29,11 +30,27 @@
         />
       </el-dialog>
     </div>
+    <div>
+      <el-dialog
+        title="Manage Efiles"
+        :visible.sync="efileVisible"
+        width="800px"
+        top="5vh"
+        :lock-scroll="false"
+      >
+        <generic-efiles
+          :efiles="efiles"
+          :reference="reference"
+          :order-type="orderType"
+        />
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
+import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles } from '@/api/receiving'
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 import Axios from 'axios';
 import qs from 'qs';
@@ -41,7 +58,8 @@ import qs from 'qs';
 export default {
     components:{
         "shipping-index-edit-form": () => import('@/views/officeview/shipping/index-edit-form'),
-        "shipping-index-table": () => import('@/views/officeview/shipping/index-table')
+        "shipping-index-table": () => import('@/views/officeview/shipping/index-table'),
+        "generic-efiles": () => import('@/views/shareview/generic/generic-efiles')
     },
     data() {
         return {
@@ -55,6 +73,10 @@ export default {
             filteredData: [],
             dialogFormVisible : false,
             shipOrderStatus: '',
+            efileVisible: false,
+            efiles: [],
+            reference: '',
+            orderType: 'ShipOrder',
             formData: {
               id : 0,
               status: '',
@@ -139,6 +161,13 @@ export default {
         this.isEdit = true;
         getShipOrderInfo(id).then(body => {
           this.formData = body.data
+        })
+      },
+      onEfilesClicked(reference) {
+        this.efileVisible = true;
+        this.reference = reference;
+        getEfiles(reference, this.orderType).then(body => {
+          this.efiles = body.data
         })
       }
     },

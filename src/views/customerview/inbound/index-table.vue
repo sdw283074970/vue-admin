@@ -170,7 +170,7 @@
         label="operation"
       >
         <template slot-scope="scope">
-          <el-button disabled="">eFiles</el-button>
+          <!-- <el-button disabled="">eFiles</el-button> -->
           <el-button :disabled="scope.row.status!='New Created'" @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
           <el-button @click="woHandler(scope.row.id)">WO</el-button>
           <el-button type="danger" plain disabled="">Delete</el-button>

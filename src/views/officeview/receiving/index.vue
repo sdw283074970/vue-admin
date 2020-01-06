@@ -184,7 +184,7 @@ export default {
       onEfilesClicked(reference) {
         this.efileVisible = true;
         this.reference = reference;
-        getEfiles(reference).then(body => {
+        getEfiles(reference, this.orderType).then(body => {
           this.efiles = body.data
         })
       }

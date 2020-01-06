@@ -191,9 +191,9 @@ export function CallbackWO(id) {
   })
 }
 
-export function getEfiles(reference) {
+export function getEfiles(reference, orderType) {
   return request({
-    url: '/api/fba/FBAEfolder/?reference=' + reference + '&orderType=MasterOrder',
+    url: '/api/fba/FBAEfolder/?reference=' + reference + '&orderType=' + orderType,
     method: 'get'
   })
 }
