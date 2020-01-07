@@ -112,9 +112,9 @@ export function resetInstructions(shipOrderId) {
   })
 }
 
-export function createNewInstruction(shipOrderNumber, description, isChargingItem) {
+export function createNewInstruction(shipOrderNumber, description, isChargingItem, isInstruction, orderType) {
   return request({
-    url: 'api/fbainvoicedetail/?reference=' + encodeURIComponent(shipOrderNumber) + '&invoiceType=ShipOrder&description=' + encodeURIComponent(description) + '&isChargingItem=' + isChargingItem,
+    url: 'api/fbainvoicedetail/?reference=' + encodeURIComponent(shipOrderNumber) + '&invoiceType=' + orderType + '&description=' + encodeURIComponent(description) + '&isChargingItem=' + isChargingItem + '&isInstruction=' + isInstruction,
     method: 'post'
   })
 }
@@ -126,9 +126,9 @@ export function deleteInstruction(id) {
   })
 }
 
-export function updateInstruction(id, description, isChargingItem) {
+export function updateInstruction(id, description, isChargingItem, isInstruction) {
   return request({
-    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=' + isChargingItem + '&operation=UpdateInstruction',
+    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=' + isChargingItem + '&isInstruction=' + isInstruction + '&operation=UpdateInstruction',
     method: 'put'
   })
 }

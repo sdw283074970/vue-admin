@@ -11,12 +11,12 @@
       @childOrderDetails="refreshOrderDetails"
     />
     <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" />
-    <receiving-wo-instruction :master-order="masterOrder" />
+    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" />
   </div>
 </template>
 
 <script>
-import { getRO, getOrderDetails, getPallets, getCartons, getPltsInventory, getCtnsInventory } from '@/api/receiving'
+import { getRO, getOrderDetails, getPallets, getCartons, getPltsInventory, getCtnsInventory, getInstructions } from '@/api/receiving'
 
 export default {
   components: {
@@ -33,6 +33,7 @@ export default {
       ctnData: [],
       pltInventoryData: [],
       ctnInventoryData: [],
+      instructions: [],
       step: 0
     }
   },
@@ -68,11 +69,19 @@ export default {
     getCtnsInventory(this.$route.params.masterOrderId).then(d => {
       this.ctnInventoryData = d.data
     })
+    getInstructions(id).then(body => {
+      this.instructions = body.data.operationInstructions
+    })
   },
   methods: {
     refreshOrderDetails(payload) {
       getOrderDetails(payload).then(body => {
         this.orderDetails = body.data
+      })
+    },
+    referashInstructions() {
+      getInstructions(this.$route.params.masterOrderId).then(body => {
+        this.instructions = body.data.operationInstructions
       })
     }
   }

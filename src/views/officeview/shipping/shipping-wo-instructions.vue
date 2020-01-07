@@ -1,81 +1,100 @@
-  <template>
-    <div>
-      <h2>Instructions</h2>
-      <div style="margin-bottom:10px">
-        <el-button class="gb-button" type="primary" @click="onNewClicked">New Instruction</el-button>
-        <el-button class="gb-button" type="primary" @click="onResetClicked">Reset Instruction</el-button>
-      </div>
-      <el-table
-        :data="instructions"
-        ref="table-instructions"
-        stripe
-        border>
-        <el-table-column
-          sortable
-          prop="id"
-          label="Id"
-          width="60">
-        </el-table-column>
-        <el-table-column
-          prop="description"
-          label="Description"
-          min-width="90%">
-        </el-table-column>
-        <el-table-column
-          prop="comment"
-          label="Comment From Whse"
-          min-width="90%">
-        </el-table-column>
-        <el-table-column
-          prop="result"
-          label="Reply From Office"
-          min-width="90%">
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="Charging Status"
-          min-width="35%">
-        </el-table-column>
-        <el-table-column
-          prop="handlingStatus"
-          label="Status"
-          min-width="15%">
-        </el-table-column>
-        <el-table-column
-          prop="operation"
-          label="operation"
-          min-width="25%">
-            <template slot-scope="scope">
-              <el-dropdown>
-                <span class="el-dropdown-link">
-                  Operations<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
-                  <el-dropdown-item @click.native="onResultClicked(scope.row.id)" v-if="scope.row.handlingStatus=='Pending'||scope.row.handlingStatus=='Updated'">Result</el-dropdown-item>
-                  <el-dropdown-item @click.native="deleteHandler(scope.row.id)" divided>Delete</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-        </el-table-column>
-      </el-table>
-      <el-dialog title="Instruction"
-        :visible.sync="instructionVisible"
-        width="40%"
-        top="5vh"
-        :lock-scroll="false">
-        <picking-wo-instructions-dialog
-          :instruction="instruction"
-          :isResult="isResult"
-          :isEdit="isEdit"
-          @onUpdateSucceed="onUpdateSucceed"
-          @onCancelClicked="onCancelClicked"
-          @onCreatedSucceed="onCreatedSucceed"
-          @onResultSucceed="onResultSucceed"
-          :shipOrder="shipOrder"></picking-wo-instructions-dialog>
-      </el-dialog>
+<template>
+  <div>
+    <h2>Instructions & Charging</h2>
+    <div style="margin-bottom:10px">
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onNewClicked">New</el-button>
+      <el-popover
+        v-model="popVisible"
+        placement="top"
+        width="380"
+      >
+        <p>All existed instructions & chargings will be overwritten.</p>
+        <p>Are you sure you want to continue?</p>
+        <div style="text-align: right; margin: 0">
+          <el-button size="mini" type="text" @click="popVisible = false">No</el-button>
+          <el-button type="primary" size="mini" @click="onResetClicked">Yes</el-button>
+        </div>
+        <el-button slot="reference" class="gb-button" type="primary">Reset Instruction</el-button>
+      </el-popover>
     </div>
-  </template>
+    <el-table
+      ref="table-instructions"
+      :data="instructions"
+      stripe
+      border
+    >
+      <el-table-column
+        sortable
+        prop="id"
+        label="Id"
+        width="60"
+      />
+      <el-table-column
+        prop="description"
+        label="Description"
+        min-width="90%"
+      />
+      <el-table-column
+        prop="comment"
+        label="Comment From Whse"
+        min-width="90%"
+      />
+      <el-table-column
+        prop="result"
+        label="Reply From Office"
+        min-width="90%"
+      />
+      <el-table-column
+        prop="status"
+        label="Charging Status"
+        min-width="35%"
+      />
+      <el-table-column
+        prop="handlingStatus"
+        label="Status"
+        min-width="15%"
+      />
+      <el-table-column
+        prop="operation"
+        label="operation"
+        min-width="25%"
+      >
+        <template slot-scope="scope">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              Operations<i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
+              <el-dropdown-item :disabled="!(scope.row.handlingStatus=='Pending'||scope.row.handlingStatus=='Updated')" @click.native="onResultClicked(scope.row.id)">Result</el-dropdown-item>
+              <el-dropdown-item divided @click.native="deleteHandler(scope.row.id)">Delete</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog
+      title="Instruction & Charging"
+      :visible.sync="instructionVisible"
+      width="40%"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <picking-wo-instructions-dialog
+        :instruction="instruction"
+        :is-result="isResult"
+        :is-edit="isEdit"
+        :step="step"
+        :reference="shipOrder.shipOrderNumber"
+        :order-type="orderType"
+        @onUpdateSucceed="onUpdateSucceed"
+        @onCancelClicked="onCancelClicked"
+        @onCreatedSucceed="onCreatedSucceed"
+        @onResultSucceed="onResultSucceed"
+      />
+    </el-dialog>
+  </div>
+</template>
 
 <script>
 /* eslint-disable */
@@ -83,15 +102,19 @@
 export default {
   props: {
     shipOrder: {},
-    instructions: Array
+    instructions: Array,
+    step: Number
   },
   data() {
       return {
         instructionVisible: false,
+        popVisible: false,
+        orderType: 'ShipOrder',
         instruction: {
           'id': 0,
           'description': '',
           'isChargingItem': true,
+          'isInstruction': false,
           'result': ''
         },
         isResult: false,
@@ -106,6 +129,7 @@ export default {
       this.$emit('onDeleteClicked', id);
     },
     onResetClicked(){
+      this.popVisible = false;
       this.$emit('onResetClicked');
     },
     onNewClicked(){
@@ -114,6 +138,7 @@ export default {
       this.instructionVisible = true;
       this.instruction.description = '';
       this.instruction.isChargingItem = true;
+      this.instruction.isInstruction = false;
     },
     onUpdateClicked(id){
       this.isResult = false;
@@ -126,9 +151,11 @@ export default {
         }
       });
       let isChargingItem = selectedInstru.status=='Waiting for charging'?true:false;
+      let isInstruction = selectedInstru.handlingStatus=='N/A'?false:true;
       this.instruction.description = selectedInstru.description;
       this.instruction.id = id;
       this.instruction.isChargingItem = isChargingItem;
+      this.instruction.isInstruction = isInstruction;
     },
     onResultClicked(id){
       this.isResult = true;

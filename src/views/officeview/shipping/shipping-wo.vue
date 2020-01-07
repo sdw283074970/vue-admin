@@ -3,7 +3,7 @@
     <shipping-wo-sum :ship-order="shipOrder" :step="step" />
     <shipping-wo-control :ship-order="shipOrder" :step="step" @onPushClicked="onPushClicked" @onCallBackClicked="onCallBackClicked" />
     <shipping-wo-picking :ship-order="shipOrder" :step="step" :pick-details="pickDetails" @referashPickDetails="referashPickDetails" />
-    <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" @onResetClicked="onResetClicked" @onDeleteClicked="onDeleteClicked" @referashInstructions="referashInstructions" />
+    <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @onDeleteClicked="onDeleteClicked" @referashInstructions="referashInstructions" />
   </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
     shipOrder: {
       handler: function(newVal, oldVal) {
         const status = this.shipOrder.status
-        if (status === 'New Created') { this.step = 1 } else if (status === 'Picking') { this.step = 1 } else if (status === 'Draft') { this.step = 2 } else if (status === 'New Order') { this.step = 3 } else if (status === 'Ready') { this.step = 4 } else if (status === 'Released') { this.step = 6 } else if (status === 'Shipped') { this.step = 8 } else { this.step = 4 }
+        if (status === 'New Created') { this.step = 1 } else if (status === 'Picking') { this.step = 1 } else if (status === 'Draft') { this.step = 2 } else if (status === 'New Order') { this.step = 3 } else if (status === 'Ready') { this.step = 5 } else if (status === 'Released') { this.step = 6 } else if (status === 'Shipped') { this.step = 8 } else { this.step = 4 }
       },
       deep: true
     }
