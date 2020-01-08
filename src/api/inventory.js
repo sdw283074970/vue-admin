@@ -18,6 +18,13 @@ export function getCtnHistories(id) {
   })
 }
 
+export function getPltHistories(id) {
+  return request({
+    url: 'api/fba/FBAinventory/?locationId=' + id + '&locationType=Pallet',
+    method: 'get'
+  })
+}
+
 export function downloadInventoryReport(code, date) {
   return request({
     url: 'api/fba/FBAInventoryIndex/?customerCode=' + code + '&closeDate=' + date + '&operation=DownloadFile',

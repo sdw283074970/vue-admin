@@ -211,3 +211,10 @@ export function downloadEfile(id) {
     method: 'get'
   })
 }
+
+export function resetInstructions(masterOrderId) {
+  return request({
+    url: 'api/fba/fbashiporder/?referenceId=' + masterOrderId + '&orderType=MasterOrder&operation=Reset',
+    method: 'put'
+  })
+}

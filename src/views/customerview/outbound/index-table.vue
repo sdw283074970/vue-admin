@@ -217,11 +217,11 @@ export default {
         this.$router.push({path: '/outbound/outbound-wo/' + id});
       },
       changeStatusColor: function(status) {
-        if (status == 'New Created')
+        if (status == 'New Created' || status == 'Draft')
             return 'gray';
         else if (status == 'Picking' || status == 'Processing' || status == 'Pending')
             return 'red';
-        else if (status == 'New Order' || status == 'Returned')
+        else if (status == 'New Order' || status == 'Returned' || status == 'New PO' || status == 'Updated')
             return 'orange';
         else if (status == 'Ready')
             return 'green';
@@ -231,7 +231,7 @@ export default {
             return 'blue';
         else
             return 'black';
-      }
+      },
     },
     mounted() {
     }

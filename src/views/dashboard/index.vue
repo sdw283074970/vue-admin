@@ -1,6 +1,22 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">此处为您的定制页面，请联系您在Grand Channel的联系人来获取定制主页的方法</div>
+    <div class="dashboard-text">更新日志 Update Log</div>
+    <el-collapse style="margin-top:20px">
+      <el-collapse-item title="Update on Jan 7, 2020">
+        <div>- 将dashboard改造成了更新日志页面</div>
+        <div>- 移植了收货页面中的按箱查看箱数出库历史功能</div>
+        <div>- 移植了收货页面中的按托盘查看托盘数量出库历史功能</div>
+        <div>- 新增了库存查询页面中的按托盘查看托盘数量出库历史功能</div>
+        <div>- 新增了在库存查询页面/收货页面中的托盘视图下，展开托盘按托盘中的SKU查看箱数出库历史的功能</div>
+      </el-collapse-item>
+      <el-collapse-item title="Update on Jan 6, 2020">
+        <div>- 移植了办公室端收货模块中的添加/编辑/调整订单指令功能</div>
+        <div>- 调整了订单指令功能，现在可以在添加和编辑指令时定义其的指令属性（是否是需要发给仓库的指令）</div>
+      </el-collapse-item>
+      <el-collapse-item title="Update on Jan 3, 2020">
+        <div>- 移植了Efiles相关功能并在使用方式上做了微调</div>
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 

@@ -11,12 +11,12 @@
       @childOrderDetails="refreshOrderDetails"
     />
     <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" />
-    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" />
+    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
   </div>
 </template>
 
 <script>
-import { getRO, getOrderDetails, getPallets, getCartons, getPltsInventory, getCtnsInventory, getInstructions } from '@/api/receiving'
+import { getRO, getOrderDetails, getPallets, getCartons, getPltsInventory, getCtnsInventory, getInstructions, resetInstructions } from '@/api/receiving'
 
 export default {
   components: {
@@ -82,6 +82,17 @@ export default {
     referashInstructions() {
       getInstructions(this.$route.params.masterOrderId).then(body => {
         this.instructions = body.data.operationInstructions
+      })
+    },
+    onResetClicked() {
+      resetInstructions(this.$route.params.masterOrderId).then(body => {
+        getInstructions(this.$route.params.masterOrderId).then(body => {
+          this.instructions = body.data.operationInstructions
+          this.$message({
+            message: 'Reset succeed',
+            type: 'success'
+          })
+        })
       })
     }
   }

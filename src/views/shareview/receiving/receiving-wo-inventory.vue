@@ -1,21 +1,21 @@
-  <template>
-    <div>
-        <h1>Inventory</h1>
-        <h2>Container: {{ masterOrder.container }}</h2>
-        <h2>Customer: {{ masterOrder.customerCode }}</h2>
-        <div style="margin-bottom:10px">
-            <el-switch
-            style="display: block"
-            v-model="pltVisible"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            active-text="Plts View"
-            inactive-text="Ctns View">
-            </el-switch>
-        </div>
-        <receiving-wo-inventory-plts :pltInventoryData="pltInventoryData" :isVisible="pltVisible"></receiving-wo-inventory-plts>
-        <receiving-wo-inventory-ctns :ctnInventoryData="ctnInventoryData" :isVisible="!pltVisible"></receiving-wo-inventory-ctns>
-        <!-- <el-dialog title="Rough Pack"
+<template>
+  <div>
+    <h1>Inventory</h1>
+    <h2>Container: {{ masterOrder.container }}</h2>
+    <h2>Customer: {{ masterOrder.customerCode }}</h2>
+    <div style="margin-bottom:10px">
+      <el-switch
+        v-model="pltVisible"
+        style="display: block"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="Plts View"
+        inactive-text="Ctns View"
+      />
+    </div>
+    <receiving-wo-inventory-plts :plt-inventory-data="pltInventoryData" :is-visible="pltVisible" :customer-code="masterOrder.customerCode" />
+    <receiving-wo-inventory-ctns :ctn-inventory-data="ctnInventoryData" :is-visible="!pltVisible" :customer-code="masterOrder.customerCode" />
+    <!-- <el-dialog title="Rough Pack"
             :visible.sync="locationVisible"
             width="450px"
             :lock-scroll="false"
@@ -36,8 +36,8 @@
                     </el-form-item>
                 </el-form>
         </el-dialog> -->
-    </div>
-  </template>
+  </div>
+</template>
 <script>
 /* eslint-disable */
 

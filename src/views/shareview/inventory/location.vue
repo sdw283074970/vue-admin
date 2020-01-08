@@ -41,7 +41,7 @@
       inactive-text="Plt View"
     />
     <location-ctns :is-ctn-view="isCtnView" :fba-ctn-inventories="inventoryResults.fbaCtnInventories" @onCtnHistoryClicked="onCtnHistoryClicked" />
-    <location-plts :is-ctn-view="isCtnView" :fba-plt-inventories="inventoryResults.fbaPalletGroupInventories" @onCtnHistoryClicked="onCtnHistoryClicked" />
+    <location-plts :is-ctn-view="isCtnView" :fba-plt-inventories="inventoryResults.fbaPalletGroupInventories" @onPltHistoryClicked="onPltHistoryClicked" @onCtnHistoryClicked="onCtnHistoryClicked" />
     <el-dialog
       title="Ctn Outbound History"
       :visible.sync="ctnHistoryVisible"
@@ -58,7 +58,7 @@
 /* eslint-disable */
 import { getReceivingOrdersByCustomerCode, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, downloadFile } from '@/api/receiving'
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
-import { getInventoryByDate, getCtnHistories, downloadInventoryReport } from '@/api/inventory'
+import { getInventoryByDate, getCtnHistories, downloadInventoryReport, getPltHistories } from '@/api/inventory'
 import store from '@/store'
 
 const customerCode = store.getters.customerCode;
@@ -155,15 +155,27 @@ export default {
             });
         },
         onCtnHistoryClicked(id) {
+          var obj = this.inventoryResults.fbaCtnInventories.find(x => x.id == id);
+          this.historySum.container = obj.container;
+          this.historySum.customerCode = this.queryData.customerCode;
+          this.historySum.shipmentId = obj.shipmentId;
+          this.historySum.amzRefId = obj.amzRefId;
+          this.historySum.warehouseCode = obj.warehouseCode;
           getCtnHistories(id).then(body => {
             this.ctnHistoryVisible = true;
             this.ctnOutboundHistories = body.data;
-            this.historySum.container = body.data[0].container;
-            this.historySum.customerCode = body.data[0].customerCode;
-            this.historySum.shipmentId = body.data[0].shipmentId;
-            this.historySum.amzRefId = body.data[0].amzRefId;
-            this.historySum.warehouseCode = body.data[0].warehouseCode;
-
+          })
+        },
+        onPltHistoryClicked(pltId) {
+          var obj = this.inventoryResults.fbaPalletGroupInventories.find(x => x.pltId == pltId);
+          this.historySum.container = obj.container;
+          this.historySum.customerCode = this.queryData.customerCode;
+          this.historySum.shipmentId = 'MULTIPLE';
+          this.historySum.amzRefId = 'MULTIPLE';
+          this.historySum.warehouseCode = 'MULTIPLE';
+          getPltHistories(pltId).then(body => {
+            this.ctnHistoryVisible = true;
+            this.ctnOutboundHistories = body.data;
           })
         }
     },

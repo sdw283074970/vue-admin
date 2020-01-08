@@ -99,7 +99,7 @@
               width="110"
             >
               <template slot-scope="scope">
-                <el-button @click="onHistoryClicked(scope.row.id)">History</el-button>
+                <el-button @click="onCtnHistoryClicked(scope.row.id)">History</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -180,16 +180,16 @@
         align="center"
         label="Location"
       />
-      <!-- <el-table-column
+      <el-table-column
         prop="operation"
         label="operation"
         align="center"
         width="110"
       >
         <template slot-scope="scope">
-          <el-button @click="onHistoryClicked(scope.row.id)">History</el-button>
+          <el-button @click="onPltHistoryClicked(scope.row.pltId)">History</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <el-pagination
       style="margin-top:10px"
@@ -246,8 +246,11 @@ export default {
       handleCurrentChange(val) {
         this.currentPage = val;
       },
-      onHistoryClicked(id) {
+      onCtnHistoryClicked(id) {
         this.$emit('onCtnHistoryClicked', id);
+      },
+      onPltHistoryClicked(id) {
+        this.$emit('onPltHistoryClicked', id);
       },
       obj_sum(arr, ...param) {
         var temp = {};

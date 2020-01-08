@@ -63,27 +63,65 @@
         min-width="30%"
       >
         <template slot-scope="scope">
-          <el-button @click="pickHandler(scope.row.id)">History</el-button>
+          <el-button :loading="loading" @click="onHistoryClicked(scope.row.id)">History</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog
+      title="Ctn Outbound History"
+      :visible.sync="ctnHistoryVisible"
+      width="900px"
+      top="5vh"
+      :lock-scroll="false"
+      append-to-body
+    >
+      <ctn-history :ctn-outbound-histories="ctnOutboundHistories" :history-sum="historySum" />
+    </el-dialog>
   </div>
 </template>
 <script>
 /* eslint-disable */
+import { getCtnHistories} from '@/api/inventory'
 
 export default {
   props: {
     isVisible: false,
-    ctnInventoryData: Array
+    ctnInventoryData: Array,
+    customerCode: String
+  },
+  components: {
+    "ctn-history": () => import('@/views/shareview/generic/generic-ctn-history')
   },
   data(){
     return {
-      tableHight: window.innerHeight * 0.6
+      tableHight: window.innerHeight * 0.6,
+      ctnOutboundHistories: [],
+      ctnHistoryVisible: false,
+      loading: false,
+      historySum: {
+        container: '',
+        customerCode: '',
+        shipmentId: '',
+        amzRefId: '',
+        warehouseCode: ''
+      }
     }
   },
   methods:{
-
+    onHistoryClicked(id) {
+      this.loading = true;
+      getCtnHistories(id).then(body => {
+        this.ctnHistoryVisible = true;
+        this.ctnOutboundHistories = body.data;
+        var obj = this.ctnInventoryData.find(x => x.id === id);
+        this.historySum.container = obj.container;
+        this.historySum.customerCode = this.customerCode;
+        this.historySum.shipmentId = obj.shipmentId;
+        this.historySum.amzRefId = obj.amzRefId;
+        this.historySum.warehouseCode = obj.warehouseCode;
+      })
+      this.loading = false;
+    }
   },
   mounted() {
 

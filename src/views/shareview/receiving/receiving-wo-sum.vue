@@ -6,7 +6,7 @@
     <el-button class="gb-button" :disabled="step<7" @click="onCommingSoonClicked">Download Receipt</el-button>
     <div style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
-        <el-step title="Step1: New Order" description="Waiting for uploading" />
+        <el-step title="Step1: Start" description="Waiting for uploading" />
         <el-step title="Step2: Uploading" description="Waiting for drafting" />
         <el-step title="Step3: Draft" description="Waiting for pushing" />
         <el-step title="Step4: Pushed" description="Waiting for arriving" />

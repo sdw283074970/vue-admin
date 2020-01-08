@@ -6,7 +6,7 @@
     <el-button class="gb-button" @click="downloadBOLHandler()">Download BOL</el-button>
     <div style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
-        <el-step title="Step1: New Order" description="Waiting for picking" />
+        <el-step title="Step1: Start" description="Waiting for picking" />
         <el-step title="Step2: Picking" description="Waiting for drafting" />
         <el-step title="Step3: Draft" description="Waiting for pushing" />
         <el-step title="Step4: Pushed" description="Wairing for processing" />
