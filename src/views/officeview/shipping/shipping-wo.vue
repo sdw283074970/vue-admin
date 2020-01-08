@@ -3,12 +3,12 @@
     <shipping-wo-sum :ship-order="shipOrder" :step="step" />
     <shipping-wo-control :ship-order="shipOrder" :step="step" @onPushClicked="onPushClicked" @onCallBackClicked="onCallBackClicked" />
     <shipping-wo-picking :ship-order="shipOrder" :step="step" :pick-details="pickDetails" @referashPickDetails="referashPickDetails" />
-    <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @onDeleteClicked="onDeleteClicked" @referashInstructions="referashInstructions" />
+    <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @referashInstructions="referashInstructions" />
   </div>
 </template>
 
 <script>
-import { getSO, getPickDetails, getInstructions, resetInstructions, deleteInstruction, pushShipOrderStatus, reverseShipOrderStatus } from '@/api/shipping'
+import { getSO, getPickDetails, getInstructions, resetInstructions, pushShipOrderStatus, reverseShipOrderStatus } from '@/api/shipping'
 
 export default {
   components: {
@@ -93,17 +93,6 @@ export default {
             message: 'Reset succeed',
             type: 'success'
           })
-        })
-      })
-    },
-    onDeleteClicked(id) {
-      deleteInstruction(id).then(() => {
-        getInstructions(this.$route.params.shipOrderId).then(body => {
-          this.instructions = body.data.operationInstructions
-        })
-        this.$message({
-          message: 'Delete succeed',
-          type: 'success'
         })
       })
     }

@@ -99,6 +99,7 @@
 <script>
 /* eslint-disable */
 import { getInstructions } from '@/api/receiving'
+import { deleteInstruction } from '@/api/shipping'
 
 export default {
   props: {
@@ -127,7 +128,14 @@ export default {
   },
   methods:{
     deleteHandler(id){
-      this.$emit('onDeleteClicked', id);
+      deleteInstruction(id).then(() => {
+        let index = this.instructions.indexOf(x => x.id === id)
+        this.instructions.splice(index, 1)
+        this.$message({
+          message: 'Delete succeed',
+          type: 'success'
+        })
+      })
     },
     onResetClicked(){
       this.popVisible = false;

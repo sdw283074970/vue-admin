@@ -2,6 +2,9 @@
   <div class="dashboard-container">
     <div class="dashboard-text">更新日志 Update Log</div>
     <el-collapse style="margin-top:20px">
+      <el-collapse-item title="Update on Jan 8, 2020">
+        <div>- 修复了收货单中无法正常删除指令的BUG</div>
+      </el-collapse-item>
       <el-collapse-item title="Update on Jan 7, 2020">
         <div>- 将dashboard改造成了更新日志页面</div>
         <div>- 移植了收货页面中的按箱查看箱数出库历史功能</div>

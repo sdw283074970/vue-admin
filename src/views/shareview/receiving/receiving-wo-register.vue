@@ -1,97 +1,101 @@
-  <template>
-    <div>
-      <h1>Register Pallets Info</h1>
-      <h2>Container: {{ masterOrder.container }}</h2>
-      <h2>Customer: {{ masterOrder.customerCode }}</h2>
-      <el-table
-          :data="orderDetails"
-          ref="table"
-          stripe
-          border
-          height="500"
-          style="width: 100%">
-          <el-table-column
-          sortable
-          prop="id"
-          label="Rcv Id"
-          width="100">
-          </el-table-column>
-          <el-table-column
-          prop="shipmentId"
-          sortable=""
-          label="Shipment Id/SKU"
-          min-width="60%">
-          </el-table-column>
-          <el-table-column
-          prop="amzRefId"
-          sortable=""
-          label="Amz Ref Id"
-          min-width="60%">
-          </el-table-column>
-          <el-table-column
-          prop="warehouseCode"
-          label="Whse Code"
-          min-width="30%">
-          </el-table-column>
-          <el-table-column
-          prop="howToDeliver"
-          label="Delivery"
-          min-width="30%">
-          </el-table-column>
-          <el-table-column
-          prop="actualGrossWeight"
-          label="G.W."
-          min-width="20%">
-          </el-table-column>
-          <el-table-column
-          prop="actualCBM"
-          label="CBM"
-          min-width="20%">
-          </el-table-column>
-          <el-table-column
-          prop="actualQuantity"
-          label="Quantity"
-          min-width="30%">
-          </el-table-column>
-          <el-table-column
-          label="TBA"
-          min-width="30%">
-              <template slot-scope="scope">
-                  <font>{{ scope.row.actualQuantity - scope.row.comsumedQuantity }}</font>
-              </template>
-          </el-table-column>
-          <el-table-column
-              type="selection"
-              width="60">
-          </el-table-column>
-      </el-table>
-      <div style="margin-top:10px;text-align:right;">
-          <el-button disabled>Detail Pack</el-button>
-          <el-button @click="packVisible = true">Rough Pack</el-button>
-      </div>
-      <el-dialog title="Rough Pack"
-          :visible.sync="packVisible"
-          width="450px"
-          :lock-scroll="false"
-          append-to-body>
-              <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px" class="demo-ruleForm">
-                  <el-form-item label="Packed Plt Quantity" prop="pltNumber">
-                      <el-input v-model.number="ruleForm.pltNumber"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Packed PLt Size" prop="pltSize">
-                      <el-select v-model="ruleForm.pltSize" placeholder="Select Size">
-                      <el-option label="P1(Standard Size)" value="P1"></el-option>
-                      <el-option label="P2(2X Standard Size)" value="P2"></el-option>
-                      </el-select>
-                  </el-form-item>
-                  <el-form-item>
-                      <el-button @click="submitForm('ruleForm')">Pack</el-button>
-                      <el-button @click="resetForm('ruleForm')">Reset</el-button>
-                  </el-form-item>
-              </el-form>
-      </el-dialog>
+<template>
+  <div>
+    <h1>Register Pallets Info</h1>
+    <h2>Container: {{ masterOrder.container }}</h2>
+    <h2>Customer: {{ masterOrder.customerCode }}</h2>
+    <el-table
+      ref="table"
+      :data="orderDetails"
+      stripe
+      border
+      height="500"
+      style="width: 100%"
+    >
+      <el-table-column
+        sortable
+        prop="id"
+        label="Rcv Id"
+        width="100"
+      />
+      <el-table-column
+        prop="shipmentId"
+        sortable=""
+        label="Shipment Id/SKU"
+        min-width="60%"
+      />
+      <el-table-column
+        prop="amzRefId"
+        sortable=""
+        label="Amz Ref Id"
+        min-width="60%"
+      />
+      <el-table-column
+        prop="warehouseCode"
+        label="Whse Code"
+        min-width="30%"
+      />
+      <el-table-column
+        prop="howToDeliver"
+        label="Delivery"
+        min-width="30%"
+      />
+      <el-table-column
+        prop="actualGrossWeight"
+        label="G.W."
+        min-width="20%"
+      />
+      <el-table-column
+        prop="actualCBM"
+        label="CBM"
+        min-width="20%"
+      />
+      <el-table-column
+        prop="actualQuantity"
+        label="Quantity"
+        min-width="30%"
+      />
+      <el-table-column
+        label="TBA"
+        min-width="30%"
+      >
+        <template slot-scope="scope">
+          <font>{{ scope.row.actualQuantity - scope.row.comsumedQuantity }}</font>
+        </template>
+      </el-table-column>
+      <el-table-column
+        type="selection"
+        width="60"
+      />
+    </el-table>
+    <div style="margin-top:10px;text-align:right;">
+      <el-button disabled>Detail Pack</el-button>
+      <el-button @click="packVisible = true">Rough Pack</el-button>
     </div>
-  </template>
+    <el-dialog
+      title="Rough Pack"
+      :visible.sync="packVisible"
+      width="450px"
+      :lock-scroll="false"
+      append-to-body
+    >
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="200px" class="demo-ruleForm">
+        <el-form-item label="Packed Plt Quantity" prop="pltNumber">
+          <el-input v-model.number="ruleForm.pltNumber" />
+        </el-form-item>
+        <el-form-item label="Packed PLt Size" prop="pltSize">
+          <el-select v-model="ruleForm.pltSize" placeholder="Select Size">
+            <el-option label="P1(Standard Size)" value="P1" />
+            <el-option label="P2(2X Standard Size)" value="P2" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="submitForm('ruleForm')">Pack</el-button>
+          <el-button @click="resetForm('ruleForm')">Reset</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  </div>
+</template>
 <script>
 /* eslint-disable */
 

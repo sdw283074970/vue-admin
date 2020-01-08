@@ -73,6 +73,8 @@
 </template>
 
 <script>
+/* eslint-disable vue/require-prop-types */
+/* eslint-disable vue/require-default-prop */
 
 export default {
   props: {
