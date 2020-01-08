@@ -6,6 +6,7 @@
       :order-details="orderDetails"
       :plt-data="pltData"
       :ctn-date="ctnData"
+      :step="step"
       :plt-inventory-data="pltInventoryData"
       :ctn-inventory-data="ctnInventoryData"
       @childOrderDetails="refreshOrderDetails"
@@ -44,7 +45,7 @@ export default {
     masterOrder: {
       handler: function(newVal, oldVal) {
         const status = this.masterOrder.status
-        if (status === 'New Created') { this.step = 1 } else if (status === 'Draft') { this.step = 2 } else if (status === 'Incoming') { this.step = 4 } else if (status === 'Received') { this.step = 5 } else if (status === 'Registered') { this.step = 7 } else if (status === 'Allocated') { this.step = 8 } else if (status === 'Completed') { this.step = 9 } else { this.step = 6 }
+        if (status === 'New Created') { this.step = 1 } else if (status === 'Draft') { this.step = 2 } else if (status === 'Incoming') { this.step = 3 } else if (status === 'Arrived') { this.step = 4 } else if (status === 'Received') { this.step = 5 } else if (status === 'Registered') { this.step = 7 } else if (status === 'Allocated') { this.step = 8 } else if (status === 'Completed') { this.step = 9 } else { this.step = 6 }
       },
       deep: true
     }

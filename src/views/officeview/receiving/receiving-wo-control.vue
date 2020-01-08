@@ -3,7 +3,7 @@
     <h2>Control Panel</h2>
     <div style="margin-bottom:10px">
       <div>
-        <el-button class="gb-button" disabled>Push WO</el-button>
+        <el-button class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
         <el-button class="gb-button" disabled>Recall WO</el-button>
         <el-button class="gb-button" disabled>Push Status</el-button>
         <el-button class="gb-button" disabled>Reverse Status</el-button>
@@ -48,6 +48,8 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
+import { pushMasterOrder } from '@/api/receiving'
+
 export default {
   components: {
     'receiving-register': () => import('@/views/shareview/receiving/receiving-wo-register'),
@@ -60,7 +62,8 @@ export default {
     pltData: Array,
     ctnData: Array,
     pltInventoryData: Array,
-    ctnInventoryData: Array
+    ctnInventoryData: Array,
+    step: Number
   },
   data() {
     return {
@@ -73,8 +76,14 @@ export default {
 
   },
   methods: {
-    test() {
-      this.$emit('childOrderDetails', this.masterOrder.id)
+    onPushClicked() {
+      pushMasterOrder(this.masterOrder.id).then(() => {
+        this.masterOrder.status = 'Incoming'
+        this.$message({
+          message: 'Push success',
+          type: 'success'
+        })
+      })
     }
   }
 }

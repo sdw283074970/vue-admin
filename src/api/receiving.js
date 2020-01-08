@@ -214,7 +214,14 @@ export function downloadEfile(id) {
 
 export function resetInstructions(masterOrderId) {
   return request({
-    url: 'api/fba/fbashiporder/?referenceId=' + masterOrderId + '&orderType=MasterOrder&operation=Reset',
+    url: '/api/fba/fbashiporder/?referenceId=' + masterOrderId + '&orderType=MasterOrder&operation=Reset',
+    method: 'put'
+  })
+}
+
+export function pushMasterOrder(id) {
+  return request({
+    url: '/api/fbamasterorder/?masterOrderId=' + id + '&operation=Push',
     method: 'put'
   })
 }

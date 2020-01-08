@@ -9,7 +9,7 @@
         <el-step title="Step1: Start" description="Waiting for uploading" />
         <el-step title="Step2: Uploading" description="Waiting for drafting" />
         <el-step title="Step3: Draft" description="Waiting for pushing" />
-        <el-step title="Step4: Pushed" description="Waiting for arriving" />
+        <el-step title="Step4: Incoming" description="Waiting for arriving" />
         <el-step title="Step5: Arrived" description="Waiting for receiving" />
         <el-step title="Step6: Received" description="Waiting for processing" />
         <el-step title="Step7: Processing" description="Waiting for registering" />
