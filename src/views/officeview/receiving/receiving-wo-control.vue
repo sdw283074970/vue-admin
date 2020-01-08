@@ -4,7 +4,7 @@
     <div style="margin-bottom:10px">
       <div>
         <el-button class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
-        <el-button class="gb-button" disabled>Recall WO</el-button>
+        <el-button class="gb-button" type="warning" :disabled="step!=3" @click="onRecallClicked">Recall WO</el-button>
         <el-button class="gb-button" disabled>Push Status</el-button>
         <el-button class="gb-button" disabled>Reverse Status</el-button>
       </div>
@@ -48,7 +48,7 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
-import { pushMasterOrder } from '@/api/receiving'
+import { pushMasterOrder, recallMasterOrder } from '@/api/receiving'
 
 export default {
   components: {
@@ -81,6 +81,15 @@ export default {
         this.masterOrder.status = 'Incoming'
         this.$message({
           message: 'Push success',
+          type: 'success'
+        })
+      })
+    },
+    onRecallClicked() {
+      recallMasterOrder(this.masterOrder.id).then(() => {
+        this.masterOrder.status = 'Draft'
+        this.$message({
+          message: 'Recall success',
           type: 'success'
         })
       })

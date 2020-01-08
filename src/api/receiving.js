@@ -225,3 +225,10 @@ export function pushMasterOrder(id) {
     method: 'put'
   })
 }
+
+export function recallMasterOrder(id) {
+  return request({
+    url: '/api/fbamasterorder/?masterOrderId=' + id + '&operation=Callback',
+    method: 'put'
+  })
+}
