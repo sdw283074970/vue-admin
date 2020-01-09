@@ -235,3 +235,10 @@ export function recallMasterOrder(id) {
     method: 'put'
   })
 }
+
+export function generateReceivingReceipt(id) {
+  return request({
+    url: '/api/fba/FBAOrderDetail/?masterOrderId=' + id + '&operation=Download',
+    method: 'get'
+  })
+}

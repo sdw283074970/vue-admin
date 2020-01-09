@@ -2,8 +2,8 @@
   <div>
     <h1>Receiving Work Order Page</h1>
     <el-button @click="btnBackClicked">Back</el-button>
-    <el-button class="gb-button" :disabled="step<5" @click="onCommingSoonClicked">Download WO</el-button>
-    <el-button class="gb-button" :disabled="step<7" @click="onCommingSoonClicked">Download Receipt</el-button>
+    <el-button class="gb-button" :disabled="step<4" @click="onCommingSoonClicked" :loading="loading">Download WO</el-button>
+    <el-button class="gb-button" :disabled="step<8" @click="onDownloadReceiptClicked" :loading="loading">Download Receipt</el-button>
     <div style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
         <el-step title="Step1: Start" description="Waiting for uploading" />
@@ -95,6 +95,7 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
+import { generateReceivingReceipt, downloadFile } from '@/api/receiving'
 
 export default {
   props: {
@@ -104,6 +105,7 @@ export default {
   },
   data() {
     return {
+      loading: false
     }
   },
   mounted() {
@@ -120,6 +122,19 @@ export default {
       this.$message({
         message: 'Feature comming soon',
         type: 'warning'
+      })
+    },
+    onDownloadReceiptClicked() {
+      this.loading = true;
+      generateReceivingReceipt(this.masterOrder.id).then(body => {
+        this.$message({
+          message: 'Downloading...',
+          type: 'success'
+        })
+        this.loading = false;
+        downloadFile(body.data, 'Receipt');
+      }).catch(error => {
+        this.loading = false;
       })
     }
   }
