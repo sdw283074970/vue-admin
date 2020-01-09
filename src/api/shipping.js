@@ -192,3 +192,17 @@ export function deleteLabelFile(id, fileName) {
     method: 'delete'
   })
 }
+
+export function generateWO(id) {
+  return request({
+    url: '/api/fba/fbapickdetail/?shipOrderId=' + id + '&operation=Download',
+    method: 'get'
+  })
+}
+
+export function generateBOL(id) {
+  return request({
+    url: '/api/fba/fbashipOrder/?shipOrderId=' + id + '&operation=BOL',
+    method: 'get'
+  })
+}

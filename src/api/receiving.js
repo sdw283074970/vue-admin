@@ -242,3 +242,10 @@ export function generateReceivingReceipt(id) {
     method: 'get'
   })
 }
+
+export function generateWO(id) {
+  return request({
+    url: '/api/fba/FbaMasterOrder/?masterOrderId=' + id + '&operation=Download',
+    method: 'get'
+  })
+}

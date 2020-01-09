@@ -2,7 +2,7 @@
   <div>
     <h1>Receiving Work Order Page</h1>
     <el-button @click="btnBackClicked">Back</el-button>
-    <el-button class="gb-button" :disabled="step<4" @click="onCommingSoonClicked" :loading="loading">Download WO</el-button>
+    <el-button class="gb-button" :disabled="step<3" @click="downloadWOHandler" :loading="loading">Download WO</el-button>
     <el-button class="gb-button" :disabled="step<8" @click="onDownloadReceiptClicked" :loading="loading">Download Receipt</el-button>
     <div style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
@@ -95,7 +95,7 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
-import { generateReceivingReceipt, downloadFile } from '@/api/receiving'
+import { generateReceivingReceipt, generateWO, downloadFile } from '@/api/receiving'
 
 export default {
   props: {
@@ -133,6 +133,19 @@ export default {
         })
         this.loading = false;
         downloadFile(body.data, 'Receipt');
+      }).catch(error => {
+        this.loading = false;
+      })
+    },
+    downloadWOHandler() {
+      this.loading = true;
+      generateWO(this.masterOrder.id).then(body => {
+        this.$message({
+          message: 'Downloading...',
+          type: 'success'
+        })
+        downloadFile(body.data, 'Work Order');
+        this.loading = false;
       }).catch(error => {
         this.loading = false;
       })

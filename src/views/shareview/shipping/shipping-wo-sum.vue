@@ -2,8 +2,8 @@
   <div>
     <h1>Shipping Work Order Page</h1>
     <el-button @click="btnBackClicked">Back</el-button>
-    <el-button class="gb-button" @click="downloadWOHandler()">Download WO</el-button>
-    <el-button class="gb-button" @click="downloadBOLHandler()">Download BOL</el-button>
+    <el-button class="gb-button" :disabled="step<3" :loading="loading" @click="downloadWOHandler()">Download WO</el-button>
+    <el-button class="gb-button" :disabled="step<3" :loading="loading" @click="downloadBOLHandler()">Download BOL</el-button>
     <div style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
         <el-step title="Step1: Start" description="Waiting for picking" />
@@ -75,15 +75,17 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
+import { generateWO, generateBOL } from "@/api/shipping"
+import { downloadFile } from '@/api/receiving'
 
 export default {
   props: {
     shipOrder: {},
-    step: Intl
+    step: Number
   },
   data() {
     return {
-
+      loading: false
     }
   },
   mounted() {
@@ -95,6 +97,32 @@ export default {
     },
     btnBackClicked: function() {
       this.$router.go(-1)
+    },
+    downloadWOHandler() {
+      this.loading = true;
+      generateWO(this.shipOrder.id).then(body => {
+        this.$message({
+          message: 'Downloading...',
+          type: 'success'
+        })
+        downloadFile(body.data, 'Work Order');
+        this.loading = false;
+      }).catch(error => {
+        this.loading = false;
+      })
+    },
+    downloadBOLHandler() {
+      this.loading = true;
+      generateBOL(this.shipOrder.id).then(body => {
+        this.$message({
+          message: 'Downloading...',
+          type: 'success'
+        })
+        downloadFile(body.data, 'BOL');
+        this.loading = false;
+      }).catch(error => {
+        this.loading = false;
+      })
     }
   }
 }

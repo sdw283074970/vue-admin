@@ -4,6 +4,8 @@
     <el-collapse style="margin-top:20px">
       <el-collapse-item title="Update on Jan 9, 2020">
         <div>- 移植了下载收货报告/收据功能</div>
+        <div>- 移植了收货模块中的下载Excel工单功能</div>
+        <div>- 移植了发货模块中的下载Excel工单和BOL功能</div>
       </el-collapse-item>
       <el-collapse-item title="Update on Jan 8, 2020">
         <div>- 修复了收货单中无法正常删除指令的BUG</div>
