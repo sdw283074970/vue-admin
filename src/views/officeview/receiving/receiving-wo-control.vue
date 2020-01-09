@@ -87,7 +87,7 @@ export default {
     },
     onRecallClicked() {
       recallMasterOrder(this.masterOrder.id).then(() => {
-        this.masterOrder.status = 'Draft'
+        this.masterOrder.status = 'New Created'
         this.$message({
           message: 'Recall success',
           type: 'success'

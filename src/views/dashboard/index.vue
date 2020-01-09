@@ -5,6 +5,8 @@
       <el-collapse-item title="Update on Jan 8, 2020">
         <div>- 修复了收货单中无法正常删除指令的BUG</div>
         <div>- 移植了办公室端收货模块的推送/召回订单功能</div>
+        <div>- 新增了办公室端/客户端收货模块中下载Excel模板的功能</div>
+        <div>- 移植了办公室端/客户端收货模块中上传Excel模板的功能</div>
       </el-collapse-item>
       <el-collapse-item title="Update on Jan 7, 2020">
         <div>- 将dashboard改造成了更新日志页面</div>

@@ -127,6 +127,9 @@ export function deleteSKU(id) {
     method: 'delete'
   })
 }
+export function getUploadPackingListAction(id) {
+  return baseURL + '/api/fba/FBAOrderDetail/?masterOrderId=' + id + '&operation=Upload'
+}
 
 export function getUploadLabelAction(id) {
   return baseURL + '/api/fba/FBAOrderDetail/?orderDetailId=' + id
@@ -147,7 +150,7 @@ export function deleteLabelFile(id, fileName) {
 }
 
 export function downloadFile(path, fileName) {
-  var url = config.baseURL + 'api/downloadfile/?fullPath=' + path
+  var url = config.baseURL + 'api/downloadfile/?fullPath=' + encodeURIComponent(path)
   var link = document.createElement('a')
   link.style.display = 'none'
   link.href = url

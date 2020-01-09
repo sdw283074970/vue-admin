@@ -3,8 +3,8 @@
     <h2>Packing List</h2>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" :disabled="step>6" @click="onNewClicked">New SKU</el-button>
-      <el-button type="primary" icon="el-icon-upload" :disabled="masterOrder.status != 'New Created'" @click="onCommingSoonClicked">Upload Packing List File</el-button>
-      <el-button type="primary" icon="el-icon-download" @click="onCommingSoonClicked">Download Packing List Template</el-button>
+      <el-button type="primary" icon="el-icon-upload" :disabled="masterOrder.status != 'New Created'" @click="onUploadPackingListClicked">Upload Packing List File</el-button>
+      <el-button type="primary" icon="el-icon-download" @click="onDownloadTemplateClicked">Download Packing List Template</el-button>
       <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input
         v-model="search"
@@ -159,7 +159,7 @@
 </template>
 <script>
 /* eslint-disable */
-import { addNewSKU, getSKUInfo, updateSKUInfo, deleteSKU, adjustSKUQuantity, getUploadLabelAction, getLabelFileList } from '@/api/receiving'
+import { addNewSKU, getSKUInfo, updateSKUInfo, deleteSKU, adjustSKUQuantity, getUploadLabelAction, getLabelFileList, downloadFile, getUploadPackingListAction } from '@/api/receiving'
 
 export default {
   props: {
@@ -286,6 +286,10 @@ export default {
       deleteSKU(id).then(body => {
         let index = this.orderDetails.map(o => o.id).indexOf(id);
         this.orderDetails.splice(index, 1);
+        this.$message({
+            message: 'Delete success',
+            type: 'success'
+        })
       });
     },
     onAdjustClicked(id) {
@@ -303,6 +307,13 @@ export default {
         this.skuVisible = false;
       });
     },
+    onUploadPackingListClicked() {
+      this.uploadVisible = true;
+      this.uploadAction = getUploadPackingListAction(this.masterOrder.id);
+    },
+    onDownloadTemplateClicked(){
+      downloadFile('D:\\Template\\FBA-PL-Template.xlsx', 'Template')
+    },
     onUploadClicked(id) {
       this.uploadVisible = true;
       this.uploadAction = getUploadLabelAction(id);
@@ -317,16 +328,23 @@ export default {
     uploadSuccessHandler(response, file, fileList) {
       // let index = this.orderDetails.map(x => x.id).indexOf(response.orderDetailId);
       let obj = this.orderDetails.find(function(x) {return x.id == response.orderDetailId});
-      obj.labelFileNumbers += 1;
+
+      if (obj != undefined)
+        obj.labelFileNumbers += 1;
+      else
+        this.orderDetails =  this.orderDetails.concat(response)
+
       this.$message({
           message: 'Upload success',
           type: 'success',
-          center: true
       })
     },
     onLabelDeleteSuccess(orderDetailId) {
       let obj = this.orderDetails.find(function(x) {return x.id == orderDetailId});
-      obj.labelFileNumbers -= 1;
+
+      if (obj != undefined)
+        obj.labelFileNumbers += 1;
+
       this.$message({
           message: 'Delete success',
           type: 'success'
