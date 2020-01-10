@@ -62,12 +62,6 @@
             <el-form-item label="Total Amount">
               <span>${{ props.row.totalAmount }}</span>
             </el-form-item>
-            <el-form-item label="Toal Cost">
-              <span>${{ props.row.totalCost }}</span>
-            </el-form-item>
-            <el-form-item label="Net">
-              <span>${{ props.row.totalAmount-props.row.totalCost }}</span>
-            </el-form-item>
             <el-form-item label="Quick Instruction">
               <span>{{ props.row.instruction }}</span>
             </el-form-item>
