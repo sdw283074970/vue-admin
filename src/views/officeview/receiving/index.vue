@@ -2,9 +2,10 @@
   <div class="gb-maincontainer">
     <h1>Inbound Orders Manager</h1>
     <receiving-index-table
-      :filtered-data="filteredData"
+      :table-data="tableData"
       :total-entries="totalEntries"
       :loading="loading"
+      :customer-code-filters="customerCodeFilters"
       @onEditClicked="onEidtClicked"
       @onCreateClicked="onCreateClicked"
       @onEfilesClicked="onEfilesClicked"
@@ -50,7 +51,7 @@
 
 <script>
 /* eslint-disable */
-import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles } from '@/api/receiving'
+import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, customerCodeFilters } from '@/api/receiving'
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 
 export default {
@@ -60,6 +61,7 @@ export default {
             tableData : [],
             totalEntries: 0,
             customerCodeOptions: [],
+            customerCodeFilters: [],
             destinationOptions: [],
             isEdit: false,
             editVisible: false,
@@ -103,14 +105,14 @@ export default {
         "generic-efiles": () => import('@/views/shareview/generic/generic-efiles')
     },
     watch:{
-      search: function(val, oldVal){
-        this.filteredData = this.tableData.filter(data => {
-            return Object.keys(data).some(key => {
-              return String(data[key]).toLowerCase().indexOf(this.search.toLowerCase()) > -1
-          })
-        })
-        this.totalEntries = this.filteredData.length;
-      }
+      // search: function(val, oldVal){
+      //   this.filteredData = this.tableData.filter(data => {
+      //       return Object.keys(data).some(key => {
+      //         return String(data[key]).toLowerCase().indexOf(this.search.toLowerCase()) > -1
+      //     })
+      //   })
+      //   this.totalEntries = this.filteredData.length;
+      // }
     },
     methods:{
       onSearchChanged(search){
@@ -190,22 +192,24 @@ export default {
       }
     },
     mounted() {
-        getReceivingOrders().then(
-            body => {
-                this.tableData = body.data.reverse();
-                this.filteredData = body.data;
-                this.totalEntries = body.data.length
-                this.loading = false;
-
-                // body.data.forEach(element => {
-                //     var newObj = {"text" : element.customerCode, "value" : element.customerCode};
-                //     this.customerCodeFilter.push(newObj);
-                // });
-        }),
-        getCustomerCodes().then(
+      getReceivingOrders().then(
           body => {
-            this.customerCodeOptions = body.data
-        })
+              this.tableData = body.data.reverse();
+              this.filteredData = body.data;
+              this.totalEntries = body.data.length
+              this.loading = false;
+
+              // body.data.forEach(element => {
+              //     var newObj = {"text" : element.customerCode, "value" : element.customerCode};
+              //     this.customerCodeFilter.push(newObj);
+              // });
+      }),
+      getCustomerCodes().then(body => {
+        this.customerCodeOptions = body.data
+      }),
+      customerCodeFilters().then(body => {
+        this.customerCodeFilters = body.data
+      })
     }
 }
 </script>

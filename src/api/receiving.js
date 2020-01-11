@@ -249,3 +249,10 @@ export function generateWO(id) {
     method: 'get'
   })
 }
+
+export function customerCodeFilters() {
+  return request({
+    url: '/api/uppervendor/?departmentCode=FBA&version=V2',
+    method: 'get'
+  })
+}

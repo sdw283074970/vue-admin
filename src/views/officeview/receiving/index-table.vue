@@ -2,7 +2,7 @@
   <div>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="createHandler">New Inbound Order</el-button>
-      <el-button @click="clearFilter">Clear All Filters</el-button>
+      <el-button :loading="localLoading" @click="clearFilter">Reset All Filters</el-button>
       <el-input
         v-model="search"
         style="width:250px"
@@ -18,7 +18,7 @@
       border
       :height="tableHeight"
       style="width: 100%"
-      @filter-change="filterChange"
+      @filter-change="onFilterChange"
     >
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -110,7 +110,7 @@
         label="Code"
         sortable
         :column-key="'code'"
-        :filters="customerCodeFilter"
+        :filters="customerCodeFilters"
         width="100"
       />
       <el-table-column
@@ -194,9 +194,9 @@
 /* eslint-disable */
 export default {
     props:{
-        filteredData: Array,
+        tableData: Array,
         loading: Boolean,
-        totalEntries: Intl
+        customerCodeFilters: Array
     },
     data() {
         return {
@@ -204,24 +204,39 @@ export default {
             currentPage: 1,
             pageSize: 20,
             search: '',
-            customerCodeFilter : []
+            customerCodeFilter : [],
+            filteredData: [],
+            localLoading: false
         };
     },
+    computed: {
+      totalEntries() {
+        return this.filteredData.length
+      }
+    },
     watch:{
+      tableData: function(val, oldVal){
+        this.filteredData = val
+      },
       search: function(val, oldVal){
-        this.$emit('onSearchChanged', val);
+        // this.$emit('onSearchChanged', val);
+        this.filteredData = this.tableData.filter(data => {
+            return Object.keys(data).some(key => {
+              return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
+          })
+        })
       }
     },
     methods:{
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
-      },
-      filterChange(filters){
-      	console.log(filters);
-      },
       clearFilter() {
+        this.localLoading = true;
         this.$refs.table.clearFilter();
+        this.filteredData = this.tableData;
+        this.localLoading = false;
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        });
       },
       handleSizeChange(val) {
         this.pageSize = val;
@@ -258,9 +273,19 @@ export default {
       },
       onEfilesClicked(reference) {
         this.$emit('onEfilesClicked', reference)
+      },
+      onFilterChange(filters) {
+        this.filteredData = this.tableData.filter((row) => {
+          return row.customerCode == filters.code[0]
+        })
       }
+      // customerCodeFilterHandler(value, row, column) {
+      //   const property = column['property'];
+      //   return row[property] === value;
+      // }
     },
     mounted() {
+
     }
 }
 </script>
