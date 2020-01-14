@@ -2,7 +2,7 @@
   <div>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="createHandler">New Inbound Order</el-button>
-      <el-button :loading="localLoading" @click="clearFilter">Reset All Filters</el-button>
+      <el-button :loading="localLoading" type="warning" @click="clearFilter">Reset</el-button>
       <el-input
         v-model="search"
         style="width:250px"

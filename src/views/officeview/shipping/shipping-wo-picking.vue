@@ -3,13 +3,6 @@
     <h2>Picking List</h2>
     <el-button class="gb-button" :disabled="shipOrder.status != 'New Created'&&shipOrder.status != 'Picking'" type="primary" @click="pltsTableVisible = true">Pick Plts</el-button>
     <el-button class="gb-button" :disabled="shipOrder.status != 'New Created'&&shipOrder.status != 'Picking'" type="primary" @click="ctnsTableVisible = true">Pick Ctns</el-button>
-    <el-input
-      v-model="search"
-      style="width:250px"
-      size="large"
-      placeholder="Search..."
-      disabled=""
-    />
     <el-table
       ref="table"
       :data="pickDetails"
@@ -168,7 +161,7 @@
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item disabled>Adjust</el-dropdown-item>
+              <el-dropdown-item :disabled="step>7" @click.native="onAdjustClicked(scope.row.id)">Adjust</el-dropdown-item>
               <el-dropdown-item :disabled="step>1" @click.native="putbackHandler(scope.row.id)">Put back</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -183,6 +176,15 @@
       :lock-scroll="false"
     >
       <picking-plts @referashPickDetails="referashPickDetails" />
+    </el-dialog>
+    <el-dialog
+      title="Adjust Pallets"
+      :visible.sync="adjustVisible"
+      width="400px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <generic-plt-adjust :adjust-info="adjustInfo" @onAdjustSuccess="onAdjustSuccess" />
     </el-dialog>
     <el-dialog
       title="Inventory(Cartons View)"
@@ -251,13 +253,14 @@ export default {
   components:{
     "picking-plts": () => import('@/views/officeview/shipping/shipping-wo-picking-plts'),
     "picking-ctns": () => import('@/views/officeview/shipping/shipping-wo-picking-ctns'),
-    "generic-labelfiles": () => import('@/views/shareview/generic/generic-labelfiles')
+    "generic-labelfiles": () => import('@/views/shareview/generic/generic-labelfiles'),
+    "generic-plt-adjust": () => import('@/views/shareview/generic/generic-plt-adjust')
   },
   data() {
       return {
           pickVisible: true,
           operationVisible: true,
-          search: '',
+          adjustVisible: false,
           filteredData : [],
           totalEntries: 0,
           currentPage: 1,
@@ -272,7 +275,13 @@ export default {
           labelFiles: [],
           orderDetailId: 0,
           cartonId: 0,
-          fbaPickDetailCartonId: 0
+          fbaPickDetailCartonId: 0,
+          adjustInfo: {
+            currentPickingPlts: 0,
+            currentNewPlts: 0,
+            currentOutboundPlts: 0,
+            sku: ''
+          }
       };
   },
   methods:{
@@ -351,6 +360,22 @@ export default {
     },
     referashPickDetails(){
       this.$emit('referashPickDetails');
+    },
+    onAdjustClicked(id){
+      this.adjustVisible = true;
+      var obj = this.pickDetails.find(x => x.id === id);
+      this.adjustInfo.currentPickingPlts = obj.pltsFromInventory;
+      this.adjustInfo.currentNewPlts = obj.newPlts;
+      this.adjustInfo.currentOutboundPlts = obj.actualPlts;
+      this.adjustInfo.sku = obj.shipmentId;
+      this.adjustInfo.id = id;
+    },
+    onAdjustSuccess(id, adjustObj){
+      var obj = this.pickDetails.find(x => x.id == id);
+      this.adjustVisible = false;
+      obj.pltsFromInventory += Number(adjustObj.pltsAdjust);
+      obj.newPlts += Number(adjustObj.newPltsAdjust);
+      obj.actualPlts += Number(adjustObj.outboundAdjust);
     }
   },
   mounted() {

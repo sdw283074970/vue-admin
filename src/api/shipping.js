@@ -60,6 +60,13 @@ export function getCustomerCodes() {
   })
 }
 
+export function onAdjustClcicked(id, obj) {
+  return request({
+    url: '/api/fba/fbapickdetail/?pickDetailId=7576&pltsAdjust=0&newPltsAdjust=2&outboundAdjust=2',
+    method: 'put'
+  })
+}
+
 export function getAddressCode() {
   return request({
     url: 'api/fbaaddressmanagement/',
@@ -156,21 +163,21 @@ export function reverseShipOrderStatus(shipOrderId, operationDate) {
 
 export function createNewInstructionByCustomer(reference, description) {
   return request({
-    url: '/api/FBAInvoiceDetail/?reference=' + reference + '&invoiceType=ShipOrder&description=' + encodeURIComponent(description),
+    url: 'api/FBAInvoiceDetail/?reference=' + reference + '&invoiceType=ShipOrder&description=' + encodeURIComponent(description),
     method: 'post'
   })
 }
 
 export function submitShipOrder(id) {
   return request({
-    url: '/api/FBAShipOrder/?shipOrderId=' + id + '&operation=Submit',
+    url: 'api/FBAShipOrder/?shipOrderId=' + id + '&operation=Submit',
     method: 'put'
   })
 }
 
 export function getOrderDetailId(id) {
   return request({
-    url: '/api/FBAPickDetail/?cartonId=' + id,
+    url: 'api/FBAPickDetail/?cartonId=' + id,
     method: 'get'
   })
 }
@@ -204,5 +211,12 @@ export function generateBOL(id) {
   return request({
     url: '/api/fba/fbashipOrder/?shipOrderId=' + id + '&operation=BOL',
     method: 'get'
+  })
+}
+
+export function adjustPickDetail(id, obj) {
+  return request({
+    url: 'api/fba/fbapickdetail/?pickDetailId=' + id + '&pltsAdjust=' + obj.pltsAdjust + '&newPltsAdjust=' + obj.newPltsAdjust + '&outboundAdjust=' + obj.outboundAdjust,
+    method: 'put'
   })
 }

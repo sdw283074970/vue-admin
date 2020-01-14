@@ -3,13 +3,6 @@
     <h2>Picking List</h2>
     <el-button class="gb-button" :disabled="shipOrder.status != 'New Created'&&shipOrder.status != 'Picking'" type="primary" @click="pltsTableVisible = true">Pick Plts</el-button>
     <el-button class="gb-button" :disabled="shipOrder.status != 'New Created'&&shipOrder.status != 'Picking'" type="primary" @click="ctnsTableVisible = true">Pick Ctns</el-button>
-    <el-input
-      v-model="search"
-      style="width:250px"
-      size="large"
-      placeholder="Search..."
-      disabled=""
-    />
     <el-table
       ref="table"
       :data="pickDetails"
@@ -168,7 +161,7 @@
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item disabled>Adjust</el-dropdown-item>
+              <!-- <el-dropdown-item :disabled="step<=3">Adjust</el-dropdown-item> -->
               <el-dropdown-item :disabled="step>1" @click.native="putbackHandler(scope.row.id)">Put back</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
