@@ -2,9 +2,9 @@
   <div class="gb-maincontainer">
     <h1>Shipping Manager</h1>
     <shipping-index-table
-      :filtered-data="filteredData"
-      :total-entries="totalEntries"
+      :table-data="tableData"
       :loading="loading"
+      :customer-code-filters="customerCodeFilters"
       @onEfilesClicked="onEfilesClicked"
       @onEditClicked="onEidtClicked"
       @onCreateClicked="onCreateClicked"
@@ -50,7 +50,7 @@
 
 <script>
 /* eslint-disable */
-import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles } from '@/api/receiving'
+import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters } from '@/api/receiving'
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 import Axios from 'axios';
 import qs from 'qs';
@@ -67,6 +67,7 @@ export default {
             tableData : [],
             totalEntries: 0,
             customerCodeOptions: [],
+            customerCodeFilters: [],
             destinationOptions: [],
             isEdit: false,
             editVisible: false,
@@ -189,7 +190,10 @@ export default {
         body => {
           this.destinationOptions = body.data
         }
-      )
+      ),
+      getCustomerCodeFilters().then(body => {
+        this.customerCodeFilters = body.data
+      })
     }
 }
 </script>

@@ -5,6 +5,7 @@
       <div>
         <el-button class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
         <el-button class="gb-button" type="warning" :disabled="step!=3" @click="onRecallClicked">Recall WO</el-button>
+        <el-button v-if="step>2" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
         <el-button class="gb-button" disabled>Push Status</el-button>
         <el-button class="gb-button" disabled>Reverse Status</el-button>
       </div>
@@ -23,6 +24,16 @@
       :lock-scroll="false"
     >
       <receiving-register :master-order="masterOrder" :order-details="orderDetails" />
+    </el-dialog>
+    <el-dialog
+      title="Select Arrive Date"
+      :visible.sync="arrivedVisible"
+      top="5vh"
+      width="350px"
+      :lock-scroll="false"
+    >
+      <el-date-picker v-model="arrivedTime" type="date" placeholder="Select Arrive Date" value-format="yyyy-MM-dd" style="width:180px;" />
+      <el-button type="primary" @click="onConfirmArrivedTimeClicked">Confirm</el-button>
     </el-dialog>
     <el-dialog
       title="Allocate Location"
@@ -48,7 +59,7 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
-import { pushMasterOrder, recallMasterOrder } from '@/api/receiving'
+import { pushMasterOrder, recallMasterOrder, setInboundDate } from '@/api/receiving'
 
 export default {
   components: {
@@ -69,7 +80,9 @@ export default {
     return {
       registerVisible: false,
       allocateVisible: false,
-      inventoryVisible: false
+      inventoryVisible: false,
+      arrivedVisible: false,
+      arrivedTime: ''
     }
   },
   mounted() {
@@ -93,6 +106,23 @@ export default {
           type: 'success'
         })
       })
+    },
+    onConfirmArrivedTimeClicked() {
+      if (this.arrivedTime === '') {
+        this.$message({
+          message: 'Please select an arrived date',
+          type: 'error'
+        })
+      } else {
+        setInboundDate(this.masterOrder.id, this.arrivedTime).then(() => {
+          this.masterOrder.status = 'Arrived'
+          this.arrivedVisible = false
+          this.$message({
+            message: 'Success!',
+            type: 'success'
+          })
+        })
+      }
     }
   }
 }

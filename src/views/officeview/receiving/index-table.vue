@@ -108,7 +108,6 @@
       <el-table-column
         prop="customerCode"
         label="Code"
-        sortable
         :column-key="'code'"
         :filters="customerCodeFilters"
         width="100"

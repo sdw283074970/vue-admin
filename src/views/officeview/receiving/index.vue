@@ -3,7 +3,6 @@
     <h1>Inbound Orders Manager</h1>
     <receiving-index-table
       :table-data="tableData"
-      :total-entries="totalEntries"
       :loading="loading"
       :customer-code-filters="customerCodeFilters"
       @onEditClicked="onEidtClicked"
@@ -51,7 +50,7 @@
 
 <script>
 /* eslint-disable */
-import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, customerCodeFilters } from '@/api/receiving'
+import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters } from '@/api/receiving'
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 
 export default {
@@ -207,7 +206,7 @@ export default {
       getCustomerCodes().then(body => {
         this.customerCodeOptions = body.data
       }),
-      customerCodeFilters().then(body => {
+      getCustomerCodeFilters().then(body => {
         this.customerCodeFilters = body.data
       })
     }

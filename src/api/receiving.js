@@ -250,9 +250,16 @@ export function generateWO(id) {
   })
 }
 
-export function customerCodeFilters() {
+export function getCustomerCodeFilters() {
   return request({
     url: '/api/uppervendor/?departmentCode=FBA&version=V2',
     method: 'get'
+  })
+}
+
+export function setInboundDate(id, date) {
+  return request({
+    url: 'api/warehouseinboundlog/?masterOrderId=' + id + '&operationDate=' + date + '&operation=MarkInboundDate',
+    method: 'put'
   })
 }

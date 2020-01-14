@@ -4,6 +4,8 @@
     <el-collapse style="margin-top:20px">
       <el-collapse-item title="Update on Jan 13, 2020">
         <div>- 移植了办公室端口托盘调整的功能</div>
+        <div>- 新增了办公室端发货页面按客户CODE筛选的功能(目前仅支持单个客户筛选)</div>
+        <div>- 新增了办公室端标记入库时间的功能)</div>
       </el-collapse-item>
       <el-collapse-item title="Update on Jan 10, 2020">
         <div>- 新增了办公室端收货页面按客户CODE筛选的功能(目前仅支持单个客户筛选)</div>
