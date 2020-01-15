@@ -5,6 +5,7 @@
       <el-collapse-item title="Update on Jan 14, 2020">
         <div>- 移植了办公室端收货模块和发货模块中按SKU过滤收货单和发货单的功能</div>
         <div>- 更改了办公室端收货模块和发货模块中的Reset功能，现在Reset将重置整个表格</div>
+        <div>- 增加了出货单主页中POD的状态显示</div>
       </el-collapse-item>
       <el-collapse-item title="Update on Jan 13, 2020">
         <div>- 移植了办公室端口托盘调整的功能</div>

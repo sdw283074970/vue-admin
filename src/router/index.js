@@ -164,13 +164,13 @@ export const asyncRoutes = [
   {
     path: '/customer',
     component: Layout,
-    meta: { title: 'Customer', icon: 'table', role: ['office', 'accounting', 'sales'] },
+    meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'sales'] },
     children: [
       {
         path: 'index',
         name: 'Customer',
         component: () => import('@/views/officeview/customer/index'),
-        meta: { title: 'Customer', icon: 'table', role: ['office', 'accounting', 'sales'] }
+        meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'sales'] }
       }
     ]
   },

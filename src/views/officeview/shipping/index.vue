@@ -189,7 +189,7 @@ export default {
       },
       onRefreshClicked() {
         this.loading = true;
-        getReceivingOrders().then(body => {
+        getShippingOrders().then(body => {
           this.tableData = body.data.reverse();
           this.totalEntries = body.data.length;
           this.filteredData = body.data;

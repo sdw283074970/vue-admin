@@ -2,8 +2,8 @@
   <div>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="createHandler">New Inbound Order</el-button>
-      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">Filter</el-button>
-      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset</el-button>
+      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
+      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"
         style="width:250px"
@@ -83,16 +83,16 @@
       </el-table-column>
       <el-table-column
         sortable
-        fixed=""
+        fixed
         prop="id"
         label="Id"
         width="60"
       />
       <el-table-column
-        sortable
         fixed
         prop="status"
         label="Status"
+        sortable
         width="120"
       >
         <template slot-scope="scope">
@@ -103,7 +103,7 @@
         prop="container"
         label="Container #"
         sortable
-        fixed=""
+        fixed
         width="200"
       />
       <el-table-column
@@ -217,7 +217,17 @@ export default {
             filteredData: [],
             localLoading: false,
             filterVisible: false,
-            orderType: 'MasterOrder'
+            orderType: 'MasterOrder',
+            statusFilters: [
+              { value: 'New Created', text: 'New Created' },
+              { value: 'Draft', text: 'Draft' },
+              { value: 'Incoming', text: 'Incoming' },
+              { value: 'Arrived', text: 'Arrived' },
+              { value: 'Processing', text: 'Processing' },
+              { value: 'Received', text: 'Received' },
+              { value: 'Registered', text: 'Registered' },
+              { value: 'Allocated', text: 'Allocated' }
+            ]
         };
     },
     components: {
@@ -233,7 +243,6 @@ export default {
         this.filteredData = val
       },
       search: function(val, oldVal){
-        // this.$emit('onSearchChanged', val);
         this.filteredData = this.tableData.filter(data => {
             return Object.keys(data).some(key => {
               return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
@@ -243,7 +252,7 @@ export default {
     },
     methods:{
       transferDate: function(date) {
-          return date === undefined ? '' : (date.substring(0, 4) === 1900 ? '-' : date.substring(0, 10))
+          return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
       },
       clearFilter() {
         this.$refs.table.clearFilter();
@@ -293,6 +302,19 @@ export default {
         this.filteredData = this.tableData.filter((row) => {
           return row.customerCode == filters.code[0]
         })
+
+        // var arr = [];
+        // this.filteredData.filter(row => {
+        //   if (row.customerCode == filters.code[0])
+        //   {
+        //     arr.push(row);
+        //   }
+        // })
+        // this.filteredData = arr;
+
+        // this.filteredData = this.tableData.filter((row) => {
+        //   return row.status = filters.status[0]
+        // })
       },
       onFilterConfirmed(filter) {
         this.filterVisible = false;

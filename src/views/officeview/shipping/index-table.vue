@@ -2,8 +2,8 @@
   <div>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="createHandler">New SO</el-button>
-      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">Filter</el-button>
-      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset</el-button>
+      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
+      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"
         style="width:250px"
@@ -145,13 +145,24 @@
       <el-table-column
         prop="totalCtns"
         label="Total Ctns"
+        align="center"
         min-width="20%"
       />
       <el-table-column
         prop="totalPlts"
         label="Total Plts"
+        align="center"
         min-width="20%"
       />
+      <el-table-column
+        label="POD"
+        width="60"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <font>{{ scope.row.podStatus===false?'N':'Y' }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="operation"
         label="operation"
@@ -161,7 +172,7 @@
           <el-button @click="editHandler(scope.row.id, scope.$index)">Fee</el-button>
           <el-button @click="editHandler(scope.row.id)">Edit</el-button>
           <el-button @click="woHandler(scope.row.id)">WO</el-button>
-          <el-button type="danger" plain @click="editHandler(scope.row.id, scope.$index)">Delete</el-button>
+          <!-- <el-button type="danger" plain @click="editHandler(scope.row.id, scope.$index)">Delete</el-button> -->
         </template>
       </el-table-column>
     </el-table>

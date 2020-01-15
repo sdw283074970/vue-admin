@@ -71,7 +71,7 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     /* has no token*/
-    alert('未检测到token 请重新登陆')
+    // alert('未检测到token 请重新登陆')
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
       next()
