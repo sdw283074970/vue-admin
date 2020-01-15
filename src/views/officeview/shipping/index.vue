@@ -9,6 +9,8 @@
       @onEditClicked="onEidtClicked"
       @onCreateClicked="onCreateClicked"
       @onSearchChanged="onSearchChanged"
+      @onFilterConfirmed="onFilterConfirmed"
+      @onRefreshClicked="onRefreshClicked"
     />
     <div>
       <el-dialog
@@ -50,8 +52,8 @@
 
 <script>
 /* eslint-disable */
-import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters } from '@/api/receiving'
-import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
+import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters, getFilteredDate } from '@/api/receiving';
+import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping';
 import Axios from 'axios';
 import qs from 'qs';
 
@@ -170,16 +172,42 @@ export default {
         getEfiles(reference, this.orderType).then(body => {
           this.efiles = body.data
         })
+      },
+      onFilterConfirmed(filter) {
+        this.loading = true;
+        getFilteredDate('ShipOrder', filter).then(body => {
+          this.tableData = body.data.reverse();
+          this.filteredData = body.data;
+          this.totalEntries = body.data.length
+          this.loading = false;
+
+          this.$message({
+            message: 'Success!',
+            type: 'success'
+          });
+        })
+      },
+      onRefreshClicked() {
+        this.loading = true;
+        getReceivingOrders().then(body => {
+          this.tableData = body.data.reverse();
+          this.totalEntries = body.data.length;
+          this.filteredData = body.data;
+          this.loading = false;
+          this.$message({
+            message: 'Success!',
+            type: 'success'
+          });
+        })
       }
     },
     mounted() {
-      getShippingOrders().then(
-          body => {
-              this.tableData = body.data.reverse();
-              this.totalEntries = body.data.length;
-              this.filteredData = body.data;
-              this.loading = false;
-          }
+      getShippingOrders().then(body => {
+          this.tableData = body.data.reverse();
+          this.totalEntries = body.data.length;
+          this.filteredData = body.data;
+          this.loading = false;
+        }
       ),
       getCustomerCodes().then(
         body => {

@@ -2,7 +2,8 @@
   <div>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="createHandler">New SO</el-button>
-      <el-button :loading="localLoading" type="warning" @click="clearFilter">Reset</el-button>
+      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">Filter</el-button>
+      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset</el-button>
       <el-input
         v-model="search"
         style="width:250px"
@@ -46,19 +47,19 @@
               <span>{{ props.row.carrier }}</span>
             </el-form-item>
             <el-form-item label="Push Date">
-              <span>{{ props.row.placeTime.substring(0, 4)==1900?'-':props.row.placeTime.substring(0, 10) }}</span>
+              <span>{{ transferDate(props.row.placeTime) }}</span>
             </el-form-item>
             <el-form-item label="Start Time">
-              <span>{{ props.row.startedTime.substring(0, 4)==1900?'-':props.row.startedTime.substring(0, 10) }}</span>
+              <span>{{ transferDate(props.row.startedTime) }}</span>
             </el-form-item>
             <el-form-item label="Ready Time">
-              <span>{{ props.row.readyTime.substring(0, 4)==1900?'-':props.row.readyTime.substring(0, 10) }}</span>
+              <span>{{ transferDate(props.row.readyTime) }}</span>
             </el-form-item>
             <el-form-item label="Released Date">
-              <span>{{ props.row.releasedDate.substring(0, 4)==1900?'-':props.row.releasedDate.substring(0, 10) }}</span>
+              <span>{{ transferDate(props.row.releasedDate) }}</span>
             </el-form-item>
             <el-form-item label="Shipped Date">
-              <span>{{ props.row.shipDate.substring(0, 4)==1900?'-':props.row.shipDate.substring(0, 10) }}</span>
+              <span>{{ transferDate(props.row.shipDate) }}</span>
             </el-form-item>
             <el-form-item label="Total Amount">
               <span>${{ props.row.totalAmount }}</span>
@@ -138,7 +139,7 @@
         min-width="20%"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.ets.substring(0, 10) }}</font>
+          <font>{{ transferDate(scope.row.ets) }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -175,6 +176,15 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <el-dialog
+      title="Manage Efiles"
+      :visible.sync="filterVisible"
+      width="300px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <generic-order-filter @onFilterConfirmed="onFilterConfirmed" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -193,8 +203,12 @@ export default {
             search: '',
             filteredData: [],
             customerCodeFilter : [],
-            localLoading: false
+            localLoading: false,
+            filterVisible: false
         };
+    },
+    components: {
+        "generic-order-filter": () => import('@/views/shareview/generic/generic-order-filter')
     },
     computed: {
       totalEntries() {
@@ -215,15 +229,12 @@ export default {
       }
     },
     methods:{
+      transferDate: function(date) {
+          return date === undefined ? '' : (date.substring(0, 4) === 1900 ? '-' : date.substring(0, 10))
+      },
       clearFilter() {
-        this.localLoading = true;
         this.$refs.table.clearFilter();
-        this.filteredData = this.tableData;
-        this.localLoading = false;
-        this.$message({
-          message: 'Success!',
-          type: 'success'
-        });
+        this.$emit('onRefreshClicked');
       },
       handleSizeChange(val) {
         this.pageSize = val;
@@ -263,6 +274,10 @@ export default {
         this.filteredData = this.tableData.filter((row) => {
           return row.customerCode == filters.code[0]
         })
+      },
+      onFilterConfirmed(filter) {
+        this.filterVisible = false;
+        this.$emit('onFilterConfirmed', filter);
       }
     },
     mounted() {

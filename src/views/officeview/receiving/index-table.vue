@@ -2,7 +2,8 @@
   <div>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="createHandler">New Inbound Order</el-button>
-      <el-button :loading="localLoading" type="warning" @click="clearFilter">Reset</el-button>
+      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">Filter</el-button>
+      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset</el-button>
       <el-input
         v-model="search"
         style="width:250px"
@@ -150,7 +151,7 @@
         width="100"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.eta.substring(0, 10) }}</font>
+          <font>{{ transferDate(scope.row.eta) }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -161,7 +162,7 @@
         width="100"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.inboundDate.substring(0, 4)==1900?'-':scope.row.inboundDate.substring(0, 10) }}</font>
+          <font>{{ transferDate(scope.row.inboundDate) }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -187,6 +188,15 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <el-dialog
+      title="Manage Efiles"
+      :visible.sync="filterVisible"
+      width="300px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <generic-order-filter @onFilterConfirmed="onFilterConfirmed" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -205,8 +215,13 @@ export default {
             search: '',
             customerCodeFilter : [],
             filteredData: [],
-            localLoading: false
+            localLoading: false,
+            filterVisible: false,
+            orderType: 'MasterOrder'
         };
+    },
+    components: {
+        "generic-order-filter": () => import('@/views/shareview/generic/generic-order-filter')
     },
     computed: {
       totalEntries() {
@@ -227,15 +242,16 @@ export default {
       }
     },
     methods:{
+      transferDate: function(date) {
+          return date === undefined ? '' : (date.substring(0, 4) === 1900 ? '-' : date.substring(0, 10))
+      },
       clearFilter() {
-        this.localLoading = true;
         this.$refs.table.clearFilter();
-        this.filteredData = this.tableData;
-        this.localLoading = false;
-        this.$message({
-          message: 'Success!',
-          type: 'success'
-        });
+        this.$emit('onRefreshClicked');
+        // this.localLoading = true;
+        // this.filteredData = this.tableData;
+        // this.localLoading = false;
+
       },
       handleSizeChange(val) {
         this.pageSize = val;
@@ -277,11 +293,11 @@ export default {
         this.filteredData = this.tableData.filter((row) => {
           return row.customerCode == filters.code[0]
         })
+      },
+      onFilterConfirmed(filter) {
+        this.filterVisible = false;
+        this.$emit('onFilterConfirmed', filter);
       }
-      // customerCodeFilterHandler(value, row, column) {
-      //   const property = column['property'];
-      //   return row[property] === value;
-      // }
     },
     mounted() {
 

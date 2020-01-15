@@ -9,6 +9,8 @@
       @onCreateClicked="onCreateClicked"
       @onEfilesClicked="onEfilesClicked"
       @onSearchChanged="onSearchChanged"
+      @onFilterConfirmed="onFilterConfirmed"
+      @onRefreshClicked="onRefreshClicked"
     />
     <div>
       <el-dialog
@@ -50,7 +52,7 @@
 
 <script>
 /* eslint-disable */
-import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters } from '@/api/receiving'
+import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters, getFilteredDate } from '@/api/receiving'
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 
 export default {
@@ -64,6 +66,7 @@ export default {
             destinationOptions: [],
             isEdit: false,
             editVisible: false,
+            filterVisible: false,
             filteredData: [],
             dialogFormVisible : false,
             shipOrderStatus: '',
@@ -188,20 +191,41 @@ export default {
         getEfiles(reference, this.orderType).then(body => {
           this.efiles = body.data
         })
+      },
+      onFilterConfirmed(filter) {
+        this.loading = true;
+        getFilteredDate('MasterOrder', filter).then(body => {
+          this.tableData = body.data.reverse();
+          this.filteredData = body.data;
+          this.totalEntries = body.data.length
+          this.loading = false;
+
+          this.$message({
+            message: 'Success!',
+            type: 'success'
+          });
+        })
+      },
+      onRefreshClicked() {
+        this.loading = true;
+        getReceivingOrders().then(body => {
+          this.tableData = body.data.reverse();
+          this.filteredData = body.data;
+          this.totalEntries = body.data.length
+          this.loading = false;
+          this.$message({
+            message: 'Success!',
+            type: 'success'
+          });
+        })
       }
     },
     mounted() {
-      getReceivingOrders().then(
-          body => {
-              this.tableData = body.data.reverse();
-              this.filteredData = body.data;
-              this.totalEntries = body.data.length
-              this.loading = false;
-
-              // body.data.forEach(element => {
-              //     var newObj = {"text" : element.customerCode, "value" : element.customerCode};
-              //     this.customerCodeFilter.push(newObj);
-              // });
+      getReceivingOrders().then(body => {
+        this.tableData = body.data.reverse();
+        this.filteredData = body.data;
+        this.totalEntries = body.data.length
+        this.loading = false;
       }),
       getCustomerCodes().then(body => {
         this.customerCodeOptions = body.data

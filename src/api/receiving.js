@@ -263,3 +263,10 @@ export function setInboundDate(id, date) {
     method: 'put'
   })
 }
+
+export function getFilteredDate(orderType, filter) {
+  return request({
+    url: 'api/fbamasterorder/?sku=' + encodeURIComponent(filter.sku.trim()) + '&orderType=' + orderType,
+    method: 'get'
+  })
+}

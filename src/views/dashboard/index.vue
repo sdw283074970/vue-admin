@@ -2,6 +2,10 @@
   <div class="dashboard-container">
     <div class="dashboard-text">更新日志 Update Log</div>
     <el-collapse style="margin-top:20px">
+      <el-collapse-item title="Update on Jan 14, 2020">
+        <div>- 移植了办公室端收货模块和发货模块中按SKU过滤收货单和发货单的功能</div>
+        <div>- 更改了办公室端收货模块和发货模块中的Reset功能，现在Reset将重置整个表格</div>
+      </el-collapse-item>
       <el-collapse-item title="Update on Jan 13, 2020">
         <div>- 移植了办公室端口托盘调整的功能</div>
         <div>- 新增了办公室端发货页面按客户CODE筛选的功能(目前仅支持单个客户筛选)</div>
