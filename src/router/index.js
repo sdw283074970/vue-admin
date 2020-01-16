@@ -352,6 +352,27 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/warehouse-receiving',
+    component: Layout,
+    name: 'Warehouse Receiving',
+    meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'accounting', 'sales', 'warehouse'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Warehouse Receiving Overview',
+        component: () => import('@/views/warehouseview/receiving/index'),
+        meta: { title: 'Inbound Manager', icon: 'table' }
+      },
+      {
+        path: '/warehouse-receiving/receiving-wo/:masterOrderId',
+        name: 'Warehouse Receiving WO',
+        component: () => import('@/views/warehouseview/receiving/receiving-wo'),
+        hidden: true,
+        meta: { title: 'WO', breadcrumb: true }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

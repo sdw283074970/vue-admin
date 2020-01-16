@@ -45,6 +45,22 @@
 <script>
 /* eslint-disable */
 
+const validateAcquaintance = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error('Please enter valid pallet number'))
+  }
+  value = Number(value)
+  if (typeof value === 'number' && !isNaN(value)) {
+    if (value < 1) {
+      callback(new Error('Pallet number cannot be smaller than 1'))
+    } else {
+      callback()
+    }
+  } else {
+    callback(new Error('Please enter valid pallet number'))
+  }
+}
+
 export default {
     props: {
         masterOrder: {},

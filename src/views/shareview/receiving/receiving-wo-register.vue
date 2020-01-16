@@ -89,7 +89,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="submitForm('ruleForm')">Pack</el-button>
+          <el-button @click="onPackCliced()">Pack</el-button>
           <el-button @click="resetForm('ruleForm')">Reset</el-button>
         </el-form-item>
       </el-form>
@@ -146,21 +146,8 @@ export default {
       };
   },
   methods:{
-    filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
-    },
-    filterChange(filters){
-        console.log(filters);
-    },
-    clearFilter() {
-        this.$refs.table.clearFilter();
-    },
-    handleSizeChange(val) {
-        this.pageSize = val;
-    },
-    handleCurrentChange(val) {
-        this.currentPage = val;
+    onPackCliced() {
+      alert('packed')
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

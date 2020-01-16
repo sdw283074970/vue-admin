@@ -270,3 +270,10 @@ export function getFilteredDate(orderType, filter) {
     method: 'get'
   })
 }
+
+export function getWarehouseInboundOrders() {
+  return request({
+    url: 'api/WarehouseInboundLog/',
+    method: 'get'
+  })
+}

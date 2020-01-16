@@ -2,7 +2,7 @@
   <div>
     <h2>Instructions & Charging</h2>
     <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onNewClicked">New</el-button>
+      <!-- <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onNewClicked">New</el-button>
       <el-popover
         v-model="popVisible"
         placement="top"
@@ -15,7 +15,7 @@
           <el-button type="primary" size="mini" @click="onResetClicked">Yes</el-button>
         </div>
         <el-button slot="reference" class="gb-button" type="primary">Reset Instruction</el-button>
-      </el-popover>
+      </el-popover> -->
     </div>
     <el-table
       ref="table-instructions"
