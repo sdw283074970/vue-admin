@@ -142,7 +142,7 @@ export function updateInstruction(id, description, isChargingItem, isInstruction
 
 export function resultInstruction(id, description) {
   return request({
-    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=true&operation=UpdateResult',
+    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=true&&isInstruction=true&&operation=UpdateResult',
     method: 'put'
   })
 }
