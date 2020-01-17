@@ -277,3 +277,25 @@ export function getWarehouseInboundOrders() {
     method: 'get'
   })
 }
+
+export function changeOrderStatus(id, operation) {
+  return request({
+    url: 'api/fbamasterorder/?masterOrderId=' + id + '&operation=' + operation,
+    method: 'put'
+  })
+}
+
+export function autoReceive(id) {
+  return request({
+    url: 'api/fba/FBAOrderDetail/?masterOrderId=' + id,
+    method: 'put'
+  })
+}
+
+export function finishProcessing(id, operation, data) {
+  return request({
+    url: 'api/warehouseinboundlog/?masterOrderId=' + id + '&operation=' + operation,
+    method: 'put',
+    data: data
+  })
+}

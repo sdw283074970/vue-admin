@@ -362,7 +362,7 @@ export const asyncRoutes = [
         path: 'index',
         name: 'Warehouse Receiving Overview',
         component: () => import('@/views/warehouseview/receiving/index'),
-        meta: { title: 'Inbound Manager', icon: 'table' }
+        meta: { title: 'WHS Receiving', icon: 'table' }
       },
       {
         path: '/warehouse-receiving/receiving-wo/:masterOrderId',

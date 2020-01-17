@@ -3,16 +3,18 @@
     <h2>Control Panel</h2>
     <div style="margin-bottom:10px">
       <div>
-        <el-button v-if="step>2" class="gb-button" type="primary" @click="arrivedVisible=true">Set Arrived Date</el-button>
-        <el-button class="gb-button" disabled>Reverse Status</el-button>
+        <el-button class="gb-button" :disabled="step!=4" type="success" @click="onStartClicked">Start</el-button>
+        <el-button class="gb-button" :disabled="step!=5" type="primary" @click="onAutoReceiveClicked">Auto Receive</el-button>
+        <el-button class="gb-button" :disabled="step!=5" type="success" @click="onFinishProcessingClicked">Finish Processing</el-button>
+        <el-button class="gb-button" :disabled="step<6" type="primary" @click="registerVisible = true">Register Plt</el-button>
+        <el-button class="gb-button" :disabled="step!=6" type="success">Finish Palletizing</el-button>
+        <el-button class="gb-button" :disabled="step<7" type="primary" @click="allocateVisible = true">Allocate Location</el-button>
+        <el-button class="gb-button" :disabled="step!=8" type="success" @click="onFinishClicked">Finish Allocating</el-button>
       </div>
       <div style="margin-top:10px">
-        <el-button class="gb-button" disabled>Start</el-button>
-        <el-button class="gb-button" disabled>Auto Receive</el-button>
-        <el-button class="gb-button" disabled>Submit Report</el-button>
-        <el-button class="gb-button" @click="registerVisible = true">Register Plt Info</el-button>
-        <el-button class="gb-button" @click="allocateVisible = true">Allocate Location</el-button>
-        <el-button class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
+        <el-button v-if="step>2" class="gb-button" type="info" @click="arrivedVisible=true">Reset Arrived Date</el-button>
+        <el-button class="gb-button" :disabled="step<5" type="info" @click="onResetStatusClicked">Reset Order Status</el-button>
+        <el-button class="gb-button" type="info" @click="inventoryVisible = true">View Inventory</el-button>
       </div>
     </div>
     <el-dialog
@@ -33,6 +35,15 @@
     >
       <el-date-picker v-model="arrivedTime" type="date" placeholder="Select Arrive Date" value-format="yyyy-MM-dd" style="width:180px;" />
       <el-button type="primary" @click="onConfirmArrivedTimeClicked">Confirm</el-button>
+    </el-dialog>
+    <el-dialog
+      title="Processing Report"
+      :visible.sync="reportVisible"
+      top="5vh"
+      width="800px"
+      :lock-scroll="false"
+    >
+      <process-report :master-order="masterOrder" :report="report" @onOperationSuccess="onOperationSuccess" />
     </el-dialog>
     <el-dialog
       title="Allocate Location"
@@ -58,13 +69,14 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
-import { setInboundDate } from '@/api/receiving'
+import { setInboundDate, changeOrderStatus, autoReceive } from '@/api/receiving'
 
 export default {
   components: {
     'receiving-register': () => import('@/views/shareview/receiving/receiving-wo-register'),
     'receiving-allocate': () => import('@/views/shareview/receiving/receiving-wo-allocate'),
-    'receiving-inventory': () => import('@/views/shareview/receiving/receiving-wo-inventory')
+    'receiving-inventory': () => import('@/views/shareview/receiving/receiving-wo-inventory'),
+    'process-report': () => import('@/views/shareview/generic/generic-receiving-report')
   },
   props: {
     masterOrder: {},
@@ -81,7 +93,16 @@ export default {
       allocateVisible: false,
       inventoryVisible: false,
       arrivedVisible: false,
-      arrivedTime: ''
+      reportVisible: false,
+      arrivedTime: '',
+      report: {
+        availableTime: '',
+        dockNumber: '',
+        inboundDate: '',
+        outTime: '',
+        unloadFinishTime: '',
+        verifiedBy: ''
+      }
     }
   },
   mounted() {
@@ -104,6 +125,56 @@ export default {
           })
         })
       }
+    },
+    onResetStatusClicked() {
+      changeOrderStatus(this.masterOrder.id, 'Reset').then(body => {
+        this.masterOrder.status = 'Arrived'
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+      })
+    },
+    onStartClicked() {
+      changeOrderStatus(this.masterOrder.id, 'Start').then(body => {
+        this.masterOrder.status = 'Processing'
+        this.masterOrder.unloadStartTime = 'Today'
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+      })
+    },
+    onFinishClicked() {
+      changeOrderStatus(this.masterOrder.id, 'Finish Allocating').then(body => {
+        this.masterOrder.status = 'Allocated'
+        this.masterOrder.unloadFinishTime = 'Today'
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+      })
+    },
+    onAutoReceiveClicked() {
+      autoReceive(this.masterOrder.id).then(body => {
+        this.$emit('refreshPackingList')
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+      })
+    },
+    onFinishProcessingClicked() {
+      this.reportVisible = true
+      this.report.verifiedBy = this.masterOrder.verifiedBy
+      this.report.availableTime = this.masterOrder.availableTime.substring(0, 4) === '1900' ? '' : this.masterOrder.availableTime
+      this.report.unloadFinishTime = this.masterOrder.unloadFinishTime.substring(0, 4) === '1900' ? '' : this.masterOrder.unloadFinishTime
+      this.report.dockNumber = this.masterOrder.dockNumber
+      this.report.outTime = this.masterOrder.outTime.substring(0, 4) === '1900' ? '' : this.masterOrder.outTime
+      this.report.inboundDate = this.masterOrder.inboundDate.substring(0, 4) === '1900' ? '' : this.masterOrder.inboundDate
+    },
+    onOperationSuccess() {
+      this.reportVisible = false
     }
   }
 }

@@ -2,6 +2,11 @@
   <div class="dashboard-container">
     <div class="dashboard-text">更新日志 Update Log</div>
     <el-collapse style="margin-top:20px">
+      <el-collapse-item title="Update on Jan 16, 2020">
+        <div>- 移植了仓库端收货模块的开始功能</div>
+        <div>- 移植了仓库端/办公室端的自动收货功能</div>
+        <div>- 移植了仓库端的提交处理报告功能</div>
+      </el-collapse-item>
       <el-collapse-item title="Update on Jan 14, 2020">
         <div>- 移植了办公室端收货模块和发货模块中按SKU过滤收货单和发货单的功能</div>
         <div>- 更改了办公室端收货模块和发货模块中的Reset功能，现在Reset将重置整个表格</div>

@@ -1,8 +1,6 @@
 <template>
   <div class="gb-maincontainer">
     <receiving-wo-sum :master-order="masterOrder" :step="step" />
-    <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" />
-    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
     <receiving-wo-control
       :master-order="masterOrder"
       :order-details="orderDetails"
@@ -12,7 +10,10 @@
       :plt-inventory-data="pltInventoryData"
       :ctn-inventory-data="ctnInventoryData"
       @childOrderDetails="refreshOrderDetails"
+      @refreshPackingList="refreshPackingList"
     />
+    <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" :step="step" />
+    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
   </div>
 </template>
 
@@ -45,7 +46,7 @@ export default {
     masterOrder: {
       handler: function(newVal, oldVal) {
         const status = this.masterOrder.status
-        if (status === 'New Created') { this.step = 1 } else if (status === 'Draft') { this.step = 2 } else if (status === 'Incoming') { this.step = 3 } else if (status === 'Arrived') { this.step = 4 } else if (status === 'Received') { this.step = 5 } else if (status === 'Registered') { this.step = 7 } else if (status === 'Allocated') { this.step = 8 } else if (status === 'Completed') { this.step = 9 } else { this.step = 6 }
+        if (status === 'New Created') { this.step = 1 } else if (status === 'Draft') { this.step = 2 } else if (status === 'Incoming') { this.step = 3 } else if (status === 'Arrived') { this.step = 4 } else if (status === 'Received') { this.step = 6 } else if (status === 'Registered') { this.step = 7 } else if (status === 'Allocated') { this.step = 8 } else if (status === 'Completed') { this.step = 9 } else { this.step = 5 }
       },
       deep: true
     }
@@ -94,6 +95,11 @@ export default {
             type: 'success'
           })
         })
+      })
+    },
+    refreshPackingList() {
+      getOrderDetails(this.masterOrder.id).then(body => {
+        this.orderDetails = body.data
       })
     }
   }

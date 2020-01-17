@@ -1,9 +1,10 @@
 <template>
   <div>
     <h2>Packing List</h2>
+    <p>current step: {{ step }}</p>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus" :disabled="step>6" @click="onNewClicked">New SKU</el-button>
-      <el-button type="primary" icon="el-icon-upload" :disabled="masterOrder.status != 'New Created'" @click="onUploadPackingListClicked">Upload Packing List File</el-button>
+      <el-button type="primary" icon="el-icon-plus" :disabled="step!==(1&&5)" @click="onNewClicked">New SKU</el-button>
+      <el-button type="primary" icon="el-icon-upload" :disabled="step!==(1&&5)" @click="onUploadPackingListClicked">Upload Packing List File</el-button>
       <el-button type="primary" icon="el-icon-download" @click="onDownloadTemplateClicked">Download Packing List Template</el-button>
       <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input

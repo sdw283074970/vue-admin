@@ -2,18 +2,18 @@
   <div>
     <h1>Receiving Work Order Page</h1>
     <el-button @click="btnBackClicked">Back</el-button>
-    <el-button class="gb-button" :disabled="step<3" @click="downloadWOHandler" :loading="loading">Download WO</el-button>
-    <el-button class="gb-button" :disabled="step<8" @click="onDownloadReceiptClicked" :loading="loading">Download Receipt</el-button>
+    <el-button class="gb-button" :disabled="step<3" :loading="loading" @click="downloadWOHandler">Download WO</el-button>
+    <el-button class="gb-button" :disabled="step<8" :loading="loading" @click="onDownloadReceiptClicked">Download Receipt</el-button>
     <div style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
         <el-step title="Step1: Start" description="Waiting for uploading" />
         <el-step title="Step2: Uploading" description="Waiting for drafting" />
         <el-step title="Step3: Draft" description="Waiting for pushing" />
         <el-step title="Step4: Incoming" description="Waiting for arriving" />
-        <el-step title="Step5: Arrived" description="Waiting for receiving" />
-        <el-step title="Step6: Processing" description="Waiting for processing" />
-        <el-step title="Step7: Received" description="Waiting for registering" />
-        <el-step title="Step8: Registered" description="Waiting for allocating" />
+        <el-step title="Step5: Arrived" description="Waiting to start" />
+        <el-step title="Step6: Processing" description="Waiting to finish processing" />
+        <el-step title="Step7: Received" description="Waiting to finish palletizing" />
+        <el-step title="Step8: Registered" description="Waiting to finish allocating" />
         <el-step title="Step9: Allocated" description="Waiting for shipping" />
         <!-- <el-step title="Step8: Cleared Out"></el-step> -->
       </el-steps>
@@ -94,6 +94,7 @@
 
 <script>
 /* eslint-disable vue/require-default-prop */
+/* eslint-disable handle-callback-err */
 /* eslint-disable vue/require-prop-types */
 import { generateReceivingReceipt, generateWO, downloadFile } from '@/api/receiving'
 
@@ -125,29 +126,29 @@ export default {
       })
     },
     onDownloadReceiptClicked() {
-      this.loading = true;
+      this.loading = true
       generateReceivingReceipt(this.masterOrder.id).then(body => {
         this.$message({
           message: 'Downloading...',
           type: 'success'
         })
-        this.loading = false;
-        downloadFile(body.data, 'Receipt');
+        this.loading = false
+        downloadFile(body.data, 'Receipt')
       }).catch(error => {
-        this.loading = false;
+        this.loading = false
       })
     },
     downloadWOHandler() {
-      this.loading = true;
+      this.loading = true
       generateWO(this.masterOrder.id).then(body => {
         this.$message({
           message: 'Downloading...',
           type: 'success'
         })
-        downloadFile(body.data, 'Work Order');
-        this.loading = false;
+        downloadFile(body.data, 'Work Order')
+        this.loading = false
       }).catch(error => {
-        this.loading = false;
+        this.loading = false
       })
     }
   }
