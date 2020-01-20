@@ -10,6 +10,7 @@
       :plt-inventory-data="pltInventoryData"
       :ctn-inventory-data="ctnInventoryData"
       @childOrderDetails="refreshOrderDetails"
+      @refreshPackingList="refreshPackingList"
     />
     <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" :step="step" />
     <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
@@ -94,6 +95,17 @@ export default {
             type: 'success'
           })
         })
+      })
+    },
+    refreshPackingList() {
+      getOrderDetails(this.masterOrder.id).then(body => {
+        this.orderDetails = body.data
+      })
+      getPallets(this.$route.params.masterOrderId).then(body => {
+        this.pltData = body.data
+      })
+      getCartons(this.$route.params.masterOrderId).then(body => {
+        this.ctnData = body.data
       })
     }
   }

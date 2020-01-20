@@ -299,3 +299,12 @@ export function finishProcessing(id, operation, data) {
     data: data
   })
 }
+
+export function packPlts(id, quantity, pltSize, data) {
+  return request({
+    url: 'api/fba/warehouseoperation/?masterOrderId=' + id + '&pltQuantity=' + quantity + '&pltSize=' + pltSize + '&doesAppliedLabel=true&hasSortingMarking=true&isOversizeOrOverwidth=false&packType=RoughPack&isSelectedByCheckBox=true',
+    method: 'post',
+    data: data
+  })
+}
+

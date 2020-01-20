@@ -8,7 +8,7 @@
         <el-button class="gb-button" :disabled="step!=5" type="success" @click="onFinishProcessingClicked">Finish Processing</el-button>
         <el-button class="gb-button" :disabled="step<6" type="primary" @click="registerVisible = true">Register Plt</el-button>
         <el-button class="gb-button" :disabled="step!=6" type="success">Finish Palletizing</el-button>
-        <el-button class="gb-button" :disabled="step<7" type="primary" @click="allocateVisible = true">Allocate Location</el-button>
+        <el-button class="gb-button" :disabled="step<7" type="primary" @click="onAllocateClicked">Allocate Location</el-button>
         <el-button class="gb-button" :disabled="step!=8" type="success" @click="onFinishClicked">Finish Allocating</el-button>
       </div>
       <div style="margin-top:10px">
@@ -175,6 +175,10 @@ export default {
     },
     onOperationSuccess() {
       this.reportVisible = false
+    },
+    onAllocateClicked() {
+      this.allocateVisible = true
+      this.$emit('refreshPackingList')
     }
   }
 }

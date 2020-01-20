@@ -10,6 +10,7 @@
       border
       height="500"
       style="width: 100%"
+      @selection-change="onSelectionChange"
     >
       <el-table-column
         sortable
@@ -51,11 +52,11 @@
       />
       <el-table-column
         prop="actualQuantity"
-        label="Quantity"
+        label="Actual Quantity"
         min-width="30%"
       />
       <el-table-column
-        label="TBA"
+        label="Unlaied Quantity"
         min-width="30%"
       >
         <template slot-scope="scope">
@@ -64,6 +65,8 @@
       </el-table-column>
       <el-table-column
         type="selection"
+        :selectable="isDisabled"
+        disabled="true"
         width="60"
       />
     </el-table>
@@ -98,6 +101,7 @@
 </template>
 <script>
 /* eslint-disable */
+import { packPlts } from '@/api/receiving'
 
 const validateAcquaintance = (rule, value, callback) => {
   if (!value) {
@@ -130,27 +134,59 @@ export default {
           currentPage: 1,
           pageSize: 20,
           formLabelWidth : '200px',
+          checkBoxData: [],
           customerCodeFilter : [],
-            ruleForm: {
-                pltNumber: '',
-                pltSize: 'P1'
-            },
-            rules: {
-            pltNumber: [
-                    { validator: validateAcquaintance, trigger: 'blur' }                    
-                ],
-            pltSize: [
-                    { required: true, message: 'Please select size', trigger: 'change' },
-                ]
-            }
+          ruleForm: {
+              pltNumber: 0,
+              pltSize: 'P1'
+          },
+          rules: {
+          pltNumber: [
+                  { validator: validateAcquaintance, trigger: 'blur' }                    
+              ],
+          pltSize: [
+                  { required: true, message: 'Please select size', trigger: 'change' },
+              ]
+          }
       };
   },
   methods:{
     onPackCliced() {
-      alert('packed')
+      var obj = []
+
+      if (this.checkBoxData)
+      {
+        this.checkBoxData.forEach(row => {
+          obj.push({
+            id: row.id,
+            quantity: 0
+          })
+        })
+        packPlts(this.masterOrder.id, this.ruleForm.pltNumber, this.ruleForm.pltSize, obj).then(() => {
+          this.checkBoxData.forEach(row => {
+            var order = this.orderDetails.find(x => x.id == row.id);
+            order.comsumedQuantity = order.actualQuantity;
+          })
+          this.$refs.table.clearSelection();
+        })
+        this.packVisible = false;
+          this.$message({
+            message: 'Pack success',
+            type: 'success'
+          })
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    isDisabled(row, index) {
+      if (row.actualQuantity - row.comsumedQuantity)
+       return 1;
+      else
+        return 0;
+    },
+    onSelectionChange(val) {
+      this.checkBoxData = val;
     }
   },
   mounted() {

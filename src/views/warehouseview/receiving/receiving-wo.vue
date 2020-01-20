@@ -101,6 +101,12 @@ export default {
       getOrderDetails(this.masterOrder.id).then(body => {
         this.orderDetails = body.data
       })
+      getPallets(this.$route.params.masterOrderId).then(body => {
+        this.pltData = body.data
+      })
+      getCartons(this.$route.params.masterOrderId).then(body => {
+        this.ctnData = body.data
+      })
     }
   }
 }
