@@ -62,7 +62,7 @@
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="onDownloadClicked(scope.row.rootPath)">Download</el-dropdown-item>
+              <el-dropdown-item @click.native="onDownloadClicked(scope.row.rootPath, scope.row.fileName)">Download</el-dropdown-item>
               <el-dropdown-item :disabled="scope.row.status!=='Valid'" @click.native="onDiscardClicked(scope.row.id)">Discard</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -92,8 +92,8 @@ export default {
       }
   },
   methods:{
-    onDownloadClicked(id) {
-        downloadEfile(id)
+    onDownloadClicked(path, fileName) {
+        downloadFile(path + fileName, 'E-file')
     },
     onDiscardClicked(id) {
         discardFile(id).then(() => {
