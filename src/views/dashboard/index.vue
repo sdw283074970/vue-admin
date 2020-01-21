@@ -2,6 +2,9 @@
   <div class="dashboard-container">
     <div class="dashboard-text">更新日志 Update Log</div>
     <el-collapse style="margin-top:20px">
+      <el-collapse-item title="Update on Jan 20, 2020">
+        <div>- 移植并简化了Rough打托功能</div>
+      </el-collapse-item>
       <el-collapse-item title="Update on Jan 16, 2020">
         <div>- 移植了仓库端收货模块的开始功能</div>
         <div>- 移植了仓库端/办公室端的自动收货功能</div>
@@ -19,6 +22,7 @@
       </el-collapse-item>
       <el-collapse-item title="Update on Jan 10, 2020">
         <div>- 新增了办公室端收货页面按客户CODE筛选的功能(目前仅支持单个客户筛选)</div>
+        <div>- 修复了efile上传失败的BUG</div>
       </el-collapse-item>
       <el-collapse-item title="Update on Jan 9, 2020">
         <div>- 移植了下载收货报告/收据功能</div>

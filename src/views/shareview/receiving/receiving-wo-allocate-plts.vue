@@ -139,6 +139,7 @@
 </template>
 <script>
 /* eslint-disable */
+import { getRO, getOrderDetails, getPallets, getCartons, getPltsInventory, getCtnsInventory, getInstructions, resetInstructions, replayPlt } from '@/api/receiving'
 
 export default {
   props: {
@@ -146,7 +147,16 @@ export default {
     pltData: Array
   },
   methods:{
-
+      onRelayClicked(id){
+          replayPlt(id).then(() => {
+            let index = this.pltData.map(x => x.id).indexOf(id)
+            this.pltData.splice(index, 1)
+            this.$message({
+                message: 'Relay success',
+                type: 'success'
+            })
+          })
+      }
   },
   mounted() {
 

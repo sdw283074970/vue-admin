@@ -16,30 +16,9 @@
     <receiving-wo-allocate-ctns :ctn-data="ctnData" :is-visible="!pltVisible" />
 
     <div style="margin-top:10px;text-align:right;">
-      <el-button>Allocate All Selected Items</el-button>
+      <el-button @click="onAllocateSelectedClicked">Allocate All Selected Items</el-button>
       <el-button>Allocate All Filled Items</el-button>
     </div>
-    <!-- <el-dialog title="Rough Pack"
-            :visible.sync="locationVisible"
-            width="450px"
-            :lock-scroll="false"
-            append-to-body>
-                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px" class="demo-ruleForm">
-                    <el-form-item label="Packed Plt Quantity" prop="pltNumber">
-                        <el-input v-model.number="ruleForm.pltNumber"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Packed PLt Size" prop="pltSize">
-                        <el-select v-model="ruleForm.pltSize" placeholder="Select Size">
-                        <el-option label="P1(Standard Size)" value="P1"></el-option>
-                        <el-option label="P2(2X Standard Size)" value="P2"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button @click="submitForm('ruleForm')">Pack</el-button>
-                        <el-button @click="resetForm('ruleForm')">Reset</el-button>
-                    </el-form-item>
-                </el-form>
-        </el-dialog> -->
   </div>
 </template>
 <script>
@@ -97,22 +76,9 @@ export default {
         "receiving-wo-allocate-ctns": () => import('@/views/shareview/receiving/receiving-wo-allocate-ctns')
     },
     methods:{
-            filterHandler(value, row, column) {
-                const property = column['property'];
-                return row[property] === value;
-            },
-            filterChange(filters){
-                console.log(filters);
-            },
-            clearFilter() {
-                this.$refs.table.clearFilter();
-            },
-            handleSizeChange(val) {
-                this.pageSize = val;
-            },
-            handleCurrentChange(val) {
-                this.currentPage = val;
-            },
+        onAllocateSelectedClicked() {
+          alert(this.pltData)
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         }

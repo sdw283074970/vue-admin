@@ -5,7 +5,7 @@
       :master-order="masterOrder"
       :order-details="orderDetails"
       :plt-data="pltData"
-      :ctn-date="ctnData"
+      :ctn-data="ctnData"
       :step="step"
       :plt-inventory-data="pltInventoryData"
       :ctn-inventory-data="ctnInventoryData"

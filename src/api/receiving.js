@@ -308,3 +308,9 @@ export function packPlts(id, quantity, pltSize, data) {
   })
 }
 
+export function replayPlt(id) {
+  return request({
+    url: 'api/fba/FBAAllocating/?palletId=' + id,
+    method: 'delete'
+  })
+}

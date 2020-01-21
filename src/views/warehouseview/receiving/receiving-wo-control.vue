@@ -7,9 +7,9 @@
         <el-button class="gb-button" :disabled="step!=5" type="primary" @click="onAutoReceiveClicked">Auto Receive</el-button>
         <el-button class="gb-button" :disabled="step!=5" type="success" @click="onFinishProcessingClicked">Finish Processing</el-button>
         <el-button class="gb-button" :disabled="step<6" type="primary" @click="registerVisible = true">Register Plt</el-button>
-        <el-button class="gb-button" :disabled="step!=6" type="success">Finish Palletizing</el-button>
+        <el-button class="gb-button" :disabled="step!=6" type="success" @click="onFinishPalletizingClicked">Finish Palletizing</el-button>
         <el-button class="gb-button" :disabled="step<7" type="primary" @click="onAllocateClicked">Allocate Location</el-button>
-        <el-button class="gb-button" :disabled="step!=8" type="success" @click="onFinishClicked">Finish Allocating</el-button>
+        <el-button class="gb-button" :disabled="step!=8" type="success" @click="onFinishAllocatingClicked">Finish Allocating</el-button>
       </div>
       <div style="margin-top:10px">
         <el-button v-if="step>2" class="gb-button" type="info" @click="arrivedVisible=true">Reset Arrived Date</el-button>
@@ -145,7 +145,7 @@ export default {
         })
       })
     },
-    onFinishClicked() {
+    onFinishAllocatingClicked() {
       changeOrderStatus(this.masterOrder.id, 'Finish Allocating').then(body => {
         this.masterOrder.status = 'Allocated'
         this.masterOrder.unloadFinishTime = 'Today'
@@ -179,6 +179,15 @@ export default {
     onAllocateClicked() {
       this.allocateVisible = true
       this.$emit('refreshPackingList')
+    },
+    onFinishPalletizingClicked() {
+      changeOrderStatus(this.masterOrder.id, 'Finish Palletizing').then(body => {
+        this.masterOrder.status = 'Registered'
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+      })
     }
   }
 }

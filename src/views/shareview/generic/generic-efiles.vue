@@ -74,8 +74,11 @@
 
 <script>
 /* eslint-disable */
+import config from '@/scripts/global'
 import { downloadFile, deleteLabelFile as deleteReceivingLabelFile, discardFile, downloadEfile } from '@/api/receiving'
 import { deleteLabelFile as deleteShippingLabelFile } from '@/api/shipping'
+
+const baseURL = config.baseURL
 
 export default {
   props: {
@@ -85,7 +88,7 @@ export default {
   },
   computed: {
       uploadAction: function() {
-          return '/api/fba/FBAEfolder/?reference=' + this.reference + '&orderType=' + this.orderType + '&fileName=File&version=V1'
+          return baseURL + 'api/fba/FBAEfolder/?reference=' + this.reference + '&orderType=' + this.orderType + '&fileName=File&version=V1'
       }
   },
   methods:{
