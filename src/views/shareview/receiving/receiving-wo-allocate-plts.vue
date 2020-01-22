@@ -149,8 +149,9 @@ export default {
   methods:{
       onRelayClicked(id){
           replayPlt(id).then(() => {
-            let index = this.pltData.map(x => x.id).indexOf(id)
-            this.pltData.splice(index, 1)
+            // let index = this.pltData.map(x => x.id).indexOf(id)
+            // this.pltData.splice(index, 1)
+            this.$emit('reloadOrder')
             this.$message({
                 message: 'Relay success',
                 type: 'success'

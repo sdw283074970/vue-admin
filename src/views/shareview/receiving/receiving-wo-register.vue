@@ -154,27 +154,34 @@ export default {
     onPackCliced() {
       var obj = []
 
-      if (this.checkBoxData)
-      {
-        this.checkBoxData.forEach(row => {
-          obj.push({
-            id: row.id,
-            quantity: 0
-          })
-        })
-        packPlts(this.masterOrder.id, this.ruleForm.pltNumber, this.ruleForm.pltSize, obj).then(() => {
-          this.checkBoxData.forEach(row => {
-            var order = this.orderDetails.find(x => x.id == row.id);
-            order.comsumedQuantity = order.actualQuantity;
-          })
-          this.$refs.table.clearSelection();
-        })
-        this.packVisible = false;
-          this.$message({
-            message: 'Pack success',
-            type: 'success'
-          })
-      }
+      this.$refs['ruleForm'].validate((valid) => {
+          if (valid) {
+            if (this.checkBoxData)
+            {
+              this.checkBoxData.forEach(row => {
+                obj.push({
+                  id: row.id,
+                  quantity: 0
+                })
+              })
+              packPlts(this.masterOrder.id, this.ruleForm.pltNumber, this.ruleForm.pltSize, obj).then(() => {
+                this.checkBoxData.forEach(row => {
+                  var order = this.orderDetails.find(x => x.id == row.id);
+                  order.comsumedQuantity = order.actualQuantity;
+                })
+                this.$refs.table.clearSelection();
+              })
+              this.packVisible = false;
+                this.$message({
+                  message: 'Pack success',
+                  type: 'success'
+                })
+            }
+          } else {
+              console.log('error submit!!');
+              return false;
+          }
+      });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

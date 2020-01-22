@@ -12,7 +12,7 @@
       />
     </div>
 
-    <receiving-wo-allocate-plts :plt-data="pltData" :is-visible="pltVisible" />
+    <receiving-wo-allocate-plts :plt-data="pltData" :is-visible="pltVisible" @reloadOrder="reloadOrder" />
     <receiving-wo-allocate-ctns :ctn-data="ctnData" :is-visible="!pltVisible" />
 
     <div style="margin-top:10px;text-align:right;">
@@ -81,6 +81,9 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        reloadOrder() {
+          this.$emit('reloadOrder')
         }
     },
     mounted() {
