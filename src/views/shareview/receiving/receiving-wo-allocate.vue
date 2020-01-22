@@ -16,13 +16,14 @@
     <receiving-wo-allocate-ctns :ctn-data="ctnData" :is-visible="!pltVisible" />
 
     <div style="margin-top:10px;text-align:right;">
-      <el-button @click="onAllocateSelectedClicked">Allocate All Selected Items</el-button>
-      <el-button>Allocate All Filled Items</el-button>
+      <el-button :disabled="true">Allocate All Selected Items</el-button>
+      <el-button @click="onFilledClicked">Allocate All Filled Items</el-button>
     </div>
   </div>
 </template>
 <script>
 /* eslint-disable */
+import { allocateLocation } from '@/api/receiving'
 
 const validateAcquaintance = (rule, value, callback) => {
   if (!value) {
@@ -57,18 +58,18 @@ export default {
             pageSize: 20,
             formLabelWidth : '200px',
             customerCodeFilter : [],
-                ruleForm: {
-                    pltNumber: '',
-                    pltSize: 'P1'
-                },
-                rules: {
-                pltNumber: [
-                        { validator: validateAcquaintance, trigger: 'blur' }                    
-                    ],
-                pltSize: [
-                        { required: true, message: 'Please select size', trigger: 'change' },
-                    ]
-                }
+            ruleForm: {
+                pltNumber: '',
+                pltSize: 'P1'
+            },
+            rules: {
+            pltNumber: [
+                    { validator: validateAcquaintance, trigger: 'blur' }                    
+                ],
+            pltSize: [
+                    { required: true, message: 'Please select size', trigger: 'change' },
+                ]
+            }
         };
     },
     components: {
@@ -76,8 +77,25 @@ export default {
         "receiving-wo-allocate-ctns": () => import('@/views/shareview/receiving/receiving-wo-allocate-ctns')
     },
     methods:{
-        onAllocateSelectedClicked() {
-          alert(this.pltData)
+        onFilledClicked() {
+          var pltObj = []
+          this.pltData.forEach(row => {
+            if (row.status != '')
+            {
+              pltObj.push({
+                id: row.id,
+                location: row.status
+              })
+            }
+          })
+
+          allocateLocation(this.masterOrder.id, 'Pallet', pltObj).then(() => {
+            this.$emit('reloadOrder')
+            this.$message({
+                message: 'Allocate success',
+                type: 'success'
+            })
+          })
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();

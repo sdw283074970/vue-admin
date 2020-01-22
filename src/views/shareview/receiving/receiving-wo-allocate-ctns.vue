@@ -37,16 +37,19 @@
         prop="warehouseCode"
         label="Whse Code"
         min-width="30%"
+        align="center"
       />
       <el-table-column
         prop="actualQuantity"
         label="Ttl Ctns"
         min-width="20%"
+        align="center"
       />
       <el-table-column
         prop="comsumedQuantity"
         label="TBA Ctns"
         min-width="25%"
+        align="center"
       >
         <template
           slot-scope="scope"
@@ -54,17 +57,17 @@
           <font>{{ scope.row.actualQuantity - scope.row.comsumedQuantity }}</font>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         type="selection"
         min-width="20%"
-      />
+      /> -->
       <el-table-column
         label="Ctns/Location"
         align="center"
         min-width="40%"
       >
-        <template>
-          <el-input style="width:100px" />
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.lotSize" style="width:100px" />
         </template>
       </el-table-column>
       <el-table-column

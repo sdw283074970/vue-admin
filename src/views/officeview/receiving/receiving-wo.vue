@@ -119,6 +119,12 @@ export default {
       getCartons(this.$route.params.masterOrderId).then(body => {
         this.ctnData = body.data
       })
+      getPltsInventory(this.$route.params.masterOrderId).then(d => {
+        this.pltInventoryData = d.data
+      })
+      getCtnsInventory(this.$route.params.masterOrderId).then(d => {
+        this.ctnInventoryData = d.data
+      })
     }
   }
 }

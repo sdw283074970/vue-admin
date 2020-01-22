@@ -112,17 +112,17 @@
           <font>{{ scope.row.actualPallets - scope.row.comsumedPallets }}</font>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         type="selection"
         width="50"
-      />
+      /> -->
       <el-table-column
         label="Location"
         align="center"
         min-width="35%"
       >
-        <template>
-          <el-input style="width:100px" />
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.status" style="width:100px" />
         </template>
       </el-table-column>
       <el-table-column
@@ -145,6 +145,11 @@ export default {
   props: {
     isVisible: false,
     pltData: Array
+  },
+  data() {
+    return {
+      isDisabled: false
+    }
   },
   methods:{
       onRelayClicked(id){

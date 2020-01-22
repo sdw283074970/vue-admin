@@ -314,3 +314,11 @@ export function replayPlt(id) {
     method: 'delete'
   })
 }
+
+export function allocateLocation(id, type, obj) {
+  return request({
+    url: 'api/fba/fbaallocating/?masterOrderId=' + id + '&inventoryType=' + type,
+    method: 'post',
+    data: obj
+  })
+}
