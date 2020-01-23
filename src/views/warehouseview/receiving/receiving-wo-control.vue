@@ -52,7 +52,7 @@
       top="5vh"
       :lock-scroll="false"
     >
-      <receiving-allocate :master-order="masterOrder" :plt-data="pltData" :ctn-data="ctnData" />
+      <receiving-allocate :master-order="masterOrder" :plt-data="pltData" :ctn-data="ctnData" @reloadOrder="reloadOrder" />
     </el-dialog>
     <el-dialog
       title="Inventory"
@@ -188,6 +188,9 @@ export default {
           type: 'success'
         })
       })
+    },
+    reloadOrder() {
+      this.$emit('reloadOrder')
     }
   }
 }

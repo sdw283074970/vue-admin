@@ -11,9 +11,10 @@
       :ctn-inventory-data="ctnInventoryData"
       @childOrderDetails="refreshOrderDetails"
       @refreshPackingList="refreshPackingList"
+      @reloadOrder="reloadOrder"
     />
     <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" :step="step" />
-    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
+    <receiving-wo-instruction :master-order="masterOrder" :step="step" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
   </div>
 </template>
 
@@ -106,6 +107,23 @@ export default {
       })
       getCartons(this.$route.params.masterOrderId).then(body => {
         this.ctnData = body.data
+      })
+    },
+    reloadOrder() {
+      getOrderDetails(this.masterOrder.id).then(body => {
+        this.orderDetails = body.data
+      })
+      getPallets(this.$route.params.masterOrderId).then(body => {
+        this.pltData = body.data
+      })
+      getCartons(this.$route.params.masterOrderId).then(body => {
+        this.ctnData = body.data
+      })
+      getPltsInventory(this.$route.params.masterOrderId).then(d => {
+        this.pltInventoryData = d.data
+      })
+      getCtnsInventory(this.$route.params.masterOrderId).then(d => {
+        this.ctnInventoryData = d.data
       })
     }
   }

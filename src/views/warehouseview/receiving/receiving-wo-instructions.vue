@@ -52,7 +52,7 @@
       <el-table-column
         prop="handlingStatus"
         label="Status"
-        min-width="18%"
+        min-width="19%"
       />
       <el-table-column
         prop="operation"
@@ -65,9 +65,12 @@
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
-              <el-dropdown-item :disabled="!(scope.row.handlingStatus=='Pending'||scope.row.handlingStatus=='Updated')" @click.native="onResultClicked(scope.row.id)">Result</el-dropdown-item>
-              <el-dropdown-item divided @click.native="deleteHandler(scope.row.id)">Delete</el-dropdown-item>
+              <el-dropdown-item :disabled="step!=5" @click.native="onConfirmClicked(scope.row.id)">Confirm</el-dropdown-item>
+              <el-dropdown-item :disabled="step!=5" @click.native="onCommentClicked(scope.row.id)">Comment</el-dropdown-item>
+              <el-dropdown-item :disabled="step!=5" @click.native="onConfirmClicked(scope.row.id)">Finish</el-dropdown-item>
+
+              <!-- <el-dropdown-item :disabled="!(scope.row.handlingStatus=='Pending'||scope.row.handlingStatus=='Updated')" @click.native="onResultClicked(scope.row.id)">Result</el-dropdown-item>
+              <el-dropdown-item divided @click.native="deleteHandler(scope.row.id)">Delete</el-dropdown-item> -->
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -87,6 +90,7 @@
         :step="step"
         :reference="masterOrder.container"
         :order-type="orderType"
+        :is-warehouse="true"
         @onUpdateSucceed="onUpdateSucceed"
         @onCancelClicked="onCancelClicked"
         @onCreatedSucceed="onCreatedSucceed"
@@ -99,7 +103,7 @@
 <script>
 /* eslint-disable */
 import { getInstructions } from '@/api/receiving'
-import { deleteInstruction } from '@/api/shipping'
+import { deleteInstruction, confirmInstruction, finishInstruction } from '@/api/shipping'
 
 export default {
   props: {
@@ -149,7 +153,7 @@ export default {
       this.instruction.isChargingItem = true;
       this.instruction.isInstruction = false;
     },
-    onUpdateClicked(id){
+    onCommentClicked(id){
       this.isResult = false;
       this.isEdit = true;
       this.instructionVisible = true;
@@ -161,7 +165,7 @@ export default {
       });
       let isChargingItem = selectedInstru.status=='Waiting for charging'?true:false;
       let isInstruction = selectedInstru.handlingStatus=='N/A'?false:true;
-      this.instruction.description = selectedInstru.description;
+      this.instruction.description = selectedInstru.comment;
       this.instruction.id = id;
       this.instruction.isChargingItem = isChargingItem;
       this.instruction.isInstruction = isInstruction;
@@ -202,6 +206,24 @@ export default {
       message: 'Send result succeed',
       type: 'success'
       });
+    },
+    onConfirmClicked(id) {
+      confirmInstruction(id).then(() => {
+        this.$emit('referashInstructions');
+        this.$message({
+        message: 'Success',
+        type: 'success'
+        });
+      })
+    },
+    onFinishClicked(id) {
+      finishInstruction(id).then(() => {
+        this.$emit('referashInstructions');
+        this.$message({
+        message: 'Success',
+        type: 'success'
+        });
+      })
     }
   },
   mounted() {

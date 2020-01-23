@@ -4,7 +4,7 @@
       <el-form-item v-if="!isResult" label="Description" prop="description">
         <el-input v-model="instruction.description" type="textarea" style="width:90%" maxlength="200" show-word-limit />
       </el-form-item>
-      <el-form-item v-if="!isResult" label="Is Instruction">
+      <el-form-item v-if="!isResult&&!isWarehouse" label="Is Instruction">
         <el-switch
           v-model="instruction.isInstruction"
           style="margin-left:10px"
@@ -15,7 +15,7 @@
           :disabled="step>2"
         />
       </el-form-item>
-      <el-form-item v-if="!isResult" label="Is Charging">
+      <el-form-item v-if="!isResult&&!isWarehouse" label="Is Charging">
         <el-switch
           v-model="instruction.isChargingItem"
           style="margin-left:10px"
@@ -31,7 +31,8 @@
     </el-form>
     <div style="text-align:right;margin-right:7%">
       <el-button v-if="!isEdit" type="primary" @click="createHandler">Create</el-button>
-      <el-button v-if="isEdit&&!isResult" type="primary" @click="updateHandler">Update Description</el-button>
+      <el-button v-if="isEdit&&!isResult&&!isWarehouse" type="primary" @click="updateHandler">Update Description</el-button>
+      <el-button v-if="isWarehouse" type="primary" @click="onCommentClicked">Update Comment</el-button>
       <el-button v-if="isResult" type="primary" @click="resultHandler">Send Result</el-button>
       <el-button @click="onCancelClicked">Cancel</el-button>
     </div>
@@ -41,7 +42,7 @@
 <script>
 /* eslint-disable */
 
-import { createNewInstruction, updateInstruction, resultInstruction } from '@/api/shipping'
+import { createNewInstruction, updateInstruction, resultInstruction, updateComment } from '@/api/shipping'
 import { ALPN_ENABLED } from 'constants';
 
 export default {
@@ -52,7 +53,8 @@ export default {
     isEdit: Boolean,
     visible: Boolean,
     reference: String,
-    orderType: String
+    orderType: String,
+    isWarehouse: Boolean
   },
   data(){
     return{
@@ -118,6 +120,20 @@ export default {
     },
     onCancelClicked: function(){
         this.$emit('onCancelClicked');
+    },
+    onCommentClicked() {
+        this.$refs['form-required'].validate((valid) => {
+            if (valid) {
+                updateComment(this.instruction.id, this.instruction.description, this.instruction.isChargingItem, this.instruction.isInstruction).then(() => {
+                    this.$emit('onUpdateSucceed');
+                    this.$emit('onCancelClicked');
+                });
+            }
+            else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
     }
   },
   mounted() {

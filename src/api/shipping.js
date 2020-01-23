@@ -140,6 +140,27 @@ export function updateInstruction(id, description, isChargingItem, isInstruction
   })
 }
 
+export function updateComment(id, description, isChargingItem, isInstruction) {
+  return request({
+    url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=' + isChargingItem + '&isInstruction=' + isInstruction + '&operation=UpdateComment',
+    method: 'put'
+  })
+}
+
+export function confirmInstruction(id) {
+  return request({
+    url: 'api/warehouseindex/?chargingItemDetailId=' + id + '&operation=Confirm',
+    method: 'put'
+  })
+}
+
+export function finishInstruction(id) {
+  return request({
+    url: 'api/warehouseindex/?chargingItemDetailId=' + id + '&operation=Finish',
+    method: 'put'
+  })
+}
+
 export function resultInstruction(id, description) {
   return request({
     url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=true&&isInstruction=true&&operation=UpdateResult',

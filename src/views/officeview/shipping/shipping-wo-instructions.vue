@@ -52,7 +52,7 @@
       <el-table-column
         prop="handlingStatus"
         label="Status"
-        min-width="15%"
+        min-width="19%"
       />
       <el-table-column
         prop="operation"
