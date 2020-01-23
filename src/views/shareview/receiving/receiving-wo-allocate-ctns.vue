@@ -67,7 +67,7 @@
         min-width="40%"
       >
         <template slot-scope="scope">
-          <el-input v-model="scope.row.lotSize" style="width:100px" />
+          <el-input v-model="scope.row.ctnsPerLocation" style="width:100px" type="number" />
         </template>
       </el-table-column>
       <el-table-column
@@ -75,8 +75,8 @@
         align="center"
         min-width="40%"
       >
-        <template>
-          <el-input style="width:100px" />
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.tempLocation" style="width:100px" />
         </template>
       </el-table-column>
     </el-table>

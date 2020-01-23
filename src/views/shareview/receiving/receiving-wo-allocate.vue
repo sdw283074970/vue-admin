@@ -17,7 +17,7 @@
 
     <div style="margin-top:10px;text-align:right;">
       <el-button :disabled="true">Allocate All Selected Items</el-button>
-      <el-button @click="onFilledClicked">Allocate All Filled Items</el-button>
+      <el-button type="primary" @click="onFilledClicked">Allocate All Filled Items</el-button>
     </div>
   </div>
 </template>
@@ -78,18 +78,36 @@ export default {
     },
     methods:{
         onFilledClicked() {
-          var pltObj = []
-          this.pltData.forEach(row => {
-            if (row.status != '')
-            {
-              pltObj.push({
-                id: row.id,
-                location: row.status
-              })
-            }
-          })
+          var obj = []
+          var ivtType = 'Pallet'
+          if (this.pltVisible)
+          {
+            this.pltData.forEach(row => {
+              if (row.tempLocation != ('' || null))
+              {
+                obj.push({
+                  id: row.id,
+                  location: row.tempLocation
+                })
+              }
+            })
+          }
+          else
+          {
+            ivtType = 'Carton'
+            this.ctnData.forEach(row => {
+              if (row.tempLocation != ('' || null) && row.ctnsPerLocation > 0 && row.ctnsPerLocation < (row.actualQuantity - row.comsumedQuantity))
+              {
+                obj.push({
+                  id: row.id,
+                  quantity: row.ctnsPerLocation,
+                  location: row.tempLocation
+                })
+              }
+            })
+          }
 
-          allocateLocation(this.masterOrder.id, 'Pallet', pltObj).then(() => {
+          allocateLocation(this.masterOrder.id, ivtType, obj).then(() => {
             this.$emit('reloadOrder')
             this.$message({
                 message: 'Allocate success',

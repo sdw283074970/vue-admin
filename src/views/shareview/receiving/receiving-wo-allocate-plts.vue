@@ -122,7 +122,7 @@
         min-width="35%"
       >
         <template slot-scope="scope">
-          <el-input v-model="scope.row.status" style="width:100px" />
+          <el-input v-model="scope.row.tempLocation" style="width:100px" />
         </template>
       </el-table-column>
       <el-table-column
