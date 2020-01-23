@@ -5,15 +5,15 @@
       <div>
         <el-button class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
         <el-button class="gb-button" type="warning" :disabled="step!=3" @click="onRecallClicked">Recall WO</el-button>
-        <el-button :disabled="!step>2" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
-        <el-button class="gb-button" disabled>Push Status</el-button>
-        <el-button class="gb-button" disabled>Reverse Status</el-button>
+        <el-button :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
+        <el-button type="info" class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
+        <!-- <el-button class="gb-button" disabled>Push Status</el-button>
+        <el-button class="gb-button" disabled>Reverse Status</el-button> -->
       </div>
       <div style="margin-top:10px">
-        <el-button class="gb-button" disabled>Auto Receive</el-button>
-        <el-button class="gb-button" @click="registerVisible = true">Register Plt Info</el-button>
-        <el-button class="gb-button" @click="onAllocateClicked">Allocate Location</el-button>
-        <el-button class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
+        <!-- <el-button class="gb-button" disabled>Auto Receive</el-button> -->
+        <!-- <el-button class="gb-button" @click="registerVisible = true">Register Plt Info</el-button>
+        <el-button class="gb-button" @click="onAllocateClicked">Allocate Location</el-button> -->
       </div>
     </div>
     <el-dialog

@@ -1,14 +1,14 @@
 <template>
   <div class="gb-maincontainer">
     <shipping-wo-sum :ship-order="shipOrder" :step="step" />
-    <shipping-wo-control :ship-order="shipOrder" :step="step" @onPushClicked="onPushClicked" @onCallBackClicked="onCallBackClicked" />
+    <shipping-wo-control :ship-order="shipOrder" :step="step" @reloadShipOrder="reloadShipOrder" @onCallBackClicked="onCallBackClicked" />
     <shipping-wo-picking :ship-order="shipOrder" :step="step" :pick-details="pickDetails" @referashPickDetails="referashPickDetails" />
     <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @referashInstructions="referashInstructions" />
   </div>
 </template>
 
 <script>
-import { getSO, getPickDetails, getInstructions, resetInstructions, pushShipOrderStatus, reverseShipOrderStatus } from '@/api/shipping'
+import { getSO, getPickDetails, getInstructions, resetInstructions, reverseShipOrderStatus } from '@/api/shipping'
 
 export default {
   components: {
@@ -53,17 +53,6 @@ export default {
     })
   },
   methods: {
-    onPushClicked() {
-      pushShipOrderStatus(this.$route.params.shipOrderId, this.today).then(() => {
-        getSO(this.$route.params.shipOrderId).then(body => {
-          this.shipOrder = body.data
-          this.$message({
-            message: 'Push succeed',
-            type: 'success'
-          })
-        })
-      })
-    },
     onCallBackClicked() {
       reverseShipOrderStatus(this.$route.params.shipOrderId, this.today).then(() => {
         getSO(this.$route.params.shipOrderId).then(body => {
@@ -94,6 +83,23 @@ export default {
             type: 'success'
           })
         })
+      })
+    },
+    reloadShipOrder() {
+      const id = this.$route.params.shipOrderId
+      getSO(id).then(body => {
+        this.shipOrder = body.data
+      })
+      getPickDetails(id).then(body => {
+        this.pickDetails = body.data
+      })
+      getInstructions(id).then(body => {
+        this.instructions = body.data.operationInstructions
+      })
+
+      this.$message({
+        message: 'Recall succeed',
+        type: 'success'
       })
     }
   }
