@@ -51,7 +51,7 @@
       top="5vh"
       :lock-scroll="false"
     >
-      <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" />
+      <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" @reloadOrder="reloadOrder" />
     </el-dialog>
   </div>
 </template>

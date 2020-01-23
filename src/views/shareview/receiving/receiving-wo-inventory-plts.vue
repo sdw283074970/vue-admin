@@ -48,23 +48,45 @@
             />
             <el-table-column
               prop="grossWeightPerCtn"
+              align="center"
               label="GW/Ctn"
-              min-width="30%"
+              min-width="20%"
             />
             <el-table-column
               prop="cbmPerCtn"
+              align="center"
               label="CBM/Ctn"
-              min-width="30%"
+              min-width="25%"
             />
             <el-table-column
               prop="actualQuantity"
               label="Org Ctns"
-              min-width="30%"
+              align="center"
+              min-width="25%"
             />
             <el-table-column
               prop="availableCtns"
               label="Ava Ctns"
+              align="center"
               min-width="30%"
+            />
+            <el-table-column
+              prop="pickingCtns"
+              align="center"
+              label="Picking Ctns"
+              min-width="30%"
+            />
+            <el-table-column
+              prop="shippedCtns"
+              align="center"
+              label="Shipped Ctns"
+              min-width="30%"
+            />
+            <el-table-column
+              prop="holdCtns"
+              align="center"
+              label="Hold Ctns"
+              width="100"
             />
             <el-table-column
               prop="operation"
@@ -73,7 +95,15 @@
               width="110"
             >
               <template slot-scope="scope">
-                <el-button @click="onCtnHistoryClicked(scope.row.id)">History</el-button>
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    Options<i class="el-icon-arrow-down el-icon--right" />
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="onCtnHistoryClicked(scope.row.id)">History</el-dropdown-item>
+                    <el-dropdown-item disabled @click.native="onHoldClicked(scope.row.id)">Hold</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </template>
             </el-table-column>
           </el-table>
@@ -93,6 +123,7 @@
       />
       <el-table-column
         prop="palletSize"
+        align="center"
         label="Plt Size"
         min-width="20%"
       />
@@ -103,26 +134,31 @@
       />
       <el-table-column
         prop="actualQuantity"
+        align="center"
         label="Org Ctns"
         min-width="30%"
       />
       <el-table-column
         prop="actualPlts"
+        align="center"
         label="Org Plts"
         min-width="30%"
       />
       <el-table-column
         prop="availablePlts"
+        align="center"
         label="Ava Plts"
         min-width="30%"
       />
       <el-table-column
         prop="pickingPlts"
+        align="center"
         label="Picking Plts"
         min-width="30%"
       />
       <el-table-column
         prop="shippedPlts"
+        align="center"
         label="Shipped Plts"
         min-width="30%"
       />
@@ -137,7 +173,15 @@
         min-width="30%"
       >
         <template slot-scope="scope">
-          <el-button @click="onPltHistoryClicked(scope.row.id)">History</el-button>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              Options<i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="onPltHistoryClicked(scope.row.id)">History</el-dropdown-item>
+              <el-dropdown-item :disabled="scope.row.actualPlts!==scope.row.availablePlts" @click.native="onRelocateClicked(scope.row.id)">Relocate</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -166,6 +210,7 @@
 <script>
 /* eslint-disable */
 import { getPltHistories, getCtnHistories } from '@/api/inventory'
+import { relocateItems } from '@/api/receiving'
 
 export default {
   props: {
@@ -221,6 +266,18 @@ export default {
         this.historySum.warehouseCode = body.data[0].warehouseCode;
       })
       this.loading = false;
+    },
+    onHoldClicked() {
+
+    },
+    onRelocateClicked(id) {
+      relocateItems(id, 'Pallet').then(() => {
+        this.$emit('reloadOrder')
+        this.$message({
+          message: 'Success',
+          type: 'success'
+        })
+      })
     }
   },
   mounted() {
@@ -232,5 +289,18 @@ export default {
 <style lang="scss" scoped>
     .input-bar{
       text-align: right
+    }
+    .el-dropdown-link {
+      cursor: pointer;
+      color: #409EFF;
+    }
+    .el-icon-arrow-down {
+      font-size: 12px;
+    }
+    .demonstration {
+      display: block;
+      color: #8492a6;
+      font-size: 14px;
+      margin-bottom: 20px;
     }
 </style>

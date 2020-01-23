@@ -34,27 +34,38 @@
       />
       <el-table-column
         prop="actualQuantity"
+        align="center"
         label="Org Ctns"
         min-width="30%"
       />
       <el-table-column
         prop="availableCtns"
+        align="center"
         label="Ava Ctns"
         min-width="30%"
       />
       <el-table-column
         prop="pickingCtns"
+        align="center"
         label="Picking Ctns"
         min-width="30%"
       />
       <el-table-column
         prop="shippedCtns"
+        align="center"
         label="Shipped Ctns"
         min-width="30%"
       />
       <el-table-column
+        prop="holdCtns"
+        align="center"
+        label="Hold Ctns"
+        width="100"
+      />
+      <el-table-column
         prop="location"
         label="Location"
+        align="center"
         min-width="30%"
       />
       <el-table-column
@@ -63,7 +74,16 @@
         min-width="30%"
       >
         <template slot-scope="scope">
-          <el-button :loading="loading" @click="onHistoryClicked(scope.row.id)">History</el-button>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              Options<i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="onHistoryClicked(scope.row.id)">History</el-dropdown-item>
+              <el-dropdown-item disabled @click.native="onHoldClicked(scope.row.id)">Hold</el-dropdown-item>
+              <el-dropdown-item :disabled="(scope.row.location==='Pallet')||(scope.row.actualQuantity!==scope.row.availableCtns)" @click.native="onRelocateClicked(scope.row.id)">Relocate</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -81,7 +101,8 @@
 </template>
 <script>
 /* eslint-disable */
-import { getCtnHistories} from '@/api/inventory'
+import { getCtnHistories } from '@/api/inventory'
+import { relocateItems } from '@/api/receiving'
 
 export default {
   props: {
@@ -121,6 +142,18 @@ export default {
         this.historySum.warehouseCode = obj.warehouseCode;
       })
       this.loading = false;
+    },
+    onHoldClicked(id) {
+
+    },
+    onRelocateClicked(id) {
+      relocateItems(id, 'Carton').then(() => {
+        this.$emit('reloadOrder')
+        this.$message({
+          message: 'Success',
+          type: 'success'
+        })
+      })
     }
   },
   mounted() {
@@ -132,5 +165,18 @@ export default {
 <style lang="scss" scoped>
     .input-bar{
       text-align: right
+    }
+    .el-dropdown-link {
+      cursor: pointer;
+      color: #409EFF;
+    }
+    .el-icon-arrow-down {
+      font-size: 12px;
+    }
+    .demonstration {
+      display: block;
+      color: #8492a6;
+      font-size: 14px;
+      margin-bottom: 20px;
     }
 </style>

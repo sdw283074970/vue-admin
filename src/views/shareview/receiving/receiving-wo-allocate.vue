@@ -96,7 +96,7 @@ export default {
           {
             ivtType = 'Carton'
             this.ctnData.forEach(row => {
-              if (row.tempLocation != ('' || null) && row.ctnsPerLocation > 0 && row.ctnsPerLocation < (row.actualQuantity - row.comsumedQuantity))
+              if (row.tempLocation != ('' || null) && row.ctnsPerLocation > 0 && row.ctnsPerLocation <= (row.actualQuantity - row.comsumedQuantity))
               {
                 obj.push({
                   id: row.id,

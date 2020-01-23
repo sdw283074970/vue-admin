@@ -9,7 +9,7 @@
         <el-button class="gb-button" :disabled="step<6" type="primary" @click="registerVisible = true">Register Plt</el-button>
         <el-button class="gb-button" :disabled="step!=6" type="success" @click="onFinishPalletizingClicked">Finish Palletizing</el-button>
         <el-button class="gb-button" :disabled="step<7" type="primary" @click="onAllocateClicked">Allocate Location</el-button>
-        <el-button class="gb-button" :disabled="step!=8" type="success" @click="onFinishAllocatingClicked">Finish Allocating</el-button>
+        <el-button class="gb-button" :disabled="step!=7" type="success" @click="onFinishAllocatingClicked">Finish Allocating</el-button>
       </div>
       <div style="margin-top:10px">
         <el-button v-if="step>2" class="gb-button" type="info" @click="arrivedVisible=true">Reset Arrived Date</el-button>
@@ -61,7 +61,7 @@
       top="5vh"
       :lock-scroll="false"
     >
-      <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" />
+      <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" @reloadOrder="reloadOrder" />
     </el-dialog>
   </div>
 </template>

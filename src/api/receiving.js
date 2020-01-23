@@ -322,3 +322,11 @@ export function allocateLocation(id, type, obj) {
     data: obj
   })
 }
+
+export function relocateItems(id, type) {
+  return request({
+    url: 'api/fba/fbainventory/?locationId=' + id + '&locationType=' + type,
+    method: 'delete'
+  })
+}
+

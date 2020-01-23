@@ -13,8 +13,8 @@
         inactive-text="Ctns View"
       />
     </div>
-    <receiving-wo-inventory-plts :plt-inventory-data="pltInventoryData" :is-visible="pltVisible" :customer-code="masterOrder.customerCode" />
-    <receiving-wo-inventory-ctns :ctn-inventory-data="ctnInventoryData" :is-visible="!pltVisible" :customer-code="masterOrder.customerCode" />
+    <receiving-wo-inventory-plts :plt-inventory-data="pltInventoryData" :is-visible="pltVisible" :customer-code="masterOrder.customerCode" @reloadOrder="reloadOrder" />
+    <receiving-wo-inventory-ctns :ctn-inventory-data="ctnInventoryData" :is-visible="!pltVisible" :customer-code="masterOrder.customerCode" @reloadOrder="reloadOrder" />
     <!-- <el-dialog title="Rough Pack"
             :visible.sync="locationVisible"
             width="450px"
@@ -65,24 +65,8 @@ export default {
         "receiving-wo-inventory-ctns": () => import('@/views/shareview/receiving/receiving-wo-inventory-ctns')
     },
     methods:{
-        filterHandler(value, row, column) {
-            const property = column['property'];
-            return row[property] === value;
-        },
-        filterChange(filters){
-            console.log(filters);
-        },
-        clearFilter() {
-            this.$refs.table.clearFilter();
-        },
-        handleSizeChange(val) {
-            this.pageSize = val;
-        },
-        handleCurrentChange(val) {
-            this.currentPage = val;
-        },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        reloadOrder() {
+          this.$emit('reloadOrder')
         }
     },
     mounted() {

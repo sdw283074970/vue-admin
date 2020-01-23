@@ -62,7 +62,7 @@
         <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
-              Operations<i class="el-icon-arrow-down el-icon--right" />
+              Options<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :disabled="step!=5" @click.native="onConfirmClicked(scope.row.id)">Confirm</el-dropdown-item>
