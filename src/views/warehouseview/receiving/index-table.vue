@@ -110,25 +110,31 @@
         width="120"
       />
       <el-table-column
-        label="Ctns"
+        label="Org Ctns"
+        prop="totalCtns"
         align="center"
-        width="120"
-      >
-        <template slot-scope="scope">
-          <font color="blue">{{ scope.row.actualCtns }}</font> of <font color="red">{{ scope.row.totalCtns }}</font>
-        </template>
-      </el-table-column>
+        width="100"
+      />
       <el-table-column
-        label="Plts"
+        label="Actual Ctns"
+        prop="actualCtns"
         align="center"
-        width="120"
-      >
-        <template slot-scope="scope">
-          <font color="blue">{{ scope.row.actualPlts }}</font> of <font color="red">{{ scope.row.originalPlts }}</font>
-        </template>
-      </el-table-column>
+        width="100"
+      />
       <el-table-column
-        prop="skuNumber"
+        label="Org Plts"
+        prop="originalPlts"
+        align="center"
+        width="80"
+      />
+      <el-table-column
+        label="Actual Plts"
+        prop="actualPlts"
+        align="center"
+        width="100"
+      />
+      <el-table-column
+        prop="sku"
         label="SKU #"
         align="center"
         width="80"

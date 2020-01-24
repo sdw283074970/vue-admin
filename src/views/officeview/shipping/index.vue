@@ -8,8 +8,6 @@
       :destination-options="destinationOptions"
       :customer-code-options="customerCodeOptions"
       @onEfilesClicked="onEfilesClicked"
-      @onEditClicked="onEidtClicked"
-      @onCreateClicked="onCreateClicked"
       @onSearchChanged="onSearchChanged"
       @onFilterConfirmed="onFilterConfirmed"
       @onRefreshClicked="onRefreshClicked"
@@ -98,7 +96,14 @@ export default {
             type: 'success'
           });
         })
-      }
+      },
+      onEfilesClicked(reference) {
+        this.efileVisible = true;
+        this.reference = reference;
+        getEfiles(reference, this.orderType).then(body => {
+          this.efiles = body.data
+        })
+      },
     },
     mounted() {
       getShippingOrders().then(body => {

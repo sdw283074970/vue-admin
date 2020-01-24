@@ -124,7 +124,7 @@
         prop="subCustomer"
         label="Sub-code"
         sortable
-        min-width="20%"
+        width="120"
       />
       <el-table-column
         prop="destination"
