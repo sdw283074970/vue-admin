@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus" @click="createHandler">New Inbound Order</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
       <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
@@ -197,133 +197,221 @@
     >
       <generic-order-filter @onFilterConfirmed="onFilterConfirmed" />
     </el-dialog>
+    <el-dialog
+      title="Create/Edit"
+      :visible.sync="editVisible"
+      width="750px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <receiving-index-edit-form
+        :form-data="formData"
+        :is-edit="isEdit"
+        :destination-options="destinationOptions"
+        :customer-code-options="customerCodeOptions"
+        @onCreateConfirmedClicked="onCreateConfirmedClicked"
+        @onEditConfirmedClicked="onEditConfirmedClicked"
+        @onCancelClicked="onCancelClicked"
+      />
+    </el-dialog>
   </div>
 </template>
 <script>
-/* eslint-disable */
+/* eslint-disable vue/require-default-prop */
+import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo } from '@/api/receiving'
+
 export default {
-    props:{
-        tableData: Array,
-        loading: Boolean,
-        customerCodeFilters: Array
-    },
-    data() {
-        return {
-            tableHeight: window.innerHeight * 0.75,
-            currentPage: 1,
-            pageSize: 20,
-            search: '',
-            customerCodeFilter : [],
-            filteredData: [],
-            localLoading: false,
-            filterVisible: false,
-            orderType: 'MasterOrder',
-            statusFilters: [
-              { value: 'New Created', text: 'New Created' },
-              { value: 'Draft', text: 'Draft' },
-              { value: 'Incoming', text: 'Incoming' },
-              { value: 'Arrived', text: 'Arrived' },
-              { value: 'Processing', text: 'Processing' },
-              { value: 'Received', text: 'Received' },
-              { value: 'Registered', text: 'Registered' },
-              { value: 'Allocated', text: 'Allocated' }
-            ]
-        };
-    },
-    components: {
-        "generic-order-filter": () => import('@/views/shareview/generic/generic-order-filter')
-    },
-    computed: {
-      totalEntries() {
-        return this.filteredData.length
-      }
-    },
-    watch:{
-      tableData: function(val, oldVal){
-        this.filteredData = val
+  components: {
+    'generic-order-filter': () => import('@/views/shareview/generic/generic-order-filter'),
+    'receiving-index-edit-form': () => import('@/views/officeview/receiving/index-edit-form')
+  },
+  props: {
+    destinationOptions: Array,
+    customerCodeOptions: Array,
+    tableData: Array,
+    loading: Boolean,
+    customerCodeFilters: Array
+  },
+  data() {
+    return {
+      tableHeight: window.innerHeight * 0.75,
+      currentPage: 1,
+      pageSize: 20,
+      search: '',
+      customerCodeFilter: [],
+      filteredData: [],
+      localLoading: false,
+      editVisible: false,
+      filterVisible: false,
+      isEdit: false,
+      orderType: 'MasterOrder',
+      formData: {
+        id: 0,
+        status: '',
+        container: '',
+        customerCode: '',
+        eta: '',
+        inboundType: '',
+        unloadingType: '',
+        storageType: '',
+        palletizing: '',
+        invoiceStatus: 'Await',
+        subCustomer: '',
+        carrier: '',
+        originalPlts: 0,
+        containerSize: '',
+        vessel: '',
+        voy: '',
+        etaPort: '',
+        placeOfReceipt: '',
+        portOfLoading: '',
+        portOfDischarge: '',
+        placeOfDelivery: '',
+        sealNumber: '',
+        instruction: ''
       },
-      search: function(val, oldVal){
-        this.filteredData = this.tableData.filter(data => {
-            return Object.keys(data).some(key => {
-              return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
-          })
-        })
-      }
-    },
-    methods:{
-      transferDate: function(date) {
-          return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
-      },
-      clearFilter() {
-        this.$refs.table.clearFilter();
-        this.$emit('onRefreshClicked');
-        // this.localLoading = true;
-        // this.filteredData = this.tableData;
-        // this.localLoading = false;
-
-      },
-      handleSizeChange(val) {
-        this.pageSize = val;
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-      },
-      editHandler: function(id) {
-        this.$emit('onEditClicked', id);
-      },
-      createHandler: function(){
-        this.$emit('onCreateClicked');
-      },
-      woHandler: function(id){
-        this.$router.push({path: '/receiving/receiving-wo/' + id});
-      },
-      changeStatusColor: function(status) {
-        if (status == 'New Created')
-            return 'gray';
-        else if (status == 'Picking' || status == 'Processing' || status == 'Pending' || status == 'Draft')
-            return 'red';
-        else if (status == 'Incoming' || status == 'Returned')
-            return 'orange';
-        else if (status == 'Allocated')
-            return 'brown';
-        else if (status == 'Received')
-            return 'green';
-        else if (status == 'Registered')
-            return 'purple';
-        else if (status == 'Arrived')
-            return 'darkcyan';
-        else
-            return 'black';
-      },
-      onEfilesClicked(reference) {
-        this.$emit('onEfilesClicked', reference)
-      },
-      onFilterChange(filters) {
-        this.filteredData = this.tableData.filter((row) => {
-          return row.customerCode == filters.code[0]
-        })
-
-        // var arr = [];
-        // this.filteredData.filter(row => {
-        //   if (row.customerCode == filters.code[0])
-        //   {
-        //     arr.push(row);
-        //   }
-        // })
-        // this.filteredData = arr;
-
-        // this.filteredData = this.tableData.filter((row) => {
-        //   return row.status = filters.status[0]
-        // })
-      },
-      onFilterConfirmed(filter) {
-        this.filterVisible = false;
-        this.$emit('onFilterConfirmed', filter);
-      }
-    },
-    mounted() {
-
+      statusFilters: [
+        { value: 'New Created', text: 'New Created' },
+        { value: 'Draft', text: 'Draft' },
+        { value: 'Incoming', text: 'Incoming' },
+        { value: 'Arrived', text: 'Arrived' },
+        { value: 'Processing', text: 'Processing' },
+        { value: 'Received', text: 'Received' },
+        { value: 'Registered', text: 'Registered' },
+        { value: 'Allocated', text: 'Allocated' }
+      ]
     }
+  },
+  computed: {
+    totalEntries() {
+      return this.filteredData.length
+    }
+  },
+  watch: {
+    tableData: function(val, oldVal) {
+      this.filteredData = val
+    },
+    search: function(val, oldVal) {
+      this.filteredData = this.tableData.filter(data => {
+        return Object.keys(data).some(key => {
+          return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
+        })
+      })
+    }
+  },
+  mounted() {
+
+  },
+  methods: {
+    transferDate: function(date) {
+      return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
+    },
+    clearFilter() {
+      this.$refs.table.clearFilter()
+      this.$emit('onRefreshClicked')
+      // this.localLoading = true;
+      // this.filteredData = this.tableData;
+      // this.localLoading = false;
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
+    editHandler: function(id) {
+      this.editVisible = true
+      this.isEdit = true
+      getReceivingOrderInfo(id).then(body => {
+        this.formData = body.data
+      })
+    },
+    woHandler: function(id) {
+      this.$router.push({ path: '/receiving/receiving-wo/' + id })
+    },
+    changeStatusColor: function(status) {
+      if (status === 'New Created') { return 'gray' } else if (status === 'Picking' || status === 'Processing' || status === 'Pending' || status === 'Draft') { return 'red' } else if (status === 'Incoming' || status === 'Returned') { return 'orange' } else if (status === 'Allocated') { return 'brown' } else if (status === 'Received') { return 'green' } else if (status === 'Registered') { return 'purple' } else if (status === 'Arrived') { return 'darkcyan' } else { return 'black' }
+    },
+    onEfilesClicked(reference) {
+      this.$emit('onEfilesClicked', reference)
+    },
+    onFilterChange(filters) {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.customerCode === filters.code[0]
+      })
+
+      // var arr = [];
+      // this.filteredData.filter(row => {
+      //   if (row.customerCode == filters.code[0])
+      //   {
+      //     arr.push(row);
+      //   }
+      // })
+      // this.filteredData = arr;
+
+      // this.filteredData = this.tableData.filter((row) => {
+      //   return row.status = filters.status[0]
+      // })
+    },
+    onFilterConfirmed(filter) {
+      this.filterVisible = false
+      this.$emit('onFilterConfirmed', filter)
+    },
+
+    onCreateConfirmedClicked() {
+      createNewrReceivingOrder(this.formData).then(body => {
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+        this.editVisible = false
+        this.filteredData.splice(0, 0, body.data)
+      })
+    },
+    onEditConfirmedClicked(id) {
+      updateReceivingOrderInfo(id, this.formData).then(body => {
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+        this.editVisible = false
+        const index = this.filteredData.map(o => o.id).indexOf(body.data.id)
+        this.filteredData.splice(index, 1, body.data)
+      })
+    },
+    onCancelClicked() {
+      this.editVisible = false
+    },
+    onCreateClicked() {
+      this.editVisible = true
+      this.isEdit = false
+      this.formData = {
+        id: 0,
+        status: '',
+        container: '',
+        customerCode: '',
+        eta: '',
+        originalPlts: 0,
+        inboundType: '',
+        unloadingType: '',
+        storageType: '',
+        palletizing: '',
+        invoiceStatus: 'Await',
+        subCustomer: '',
+        carrier: '',
+        containerSize: '',
+        vessel: '',
+        voy: '',
+        etaPort: '',
+        placeOfReceipt: '',
+        portOfLoading: '',
+        portOfDischarge: '',
+        placeOfDelivery: '',
+        sealNumber: '',
+        instruction: ''
+      }
+    }
+  }
 }
 </script>
 

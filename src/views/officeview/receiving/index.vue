@@ -5,33 +5,13 @@
       :table-data="tableData"
       :loading="loading"
       :customer-code-filters="customerCodeFilters"
-      @onEditClicked="onEidtClicked"
-      @onCreateClicked="onCreateClicked"
+      :destination-options="destinationOptions"
+      :customer-code-options="customerCodeOptions"
       @onEfilesClicked="onEfilesClicked"
       @onSearchChanged="onSearchChanged"
       @onFilterConfirmed="onFilterConfirmed"
       @onRefreshClicked="onRefreshClicked"
     />
-    <div>
-      <el-dialog
-        title="Create/Edit"
-        :visible.sync="editVisible"
-        width="750px"
-        top="5vh"
-        :lock-scroll="false"
-      >
-        <receiving-index-edit-form
-          :form-data="formData"
-          :is-edit="isEdit"
-          :ship-order-status="shipOrderStatus"
-          :destination-options="destinationOptions"
-          :customer-code-options="customerCodeOptions"
-          @onCreateConfirmedClicked="onCreateConfirmedClicked"
-          @onEditConfirmedClicked="onEditConfirmedClicked"
-          @onCancelClicked="onCancelClicked"
-        />
-      </el-dialog>
-    </div>
     <div>
       <el-dialog
         title="Manage Efiles"
@@ -69,40 +49,13 @@ export default {
             filterVisible: false,
             filteredData: [],
             dialogFormVisible : false,
-            shipOrderStatus: '',
             efileVisible: false,
             efiles: [],
             reference: '',
-            orderType: 'MasterOrder',
-            formData: {
-              id : 0,
-              status: '',
-              container: '',
-              customerCode: '',
-              eta: '',
-              inboundType: '',
-              unloadingType: '',
-              storageType: '',
-              palletizing: '',
-              invoiceStatus: 'Await',
-              subCustomer: '',
-              carrier: '',
-              originalPlts: 0,
-              containerSize: '',
-              vessel: '',
-              voy: '',
-              etaPort: '',
-              placeOfReceipt: '',
-              portOfLoading: '',
-              portOfDischarge: '',
-              placeOfDelivery: '',
-              sealNumber: '',
-              instruction: ''
-            }
+            orderType: 'MasterOrder'
         };
     },
     components:{
-        "receiving-index-edit-form": () => import('@/views/officeview/receiving/index-edit-form'),
         "receiving-index-table": () => import('@/views/officeview/receiving/index-table'),
         "generic-efiles": () => import('@/views/shareview/generic/generic-efiles')
     },
@@ -124,66 +77,6 @@ export default {
           })
         })
         this.totalEntries = this.filteredData.length;
-      },
-      onCreateConfirmedClicked(){
-        createNewrReceivingOrder(this.formData).then(body => {
-          this.$message({
-            message: 'Success!',
-            type: 'success'
-          });
-          this.editVisible = false;
-          this.filteredData.splice(0, 0, body.data);
-        })
-      },
-      onEditConfirmedClicked(id){
-        updateReceivingOrderInfo(id, this.formData).then(body => {
-          this.$message({
-            message: 'Success!',
-            type: 'success'
-          });
-          this.editVisible = false;
-          let index = this.filteredData.map(o => o.id).indexOf(body.data.id);
-          this.filteredData.splice(index, 1, body.data);
-        })
-      },
-      onCancelClicked(){
-        this.editVisible = false;
-      },
-      onCreateClicked(){
-        this.editVisible = true;
-        this.isEdit = false;
-        this.formData = {
-            id : 0,
-            status: '',
-            container: '',
-            customerCode: '',
-            eta: '',
-            originalPlts: 0,
-            inboundType: '',
-            unloadingType: '',
-            storageType: '',
-            palletizing: '',
-            invoiceStatus: 'Await',
-            subCustomer: '',
-            carrier: '',
-            containerSize: '',
-            vessel: '',
-            voy: '',
-            etaPort: '',
-            placeOfReceipt: '',
-            portOfLoading: '',
-            portOfDischarge: '',
-            placeOfDelivery: '',
-            sealNumber: '',
-            instruction: ''
-        }
-      },
-      onEidtClicked(id){
-        this.editVisible = true;
-        this.isEdit = true;
-        getReceivingOrderInfo(id).then(body => {
-          this.formData = body.data
-        })
       },
       onEfilesClicked(reference) {
         this.efileVisible = true;
