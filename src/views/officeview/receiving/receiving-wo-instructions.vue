@@ -129,7 +129,7 @@ export default {
   methods:{
     deleteHandler(id){
       deleteInstruction(id).then(() => {
-        let index = this.instructions.indexOf(x => x.id === id)
+        let index = this.instructions.map(x => x.id).indexOf(id)
         this.instructions.splice(index, 1)
         this.$message({
           message: 'Delete succeed',

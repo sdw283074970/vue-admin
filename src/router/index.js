@@ -164,13 +164,13 @@ export const asyncRoutes = [
   {
     path: '/customer',
     component: Layout,
-    meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'sales'] },
+    meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'TBD'] },
     children: [
       {
         path: 'index',
         name: 'Customer',
         component: () => import('@/views/officeview/customer/index'),
-        meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'sales'] }
+        meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'TBD'] }
       }
     ]
   },
@@ -179,7 +179,7 @@ export const asyncRoutes = [
     path: '/receiving',
     component: Layout,
     name: 'Receiving',
-    meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'accounting', 'sales'] },
+    meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'accounting', 'TBD'] },
     children: [
       {
         path: 'index',
@@ -200,7 +200,7 @@ export const asyncRoutes = [
     path: '/shipping',
     component: Layout,
     name: 'shipping',
-    meta: { title: 'Shipping Orders', icon: 'table', role: ['office', 'accounting', 'sales'] },
+    meta: { title: 'Shipping Orders', icon: 'table', role: ['office', 'accounting', 'TBD'] },
     children: [
       {
         path: 'index',
@@ -221,7 +221,7 @@ export const asyncRoutes = [
     path: '/reports',
     component: Layout,
     name: 'Reports',
-    meta: { title: 'Reports', icon: 'table', role: ['office', 'accounting', 'sales'] },
+    meta: { title: 'Reports', icon: 'table', role: ['office', 'accounting', 'TBD'] },
     children: [
       {
         path: '/reports/inventory/index',
@@ -237,33 +237,33 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/accounting',
-    component: Layout,
-    name: 'Accounting',
-    meta: { title: 'Accounting', icon: 'table', role: ['office', 'accounting', 'sales'] },
-    children: [
-      {
-        path: '/accounting/storage/index',
-        name: 'Storage',
-        component: () => import('@/views/accountingview/accounting/storage/index'),
-        meta: { title: 'Storage', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/addressbook',
-    component: Layout,
-    meta: { title: 'Address Book', icon: 'table', role: ['office', 'accounting', 'sales'] },
-    children: [
-      {
-        path: 'index',
-        name: 'AddressBook',
-        component: () => import('@/views/shareview/addressbook/index'),
-        meta: { title: 'Address Book', icon: 'table', role: ['office', 'accounting', 'sales'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/accounting',
+  //   component: Layout,
+  //   name: 'Accounting',
+  //   meta: { title: 'Accounting', icon: 'table', role: ['office', 'accounting', 'TBD'] },
+  //   children: [
+  //     {
+  //       path: '/accounting/storage/index',
+  //       name: 'Storage',
+  //       component: () => import('@/views/accountingview/accounting/storage/index'),
+  //       meta: { title: 'Storage', icon: 'table' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/addressbook',
+  //   component: Layout,
+  //   meta: { title: 'Address Book', icon: 'table', role: ['office', 'accounting', 'TBD'] },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'AddressBook',
+  //       component: () => import('@/views/shareview/addressbook/index'),
+  //       meta: { title: 'Address Book', icon: 'table', role: ['office', 'accounting', 'TBD'] }
+  //     }
+  //   ]
+  // },
   {
     path: '/inbound',
     component: Layout,
@@ -356,7 +356,7 @@ export const asyncRoutes = [
     path: '/warehouse-receiving',
     component: Layout,
     name: 'Warehouse Receiving',
-    meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'accounting', 'sales', 'warehouse'] },
+    meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'accounting', 'TBD', 'warehouse'] },
     children: [
       {
         path: 'index',
