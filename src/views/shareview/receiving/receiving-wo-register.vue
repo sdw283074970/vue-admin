@@ -198,14 +198,14 @@ export default {
                   quantity: row.ctnsPerLocation
                 })
               }
-              packPlts(this.masterOrder.id, this.ruleForm.pltNumber, this.ruleForm.pltSize, obj).then(() => {
-                this.$emit('reloadOrder')
-              })
-              this.packVisible = false;
-              this.$message({
-                message: 'Pack success',
-                type: 'success'
-              })
+            })
+            packPlts(this.masterOrder.id, this.ruleForm.pltNumber, this.ruleForm.pltSize, obj).then(() => {
+              this.$emit('reloadOrder')
+            })
+            this.packVisible = false;
+            this.$message({
+              message: 'Pack success',
+              type: 'success'
             })
           } else {
               console.log('error submit!!');

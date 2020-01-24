@@ -113,7 +113,6 @@
 export default {
   props: {
     formData: Object,
-    shipOrderStatus: String,
     isEdit: Boolean,
     customerCodeOptions: Array,
     destinationOptions: Array

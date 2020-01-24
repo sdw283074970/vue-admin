@@ -4,8 +4,8 @@
     <!-- <p>current step: {{ step }}</p>
     <p>current step: {{ (step!==5) }}</p> -->
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus" :disabled="!(step==(1||5))" @click="onNewClicked">New SKU</el-button>
-      <el-button type="primary" icon="el-icon-upload" :disabled="!(step==(1||5))" @click="onUploadPackingListClicked">Upload Packing List File</el-button>
+      <el-button type="primary" icon="el-icon-plus" :disabled="step!=(1&&5)" @click="onNewClicked">New SKU</el-button>
+      <el-button type="primary" icon="el-icon-upload" :disabled="step!=(1&&5)" @click="onUploadPackingListClicked">Upload Packing List File</el-button>
       <el-button type="primary" icon="el-icon-download" @click="onDownloadTemplateClicked">Download Packing List Template</el-button>
       <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input

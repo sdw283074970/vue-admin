@@ -169,7 +169,7 @@
       >
         <template slot-scope="scope">
           <el-button @click="onEfilesClicked(scope.row.shipOrderNumber)">eFiles</el-button>
-          <el-button @click="editHandler(scope.row.id, scope.$index)">Fee</el-button>
+          <!-- <el-button @click="editHandler(scope.row.id, scope.$index)">Fee</el-button> -->
           <el-button @click="editHandler(scope.row.id)">Edit</el-button>
           <el-button @click="woHandler(scope.row.id)">WO</el-button>
           <!-- <el-button type="danger" plain @click="editHandler(scope.row.id, scope.$index)">Delete</el-button> -->
@@ -196,103 +196,183 @@
     >
       <generic-order-filter @onFilterConfirmed="onFilterConfirmed" />
     </el-dialog>
+    <el-dialog
+      title="Create/Edit"
+      :visible.sync="editVisible"
+      width="750px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <shipping-index-edit-form
+        :form-data="formData"
+        :is-edit="isEdit"
+        :destination-options="destinationOptions"
+        :customer-code-options="customerCodeOptions"
+        @onCreateConfirmedClicked="onCreateConfirmedClicked"
+        @onEditConfirmedClicked="onEditConfirmedClicked"
+        @onCancelClicked="onCancelClicked"
+      />
+    </el-dialog>
   </div>
 </template>
 <script>
-/* eslint-disable */
+/* eslint-disable vue/require-default-prop */
+import { getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
+
 export default {
-    props:{
-        tableData: Array,
-        loading: Boolean,
-        customerCodeFilters: Array
-    },
-    data() {
-        return {
-            tableHeight: window.innerHeight * 0.75,
-            currentPage: 1,
-            pageSize: 20,
-            search: '',
-            filteredData: [],
-            customerCodeFilter : [],
-            localLoading: false,
-            filterVisible: false
-        };
-    },
-    components: {
-        "generic-order-filter": () => import('@/views/shareview/generic/generic-order-filter')
-    },
-    computed: {
-      totalEntries() {
-        return this.filteredData.length
+  components: {
+    'generic-order-filter': () => import('@/views/shareview/generic/generic-order-filter'),
+    'shipping-index-edit-form': () => import('@/views/officeview/shipping/index-edit-form')
+  },
+  props: {
+    tableData: Array,
+    loading: Boolean,
+    customerCodeFilters: Array,
+    destinationOptions: Array,
+    customerCodeOptions: Array
+  },
+  data() {
+    return {
+      tableHeight: window.innerHeight * 0.75,
+      currentPage: 1,
+      pageSize: 20,
+      search: '',
+      filteredData: [],
+      customerCodeFilter: [],
+      localLoading: false,
+      filterVisible: false,
+      editVisible: false,
+      isEdit: false,
+      formData: {
+        id: 0,
+        status: '',
+        shipOrderNumber: '',
+        customerCode: '',
+        ets: '',
+        orderType: 'Standard',
+        invoiceStatus: 'Await',
+        destination: '',
+        pickReference: '',
+        carrier: '',
+        batchNumber: '',
+        podStatus: false,
+        etsTimeRange: '',
+        bolNumber: '',
+        pickNumber: '',
+        subCustomer: '',
+        purchaseOrderNumber: '',
+        instruction: ''
       }
-    },
-    watch:{
-      tableData: function(val, oldVal){
-        this.filteredData = val
-      },
-      search: function(val, oldVal){
-        // this.$emit('onSearchChanged', val);
-        this.filteredData = this.tableData.filter(data => {
-            return Object.keys(data).some(key => {
-              return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
-          })
-        })
-      }
-    },
-    methods:{
-      transferDate: function(date) {
-          return date === undefined ? '' : (date.substring(0, 4) === 1900 ? '-' : date.substring(0, 10))
-      },
-      clearFilter() {
-        this.$refs.table.clearFilter();
-        this.$emit('onRefreshClicked');
-      },
-      handleSizeChange(val) {
-        this.pageSize = val;
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-      },
-      editHandler: function(id) {
-        this.$emit('onEditClicked', id);
-      },
-      createHandler: function(){
-        this.$emit('onCreateClicked');
-      },
-      woHandler: function(id){
-        this.$router.push({path: '/shipping/shipping-wo/' + id});
-      },
-      changeStatusColor: function(status) {
-        if (status == 'New Created' || status == 'Draft')
-            return 'gray';
-        else if (status == 'Picking' || status == 'Processing' || status == 'Pending')
-            return 'red';
-        else if (status == 'New Order' || status == 'Returned' || status == 'New PO' || status == 'Updated')
-            return 'orange';
-        else if (status == 'Ready')
-            return 'green';
-        else if (status == 'Released')
-            return 'brown';
-        else if (status == 'Shipped')
-            return 'blue';
-        else
-            return 'black';
-      },
-      onEfilesClicked(reference) {
-        this.$emit('onEfilesClicked', reference)
-      },
-      onFilterChange(filters) {
-        this.filteredData = this.tableData.filter((row) => {
-          return row.customerCode == filters.code[0]
-        })
-      },
-      onFilterConfirmed(filter) {
-        this.filterVisible = false;
-        this.$emit('onFilterConfirmed', filter);
-      }
-    },
-    mounted() {
     }
+  },
+  computed: {
+    totalEntries() {
+      return this.filteredData.length
+    }
+  },
+  watch: {
+    tableData: function(val, oldVal) {
+      this.filteredData = val
+    },
+    search: function(val, oldVal) {
+      this.filteredData = this.tableData.filter(data => {
+        return Object.keys(data).some(key => {
+          return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
+        })
+      })
+    }
+  },
+  mounted() {
+  },
+  methods: {
+    transferDate: function(date) {
+      return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
+    },
+    clearFilter() {
+      this.$refs.table.clearFilter()
+      this.$emit('onRefreshClicked')
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
+    editHandler: function(id) {
+      this.editVisible = true
+      this.editVisible = true
+      this.isEdit = true
+      getShipOrderInfo(id).then(body => {
+        this.formData = body.data
+      })
+    },
+    createHandler: function() {
+      this.editVisible = true
+      this.isEdit = false
+      this.formData = {
+        id: 0,
+        status: 'New Created',
+        shipOrderNumber: '',
+        customerCode: '',
+        ets: '',
+        orderType: 'Standard',
+        invoiceStatus: 'Await',
+        destination: '',
+        pickReference: '',
+        carrier: '',
+        batchNumber: '',
+        podStatus: false,
+        etsTimeRange: '',
+        bolNumber: '',
+        pickNumber: '',
+        subCustomer: '',
+        purchaseOrderNumber: '',
+        instruction: ''
+      }
+    },
+    woHandler: function(id) {
+      this.$router.push({ path: '/shipping/shipping-wo/' + id })
+    },
+    changeStatusColor: function(status) {
+      if (status === 'New Created' || status === 'Draft') { return 'gray' } else if (status === 'Picking' || status === 'Processing' || status === 'Pending') { return 'red' } else if (status === 'New Order' || status === 'Returned' || status === 'New PO' || status === 'Updated') { return 'orange' } else if (status === 'Ready') { return 'green' } else if (status === 'Released') { return 'brown' } else if (status === 'Shipped') { return 'blue' } else { return 'black' }
+    },
+    onEfilesClicked(reference) {
+      this.$emit('onEfilesClicked', reference)
+    },
+    onFilterChange(filters) {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.customerCode === filters.code[0]
+      })
+    },
+    onFilterConfirmed(filter) {
+      this.filterVisible = false
+      this.$emit('onFilterConfirmed', filter)
+    },
+    onCreateConfirmedClicked() {
+      createNewShipOrder(this.formData).then(body => {
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+        this.editVisible = false
+        this.filteredData.splice(0, 0, body.data)
+      })
+    },
+    onEditConfirmedClicked(id) {
+      updateShipOrderInfo(id, this.formData).then(body => {
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+        this.editVisible = false
+        const index = this.filteredData.map(o => o.id).indexOf(body.data.id)
+        this.filteredData.splice(index, 1, body.data)
+      })
+    },
+    onCancelClicked() {
+      this.editVisible = false
+    }
+  }
 }
 </script>
 
