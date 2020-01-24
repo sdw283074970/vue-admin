@@ -24,7 +24,7 @@
       width="85%"
       :lock-scroll="false"
     >
-      <receiving-register :master-order="masterOrder" :order-details="orderDetails" />
+      <receiving-register :master-order="masterOrder" :order-details="orderDetails" @reloadOrder="reloadOrder" />
     </el-dialog>
     <el-dialog
       title="Select Arrive Date"

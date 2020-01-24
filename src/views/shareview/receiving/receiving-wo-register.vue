@@ -42,20 +42,24 @@
       />
       <el-table-column
         prop="actualGrossWeight"
+        align="center"
         label="G.W."
         min-width="20%"
       />
       <el-table-column
         prop="actualCBM"
+        align="center"
         label="CBM"
         min-width="20%"
       />
       <el-table-column
         prop="actualQuantity"
         label="Actual Quantity"
+        align="center"
         min-width="30%"
       />
       <el-table-column
+        align="center"
         label="Unlaied Quantity"
         min-width="30%"
       >
@@ -63,12 +67,21 @@
           <font>{{ scope.row.actualQuantity - scope.row.comsumedQuantity }}</font>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         type="selection"
         :selectable="isDisabled"
         disabled="true"
         width="60"
-      />
+      /> -->
+      <el-table-column
+        label="Ctns/Pack"
+        align="center"
+        width="140"
+      >
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.ctnsPerLocation" type="number" style="width:100px" />
+        </template>
+      </el-table-column>
     </el-table>
     <div style="margin-top:10px;text-align:right;">
       <el-button disabled>Detail Pack</el-button>
@@ -141,12 +154,12 @@ export default {
               pltSize: 'P1'
           },
           rules: {
-          pltNumber: [
-                  { validator: validateAcquaintance, trigger: 'blur' }                    
-              ],
-          pltSize: [
-                  { required: true, message: 'Please select size', trigger: 'change' },
-              ]
+            pltNumber: [
+                { validator: validateAcquaintance, trigger: 'blur' }                    
+            ],
+            pltSize: [
+                { required: true, message: 'Please select size', trigger: 'change' },
+            ]
           }
       };
   },
@@ -156,27 +169,44 @@ export default {
 
       this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
-            if (this.checkBoxData)
-            {
-              this.checkBoxData.forEach(row => {
+            // if (this.checkBoxData)
+            // {
+            //   this.checkBoxData.forEach(row => {
+            //     obj.push({
+            //       id: row.id,
+            //       quantity: 0
+            //     })
+            //   })
+            //   packPlts(this.masterOrder.id, this.ruleForm.pltNumber, this.ruleForm.pltSize, obj).then(() => {
+            //     this.checkBoxData.forEach(row => {
+            //       var order = this.orderDetails.find(x => x.id == row.id);
+            //       order.comsumedQuantity = order.actualQuantity;
+            //     })
+            //     this.$refs.table.clearSelection();
+            //   })
+            //   this.packVisible = false;
+            //     this.$message({
+            //       message: 'Pack success',
+            //       type: 'success'
+            //     })
+            // }
+            this.orderDetails.forEach(row => {
+              if (row.ctnsPerLocation != 0 && row.ctnsPerLocation != '' && row.ctnsPerLocation != null && row.ctnsPerLocation != undefined && row.ctnsPerLocation <= (row.actualQuantity - row.comsumedQuantity) && row.ctnsPerLocation > 0)
+              {
                 obj.push({
                   id: row.id,
-                  quantity: 0
+                  quantity: row.ctnsPerLocation
                 })
-              })
+              }
               packPlts(this.masterOrder.id, this.ruleForm.pltNumber, this.ruleForm.pltSize, obj).then(() => {
-                this.checkBoxData.forEach(row => {
-                  var order = this.orderDetails.find(x => x.id == row.id);
-                  order.comsumedQuantity = order.actualQuantity;
-                })
-                this.$refs.table.clearSelection();
+                this.$emit('reloadOrder')
               })
               this.packVisible = false;
-                this.$message({
-                  message: 'Pack success',
-                  type: 'success'
-                })
-            }
+              this.$message({
+                message: 'Pack success',
+                type: 'success'
+              })
+            })
           } else {
               console.log('error submit!!');
               return false;
