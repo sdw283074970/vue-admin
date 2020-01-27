@@ -111,7 +111,7 @@
       />
       <el-table-column
         label="Org Ctns"
-        prop="totalCtns"
+        prop="originalCtns"
         align="center"
         width="100"
       />

@@ -74,8 +74,9 @@
 
 <script>
 /* eslint-disable vue/require-prop-types */
+/* eslint-disable handle-callback-err */
 /* eslint-disable vue/require-default-prop */
-import { generateWO, generateBOL } from "@/api/shipping"
+import { generateWO, generateBOL } from '@/api/shipping'
 import { downloadFile } from '@/api/receiving'
 
 export default {
@@ -99,29 +100,29 @@ export default {
       this.$router.go(-1)
     },
     downloadWOHandler() {
-      this.loading = true;
+      this.loading = true
       generateWO(this.shipOrder.id).then(body => {
         this.$message({
           message: 'Downloading...',
           type: 'success'
         })
-        downloadFile(body.data, 'Work Order');
-        this.loading = false;
+        downloadFile(body.data, 'Work Order')
+        this.loading = false
       }).catch(error => {
-        this.loading = false;
+        this.loading = false
       })
     },
     downloadBOLHandler() {
-      this.loading = true;
+      this.loading = true
       generateBOL(this.shipOrder.id).then(body => {
         this.$message({
           message: 'Downloading...',
           type: 'success'
         })
-        downloadFile(body.data, 'BOL');
-        this.loading = false;
+        downloadFile(body.data, 'BOL')
+        this.loading = false
       }).catch(error => {
-        this.loading = false;
+        this.loading = false
       })
     }
   }
