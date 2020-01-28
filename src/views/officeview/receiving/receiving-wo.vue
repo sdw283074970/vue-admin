@@ -15,18 +15,21 @@
     />
     <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" :step="step" />
     <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
+    <invoice-detail :reference="masterOrder.container" :order-type="'MasterOrder'" :invoice-status="masterOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
   </div>
 </template>
 
 <script>
 import { getRO, getOrderDetails, getPallets, getCartons, getPltsInventory, getCtnsInventory, getInstructions, resetInstructions } from '@/api/receiving'
+import { getInvoices } from '@/api/accounting'
 
 export default {
   components: {
     'receiving-wo-sum': () => import('@/views/shareview/receiving/receiving-wo-sum'),
     'receiving-wo-control': () => import('@/views/officeview/receiving/receiving-wo-control'),
     'receiving-wo-packinglist': () => import('@/views/shareview/receiving/receiving-wo-packinglist'),
-    'receiving-wo-instruction': () => import('@/views/officeview/receiving/receiving-wo-instructions')
+    'receiving-wo-instruction': () => import('@/views/officeview/receiving/receiving-wo-instructions'),
+    'invoice-detail': () => import('@/views/accountingview/invoice/invoice-detail')
   },
   data() {
     return {
@@ -37,6 +40,7 @@ export default {
       pltInventoryData: [],
       ctnInventoryData: [],
       instructions: [],
+      invoices: [],
       step: 0
     }
   },
@@ -56,6 +60,9 @@ export default {
     const id = this.$route.params.masterOrderId
     getRO(id).then(body => {
       this.masterOrder = body.data
+      getInvoices(this.masterOrder.container, 'MasterOrder').then(ivs => {
+        this.invoices = ivs.data
+      })
     })
     getOrderDetails(id).then(body => {
       this.orderDetails = body.data
@@ -124,6 +131,9 @@ export default {
       })
       getCtnsInventory(this.$route.params.masterOrderId).then(d => {
         this.ctnInventoryData = d.data
+      })
+      getInvoices(this.masterOrder.container, 'MasterOrder').then(ivs => {
+        this.invoices = ivs.data
       })
     }
   }
