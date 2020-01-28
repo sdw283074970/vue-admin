@@ -2,29 +2,31 @@
   <div class="gb-maincontainer">
     <h1>Outbound Orders Manager</h1>
     <shipping-index-table
-    :filteredData="filteredData"
-    :totalEntries="totalEntries"
-    @onEditClicked="onEidtClicked"
-    @onCreateClicked="onCreateClicked"
-    @onSearchChanged="onSearchChanged"
-    :loading="loading">
-    </shipping-index-table>
+      :filtered-data="filteredData"
+      :total-entries="totalEntries"
+      :loading="loading"
+      @onEditClicked="onEidtClicked"
+      @onCreateClicked="onCreateClicked"
+      @onSearchChanged="onSearchChanged"
+    />
     <div>
-      <el-dialog title="Create/Edit"
+      <el-dialog
+        title="Create/Edit"
         :visible.sync="editVisible"
         width="750px"
         top="5vh"
-        :lock-scroll="false">
+        :lock-scroll="false"
+      >
         <shipping-index-edit-form
-        :formData="formData"
-        :isEdit="isEdit"
-        :shipOrderStatus="shipOrderStatus"
-        :destinationOptions="destinationOptions"
-        @onCreateConfirmedClicked="onCreateConfirmedClicked"
-        @onEditConfirmedClicked="onEditConfirmedClicked"
-        @onCancelClicked="onCancelClicked"
-        :customerCodeOptions="customerCodeOptions">
-        </shipping-index-edit-form>
+          :form-data="formData"
+          :is-edit="isEdit"
+          :ship-order-status="shipOrderStatus"
+          :destination-options="destinationOptions"
+          :customer-code-options="customerCodeOptions"
+          @onCreateConfirmedClicked="onCreateConfirmedClicked"
+          @onEditConfirmedClicked="onEditConfirmedClicked"
+          @onCancelClicked="onCancelClicked"
+        />
       </el-dialog>
     </div>
   </div>

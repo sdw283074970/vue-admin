@@ -1,4 +1,3 @@
-/* eslint-disable vue/require-default-prop */
 <template>
   <div>
     <h2>Operation</h2>
@@ -22,6 +21,8 @@
 </template>
 
 <script>
+/* eslint-disable vue/require-prop-types */
+/* eslint-disable vue/require-default-prop */
 import { submitWO, CallbackWO } from '@/api/receiving'
 
 export default {

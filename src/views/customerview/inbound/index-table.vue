@@ -102,9 +102,6 @@
       <el-table-column
         prop="customerCode"
         label="Code"
-        sortable
-        :column-key="'code'"
-        :filters="customerCodeFilter"
         width="100"
       />
       <el-table-column
@@ -113,7 +110,7 @@
         sortable
         width="120"
       />
-      <el-table-column
+      <!-- <el-table-column
         label="Ctns"
         align="center"
         width="120"
@@ -130,7 +127,31 @@
         <template slot-scope="scope">
           <font color="blue">{{ scope.row.actualPlts }}</font> of <font color="red">{{ scope.row.originalPlts }}</font>
         </template>
-      </el-table-column>
+      </el-table-column> -->
+      <el-table-column
+        label="Org Ctns"
+        prop="totalCtns"
+        align="center"
+        width="100"
+      />
+      <el-table-column
+        label="Actual Ctns"
+        prop="actualCtns"
+        align="center"
+        width="100"
+      />
+      <el-table-column
+        label="Org Plts"
+        prop="originalPlts"
+        align="center"
+        width="80"
+      />
+      <el-table-column
+        label="Actual Plts"
+        prop="actualPlts"
+        align="center"
+        width="100"
+      />
       <el-table-column
         prop="skuNumber"
         label="SKU #"
@@ -166,7 +187,7 @@
         <template slot-scope="scope">
           <!-- <el-button disabled="">eFiles</el-button> -->
           <el-button :disabled="scope.row.status!='New Created'" @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
-          <el-button @click="woHandler(scope.row.id)">WO</el-button>
+          <el-button @click="woHandler(scope.row.id)">WO & Details</el-button>
           <el-button type="danger" plain disabled="">Delete</el-button>
         </template>
       </el-table-column>
@@ -190,7 +211,7 @@ export default {
     props:{
         filteredData: Array,
         loading: Boolean,
-        totalEntries: Intl
+        totalEntries: Number
     },
     data() {
         return {

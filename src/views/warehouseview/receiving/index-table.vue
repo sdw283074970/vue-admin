@@ -166,7 +166,7 @@
         label="operation"
       >
         <template slot-scope="scope">
-          <el-button @click="woHandler(scope.row.id)">WO</el-button>
+          <el-button @click="woHandler(scope.row.id)">WO & Details</el-button>
         </template>
       </el-table-column>
     </el-table>

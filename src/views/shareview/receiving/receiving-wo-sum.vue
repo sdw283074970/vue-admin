@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Receiving Work Order Page</h1>
+    <h1>Receiving Order Detail Page</h1>
     <el-button @click="btnBackClicked">Back</el-button>
     <el-button class="gb-button" :disabled="step<3" :loading="loading" @click="downloadWOHandler">Download WO</el-button>
     <el-button class="gb-button" :disabled="step<8" :loading="loading" @click="onDownloadReceiptClicked">Download Receipt</el-button>

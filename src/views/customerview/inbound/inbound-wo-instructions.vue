@@ -6,7 +6,7 @@
     </div>
     <el-table
       ref="table-instructions"
-      :data="instructions"
+      :data="instructions.filter(x => { return x.handlingStatus!='N/A' })"
       stripe
       border
     >

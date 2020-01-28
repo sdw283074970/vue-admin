@@ -171,11 +171,6 @@ export default {
                 this.filteredData = body.data;
                 this.totalEntries = body.data.length
                 this.loading = false;
-
-                // body.data.forEach(element => {
-                //     var newObj = {"text" : element.customerCode, "value" : element.customerCode};
-                //     this.customerCodeFilter.push(newObj);
-                // });
             }
         ),
       getCustomerCodes().then(

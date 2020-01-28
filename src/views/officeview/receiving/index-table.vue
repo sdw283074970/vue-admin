@@ -196,7 +196,7 @@
         <template slot-scope="scope">
           <el-button @click="onEfilesClicked(scope.row.container)">eFiles</el-button>
           <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
-          <el-button @click="woHandler(scope.row.id)">WO</el-button>
+          <el-button @click="woHandler(scope.row.id)">WO & Details</el-button>
           <!-- <el-button type="danger" plain @click="editHandler(scope.row.id, scope.$index)">Delete</el-button> -->
         </template>
       </el-table-column>
