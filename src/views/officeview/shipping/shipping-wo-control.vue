@@ -65,7 +65,7 @@ export default {
   methods: {
     onPushClicked() {
       pushShipOrderStatus(this.$route.params.shipOrderId, this.today).then(() => {
-        this.$emit('reloadShipOrder')
+        this.$emit('reloadOrder')
       })
     },
     onCallBackClicked() {
@@ -73,7 +73,7 @@ export default {
     },
     onConfirmReleasedClicked() {
       pushShipOrderStatus(this.$route.params.shipOrderId, this.shipOrder.releasedDate).then(() => {
-        this.$emit('reloadShipOrder')
+        this.$emit('reloadOrder')
         this.releaseVisible = false
       })
     }

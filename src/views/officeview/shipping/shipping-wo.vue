@@ -1,27 +1,31 @@
 <template>
   <div class="gb-maincontainer">
     <shipping-wo-sum :ship-order="shipOrder" :step="step" />
-    <shipping-wo-control :ship-order="shipOrder" :step="step" @reloadShipOrder="reloadShipOrder" @onCallBackClicked="onCallBackClicked" />
+    <shipping-wo-control :ship-order="shipOrder" :step="step" @reloadOrder="reloadOrder" @onCallBackClicked="onCallBackClicked" />
     <shipping-wo-picking :ship-order="shipOrder" :step="step" :pick-details="pickDetails" @referashPickDetails="referashPickDetails" />
     <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @referashInstructions="referashInstructions" />
+    <invoice-detail :reference="shipOrder.shipOrderNumber" :order-type="'ShipOrder'" :invoice-status="shipOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
   </div>
 </template>
 
 <script>
 import { getSO, getPickDetails, getInstructions, resetInstructions, reverseShipOrderStatus } from '@/api/shipping'
+import { getInvoices } from '@/api/accounting'
 
 export default {
   components: {
     'shipping-wo-sum': () => import('@/views/shareview/shipping/shipping-wo-sum'),
     'shipping-wo-control': () => import('@/views/officeview/shipping/shipping-wo-control'),
     'shipping-wo-picking': () => import('@/views/officeview/shipping/shipping-wo-picking'),
-    'shipping-wo-instruction': () => import('@/views/officeview/shipping/shipping-wo-instructions')
+    'shipping-wo-instruction': () => import('@/views/officeview/shipping/shipping-wo-instructions'),
+    'invoice-detail': () => import('@/views/accountingview/invoice/invoice-detail')
   },
   data() {
     return {
       shipOrder: {},
       pickDetails: [],
       instructions: [],
+      invoices: [],
       step: 0
     }
   },
@@ -44,6 +48,9 @@ export default {
     const id = this.$route.params.shipOrderId
     getSO(id).then(body => {
       this.shipOrder = body.data
+      getInvoices(this.shipOrder.shipOrderNumber, 'ShipOrder').then(res => {
+        this.invoices = res.data
+      })
     })
     getPickDetails(id).then(body => {
       this.pickDetails = body.data
@@ -85,7 +92,7 @@ export default {
         })
       })
     },
-    reloadShipOrder() {
+    reloadOrder() {
       const id = this.$route.params.shipOrderId
       getSO(id).then(body => {
         this.shipOrder = body.data
@@ -96,9 +103,12 @@ export default {
       getInstructions(id).then(body => {
         this.instructions = body.data.operationInstructions
       })
+      getInvoices(this.shipOrder.shipOrderNumber, 'ShipOrder').then(res => {
+        this.invoices = res.data
+      })
 
       this.$message({
-        message: 'Recall succeed',
+        message: 'Success',
         type: 'success'
       })
     }

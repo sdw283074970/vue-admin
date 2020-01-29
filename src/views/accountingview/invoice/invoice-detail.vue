@@ -49,43 +49,71 @@
         align="center"
         label="QTY"
         width="80"
-      />
+      >
+        <template slot-scope="scope">
+          <font>{{ scope.row.quantity.toFixed(2) }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="rate"
         align="center"
         label="Rate"
         width="80"
-      />
+      >
+        <template slot-scope="scope">
+          <font>{{ '$ ' + scope.row.rate.toFixed(2) }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="originalAmount"
         align="center"
         label="ORG AMT"
         width="100"
-      />
+      >
+        <template slot-scope="scope">
+          <font>{{ '$ ' + scope.row.originalAmount.toFixed(2) }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="discount"
         align="center"
         label="DISC"
         width="80"
-      />
+      >
+        <template slot-scope="scope">
+          <font>{{ scope.row.discount == 1 ? '-' : ((1 - scope.row.discount) * 100 + '% OFF') }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="amount"
         align="center"
         label="FNL AMT"
         width="100"
-      />
+      >
+        <template slot-scope="scope">
+          <font>{{ '$ ' + scope.row.amount.toFixed(2) }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="cost"
         align="center"
         label="COST"
         width="80"
-      />
+      >
+        <template slot-scope="scope">
+          <font>{{ '$ ' + scope.row.cost.toFixed(2) }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="net"
         align="center"
         label="NET"
         width="80"
-      />
+      >
+        <template slot-scope="scope">
+          <font>{{ '$ ' + scope.row.net.toFixed(2) }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="costConfirm"
         label="COST FONFIRM"
