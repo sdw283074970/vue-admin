@@ -105,6 +105,15 @@ export function pickCtnsInPlts(shipOrderId, inventoryId, quantity, newQuantity, 
   })
 }
 
+export function confirmPickCtns(shipOrderId, data) {
+  return request({
+    url: 'api/fba/fbapickdetail/?shipOrderId=' + shipOrderId + '&inventoryLocationId=0&quantity=0&newQuantity=0&inventoryType=Carton',
+    method: 'post',
+    data: data,
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
+
 export function putbackPickDetail(pickDetailId) {
   return request({
     url: 'api/fba/fbapickdetail/?pickDetailId=' + pickDetailId,

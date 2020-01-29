@@ -193,7 +193,7 @@
       top="5vh"
       :lock-scroll="false"
     >
-      <picking-ctns />
+      <picking-ctns @referashPickDetails="referashPickDetails" />
     </el-dialog>
     <el-dialog
       title="Upload Label Files"
