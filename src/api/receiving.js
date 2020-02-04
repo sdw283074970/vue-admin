@@ -336,3 +336,17 @@ export function updateHoldCtns(id, ctns) {
     method: 'put'
   })
 }
+
+export function updateLocation(id, location) {
+  return request({
+    url: 'api/fbainventory/?locationId=' + id + '&locationValue=' + location + '&locationtype=Carton',
+    method: 'put'
+  })
+}
+
+export function updatePltLocation(id, location) {
+  return request({
+    url: 'api/fbainventory/?locationId=' + id + '&locationValue=' + location + '&locationtype=Pallet',
+    method: 'put'
+  })
+}

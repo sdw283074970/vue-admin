@@ -100,6 +100,7 @@
                     Options<i class="el-icon-arrow-down el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :disabled="scope.row.availableCtns==0&&scope.row.holdCtns==0" @click.native="onUpdateClicked(scope.row.id, scope.row.holdCtns, scope.row.location, scope.row.availableCtns)">Update</el-dropdown-item>
                     <el-dropdown-item @click.native="onCtnHistoryClicked(scope.row.id)">History</el-dropdown-item>
                     <el-dropdown-item disabled @click.native="onHoldClicked(scope.row.id)">Hold</el-dropdown-item>
                   </el-dropdown-menu>
@@ -178,6 +179,7 @@
               Options<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item :disabled="scope.row.availablePlts=0" @click.native="onUpdatePltsClicked(scope.row.id, scope.row.location)">Update</el-dropdown-item>
               <el-dropdown-item @click.native="onPltHistoryClicked(scope.row.id)">History</el-dropdown-item>
               <el-dropdown-item :disabled="scope.row.actualPlts!==scope.row.availablePlts" @click.native="onRelocateClicked(scope.row.id)">Re-allocate</el-dropdown-item>
             </el-dropdown-menu>
@@ -205,12 +207,70 @@
     >
       <ctn-history :ctn-outbound-histories="ctnOutboundHistories" :history-sum="historySum" />
     </el-dialog>
+    <el-dialog
+      title="Update"
+      :visible.sync="updateVisible"
+      width="400px"
+      top="8vh"
+      :lock-scroll="false"
+      append-to-body
+    >
+      <el-form ref="form-required" :rules="rules" :model="formData" label-width="150px">
+        <el-col>
+          <el-form-item label="Hold Ctns" prop="holdCtns">
+            <el-input v-model="formData.holdCtns" type="number" :max="formData.availableCtns" @input="onInputChange" />
+          </el-form-item>
+          <el-form-item label="Location" prop="location">
+            <el-input v-model="formData.location" :disabled="formData.location=='Pallet'" />
+          </el-form-item>
+          <p style="text-align:center">{{ 'Max holdable quantity: ' + formData.max + ' ctns' }}</p>
+        </el-col></el-form>
+      <div style="text-align:center">
+        <el-button type="primary" @click="onUpdateConfirmClicked">Update</el-button>
+        <el-button @click="updateVisible=false">Cancel</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="Update Pallet"
+      :visible.sync="updatePltsVisible"
+      width="400px"
+      top="8vh"
+      :lock-scroll="false"
+      append-to-body
+    >
+      <el-form ref="form-required-plt" :rules="rules" :model="formData" label-width="150px">
+        <el-col>
+          <el-form-item label="Location" prop="location">
+            <el-input v-model="formData.location" />
+          </el-form-item>
+        </el-col></el-form>
+      <div style="text-align:center">
+        <el-button type="primary" @click="onUpdatePltsConfirmClicked">Update</el-button>
+        <el-button @click="updatePltsVisible=false">Cancel</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 /* eslint-disable */
 import { getPltHistories, getCtnHistories } from '@/api/inventory'
-import { relocateItems } from '@/api/receiving'
+import { relocateItems, updateHoldCtns, updateLocation, updatePltLocation } from '@/api/receiving'
+
+const validateAcquaintance = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error('Please enter valid hold ctns quanity'))
+  }
+  value = Number(value)
+  if (typeof value === 'number' && !isNaN(value)) {
+    if (value < 0) {
+      callback(new Error('Hold quantity cannot be smaller than 0'))
+    } else {
+      callback()
+    }
+  } else {
+    callback(new Error('Please enter valid pallet number'))
+  }
+}
 
 export default {
   props: {
@@ -229,13 +289,29 @@ export default {
       ctnOutboundHistories: [],
       pltHistoryVisible: false,
       ctnHistoryVisible: false,
+      updateVisible: false,
+      updatePltsVisible: false,
       loading: false,
+      formData: {
+        id: 0,
+        holdCtns: 0,
+        location: '',
+        max: 0
+      },
       historySum: {
         container: '',
         customerCode: '',
         shipmentId: '',
         amzRefId: '',
         warehouseCode: ''
+      },
+      rules: {
+        holdCtns: [
+          { validator: validateAcquaintance, trigger: 'blur' }                    
+        ],
+        location: [
+          { required: true, message: 'Please input a location', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -278,6 +354,47 @@ export default {
           type: 'success'
         })
       })
+    },
+    onUpdateClicked(id, holdCtns, location, availableCtns) {
+      this.formData.holdCtns = holdCtns
+      this.formData.location = location
+      this.formData.availableCtns = availableCtns
+      this.formData.id = id
+      this.updateVisible = true
+      this.formData.max = holdCtns + availableCtns
+    },
+    onUpdatePltsClicked(id, location) {
+      this.formData.id = id
+      this.formData.location = location
+      this.updatePltsVisible = true
+    },
+    onUpdateConfirmClicked() {
+      this.$refs['form-required'].validate((valid) => {
+          if (valid) {
+            updateHoldCtns(this.formData.id, this.formData.holdCtns).then(() => {
+              updateLocation(this.formData.id, this.formData.location).then(() => {
+                this.$emit('reloadOrder')
+                this.updateVisible = false
+              })
+            })
+          } else {
+              console.log('error submit!!');
+              return false;
+          }
+      });
+    },
+    onUpdatePltsConfirmClicked() {
+      this.$refs['form-required-plt'].validate((valid) => {
+          if (valid) {
+            updatePltLocation(this.formData.id, this.formData.location).then(() => {
+              this.$emit('reloadOrder')
+              this.updatePltsVisible = false
+            })
+          } else {
+              console.log('error submit!!');
+              return false;
+          }
+      });
     }
   },
   mounted() {

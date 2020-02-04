@@ -79,7 +79,7 @@
               Options<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :disabled="scope.row.availableCtns==0" @click.native="onUpdateClicked(scope.row.id, scope.row.holdCtns, scope.row.location, scope.row.availableCtns)">Update</el-dropdown-item>
+              <el-dropdown-item :disabled="scope.row.availableCtns==0&&scope.row.holdCtns==0" @click.native="onUpdateClicked(scope.row.id, scope.row.holdCtns, scope.row.location, scope.row.availableCtns)">Update</el-dropdown-item>
               <el-dropdown-item @click.native="onHistoryClicked(scope.row.id)">History</el-dropdown-item>
               <el-dropdown-item :disabled="(scope.row.location==='Pallet')||(scope.row.actualQuantity!==scope.row.availableCtns)" @click.native="onReallocateClicked(scope.row.id)">Re-allocate</el-dropdown-item>
             </el-dropdown-menu>
@@ -113,7 +113,7 @@
           <el-form-item label="Location" prop="location">
             <el-input v-model="formData.location" :disabled="formData.location=='Pallet'" />
           </el-form-item>
-          <p style="text-align:center">{{ 'Max holdable quantity: ' + formData.availableCtns + ' ctns' }}</p>
+          <p style="text-align:center">{{ 'Max holdable quantity: ' + formData.max + ' ctns' }}</p>
         </el-col></el-form>
       <div style="text-align:center">
         <el-button type="primary" @click="onUpdateConfirmClicked">Update</el-button>
@@ -125,7 +125,7 @@
 <script>
 /* eslint-disable */
 import { getCtnHistories } from '@/api/inventory'
-import { relocateItems, updateHoldCtns } from '@/api/receiving'
+import { relocateItems, updateHoldCtns, updateLocation } from '@/api/receiving'
 
 const validateAcquaintance = (rule, value, callback) => {
   if (!value) {
@@ -176,7 +176,7 @@ export default {
           { validator: validateAcquaintance, trigger: 'blur' }                    
         ],
         location: [
-          { required: true, message: 'Please input Amz Reference Id or NA', trigger: 'blur' }
+          { required: true, message: 'Please input a location', trigger: 'blur' }
         ]
       }
     }
@@ -202,12 +202,22 @@ export default {
       this.formData.availableCtns = availableCtns
       this.formData.id = id
       this.updateVisible = true
+      this.formData.max = holdCtns + availableCtns
     },
     onUpdateConfirmClicked() {
-      updateHoldCtns(this.formData.id, this.formData.holdCtns).then(() => {
-        this.$emit('reloadOrder')
-        this.updateVisible = false
-      })
+      this.$refs['form-required'].validate((valid) => {
+          if (valid) {
+            updateHoldCtns(this.formData.id, this.formData.holdCtns).then(() => {
+              updateLocation(this.formData.id, this.formData.location).then(() => {
+                this.$emit('reloadOrder')
+                this.updateVisible = false
+              })
+            })
+          } else {
+              console.log('error submit!!');
+              return false;
+          }
+      });
     },
     onReallocateClicked(id) {
       relocateItems(id, 'Carton').then(() => {
@@ -219,8 +229,8 @@ export default {
       })
     },
     onInputChange() {
-      if (this.formData.holdCtns > this.formData.availableCtns)
-        this.formData.holdCtns = this.formData.availableCtns
+      if (this.formData.holdCtns > this.formData.max)
+        this.formData.holdCtns = this.formData.max
     }
   },
   mounted() {
