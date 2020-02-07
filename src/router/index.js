@@ -373,6 +373,27 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/warehouse-shipping',
+    component: Layout,
+    name: 'Warehouse Shipping',
+    meta: { title: 'Shipping Orders', icon: 'table', role: ['office', 'accounting', 'TBD', 'warehouse'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Warehouse Shipping Overview',
+        component: () => import('@/views/warehouseview/shipping/index'),
+        meta: { title: 'WHS Shipping', icon: 'table' }
+      }
+      // {
+      //   path: '/warehouse-receiving/receiving-wo/:masterOrderId',
+      //   name: 'Warehouse Receiving WO',
+      //   component: () => import('@/views/warehouseview/receiving/receiving-wo'),
+      //   hidden: true,
+      //   meta: { title: 'WO', breadcrumb: true }
+      // }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

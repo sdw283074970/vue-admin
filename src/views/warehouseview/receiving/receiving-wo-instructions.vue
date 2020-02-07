@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Instructions & Charging</h2>
+    <h2>Instructions & Operations & Charging</h2>
     <div style="margin-bottom:10px">
       <!-- <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onNewClicked">New</el-button>
       <el-popover

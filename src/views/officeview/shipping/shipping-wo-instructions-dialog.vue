@@ -4,7 +4,7 @@
       <el-form-item v-if="!isResult" label="Description" prop="description">
         <el-input v-model="instruction.description" type="textarea" style="width:90%" maxlength="200" show-word-limit />
       </el-form-item>
-      <el-form-item v-if="!isResult&&!isWarehouse" label="Is Instruction">
+      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is Instruction (visible to warehouse, office, customer)">
         <el-switch
           v-model="instruction.isInstruction"
           style="margin-left:10px"
@@ -15,7 +15,17 @@
           :disabled="step>2"
         />
       </el-form-item>
-      <el-form-item v-if="!isResult&&!isWarehouse" label="Is Charging">
+      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is Operation (visible to warehouse, office)">
+        <el-switch
+          v-model="instruction.isOperation"
+          style="margin-left:10px"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-text="Yes"
+          inactive-text="No"
+        />
+      </el-form-item>
+      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is Charging (visible to office only)">
         <el-switch
           v-model="instruction.isChargingItem"
           style="margin-left:10px"
@@ -42,7 +52,7 @@
 <script>
 /* eslint-disable */
 
-import { createNewInstruction, updateInstruction, resultInstruction, updateComment } from '@/api/shipping'
+import { createNewInstruction, updateInstruction, resultInstruction, updateComment, createNewInstructionByModel, updateInstructionbyModel } from '@/api/shipping'
 import { ALPN_ENABLED } from 'constants';
 
 export default {
@@ -81,7 +91,7 @@ export default {
     createHandler: function(){
         this.$refs['form-required'].validate((valid) => {
             if (valid) {
-                createNewInstruction(this.reference, this.instruction.description, this.instruction.isChargingItem, this.instruction.isInstruction, this.orderType).then(body => {
+                createNewInstructionByModel(this.instruction).then(body => {
                     this.$emit('onCreatedSucceed', body.data);
                     this.$emit('onCancelClicked');
                 })
@@ -94,7 +104,7 @@ export default {
     updateHandler: function(){
         this.$refs['form-required'].validate((valid) => {
             if (valid) {
-                updateInstruction(this.instruction.id, this.instruction.description, this.instruction.isChargingItem, this.instruction.isInstruction).then(() => {
+                updateInstructionbyModel('UpdateInstruction', this.instruction).then(() => {
                     this.$emit('onUpdateSucceed');
                     this.$emit('onCancelClicked');
                 });
@@ -108,7 +118,7 @@ export default {
     resultHandler: function(){
         this.$refs['form-required'].validate((valid) => {
             if (valid) {
-                resultInstruction(this.instruction.id, this.instruction.result).then(() => {
+                updateInstructionbyModel('UpdateResult', this.instruction).then(() => {
                     this.$emit('onResultSucceed');
                     this.$emit('onCancelClicked');
                 });
@@ -124,7 +134,7 @@ export default {
     onCommentClicked() {
         this.$refs['form-required'].validate((valid) => {
             if (valid) {
-                updateComment(this.instruction.id, this.instruction.description, this.instruction.isChargingItem, this.instruction.isInstruction).then(() => {
+                updateInstructionbyModel('UpdateComment', this.instruction).then(() => {
                     this.$emit('onUpdateSucceed');
                     this.$emit('onCancelClicked');
                 });

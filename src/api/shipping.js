@@ -135,6 +135,14 @@ export function createNewInstruction(shipOrderNumber, description, isChargingIte
   })
 }
 
+export function createNewInstructionByModel(data) {
+  return request({
+    url: 'api/fbainvoicedetail/',
+    method: 'post',
+    data: data
+  })
+}
+
 export function deleteInstruction(id) {
   return request({
     url: 'api/fba/fbainvoicedetail/?chargingItemDetailId=' + id,
@@ -146,6 +154,14 @@ export function updateInstruction(id, description, isChargingItem, isInstruction
   return request({
     url: 'api/fba/fbashiporder/?chargingDetailId=' + id + '&comment=' + encodeURIComponent(description) + '&isChargingItem=' + isChargingItem + '&isInstruction=' + isInstruction + '&operation=UpdateInstruction',
     method: 'put'
+  })
+}
+
+export function updateInstructionbyModel(operation, data) {
+  return request({
+    url: 'api/fba/fbashiporder/?operation=' + operation,
+    method: 'put',
+    data: data
   })
 }
 

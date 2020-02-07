@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Instructions & Charging</h2>
+    <h2>Instructions & Operations & Charging</h2>
     <div style="margin-bottom:10px">
       <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onNewClicked">New</el-button>
       <el-popover
@@ -112,11 +112,14 @@ export default {
         popVisible: false,
         orderType: 'ShipOrder',
         instruction: {
-          'id': 0,
-          'description': '',
-          'isChargingItem': true,
-          'isInstruction': false,
-          'result': ''
+          id: 0,
+          description: '',
+          isChargingItem: true,
+          isInstruction: false,
+          isOperation: false,
+          result: '',
+          reference: '',
+          orderType: 'ShipOrder'
         },
         isResult: false,
         isEdit: false
@@ -147,11 +150,13 @@ export default {
       this.instruction.description = '';
       this.instruction.isChargingItem = true;
       this.instruction.isInstruction = false;
+      this.instruction.reference = this.shipOrder.shipOrderNumber;
     },
     onUpdateClicked(id){
       this.isResult = false;
       this.isEdit = true;
       this.instructionVisible = true;
+      this.instruction.reference = this.shipOrder.shipOrderNumber;
       let selectedInstru = this.instructions.find(function(i){
         if (i.id == id)
         {
@@ -162,12 +167,14 @@ export default {
       let isInstruction = selectedInstru.handlingStatus=='N/A'?false:true;
       this.instruction.description = selectedInstru.description;
       this.instruction.id = id;
+      this.instruction.isOperation = selectedInstru.isOperation;
       this.instruction.isChargingItem = isChargingItem;
       this.instruction.isInstruction = isInstruction;
     },
     onResultClicked(id){
       this.isResult = true;
       this.isEdit = true;
+      this.instruction.reference = this.shipOrder.shipOrderNumber;
       this.instructionVisible = true;
       let selectedInstru = this.instructions.find(function(i){
         if (i.id == id)

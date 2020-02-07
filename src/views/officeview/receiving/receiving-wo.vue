@@ -14,7 +14,7 @@
       @reloadOrder="reloadOrder"
     />
     <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" :step="step" />
-    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
+    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" :step="step" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
     <invoice-detail :reference="masterOrder.container" :order-type="'MasterOrder'" :invoice-status="masterOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
   </div>
 </template>
