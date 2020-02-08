@@ -13,12 +13,12 @@
 
 <script>
 
-import { getCustomerCodeFilters, getFilteredDate, getWarehouseInboundOrders } from '@/api/receiving'
-import { getCustomerCodes } from '@/api/shipping'
+import { getCustomerCodeFilters, getFilteredDate } from '@/api/receiving'
+import { getCustomerCodes, getWarehouseOutboundOrders } from '@/api/shipping'
 
 export default {
   components: {
-    'receiving-index-table': () => import('@/views/warehouseview/receiving/index-table')
+    'receiving-index-table': () => import('@/views/warehouseview/shipping/index-table')
   },
   data() {
     return {
@@ -43,7 +43,7 @@ export default {
   watch: {
   },
   mounted() {
-    getWarehouseInboundOrders().then(body => {
+    getWarehouseOutboundOrders().then(body => {
       this.tableData = body.data.reverse()
       this.filteredData = body.data
       this.totalEntries = body.data.length
@@ -75,7 +75,7 @@ export default {
     },
     onRefreshClicked() {
       this.loading = true
-      getWarehouseInboundOrders().then(body => {
+      getWarehouseOutboundOrders().then(body => {
         this.tableData = body.data.reverse()
         this.filteredData = body.data
         this.totalEntries = body.data.length

@@ -266,3 +266,11 @@ export function adjustPickDetail(id, obj) {
     method: 'put'
   })
 }
+
+export function getWarehouseOutboundOrders() {
+  return request({
+    url: 'api/WarehouseIndex/?operation=GET',
+    method: 'get'
+  })
+}
+

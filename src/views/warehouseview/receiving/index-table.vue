@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
+      <!-- <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button> -->
       <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"

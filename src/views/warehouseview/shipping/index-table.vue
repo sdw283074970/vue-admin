@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
+      <!-- <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button> -->
       <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"
@@ -20,31 +20,19 @@
       style="width: 100%"
       @filter-change="onFilterChange"
     >
-      <!-- <el-table-column type="expand">
+      <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="gb-table-expand">
             <el-form-item label="Ship Order #">
-              <span>{{ props.row.shipOrderNumber }}</span>
+              <span>{{ props.row.orderNumber }}</span>
             </el-form-item>
-            <el-form-item label="Unloading Type">
-              <span>{{ props.row.inboundType }}</span>
-            </el-form-item>
-            <el-form-item label="Storage Type">
-              <span>{{ props.row.storageType }}</span>
-            </el-form-item>
-            <el-form-item label="Palletizing">
-              <span>{{ props.row.palletizing }}</span>
+            <el-form-item label="BOL #">
+              <span>{{ props.row.bolNumber }}</span>
             </el-form-item>
             <el-form-item label="Carrier">
               <span>{{ props.row.carrier }}</span>
             </el-form-item>
-            <el-form-item label="Dock #">
-              <span>{{ props.row.dockNumber }}</span>
-            </el-form-item>
-            <el-form-item label="Container Size">
-              <span>{{ props.row.containerSize }}</span>
-            </el-form-item>
-            <el-form-item label="Push Date">
+            <!-- <el-form-item label="Push Date">
               <span>{{ props.row.pushTime.substring(0, 4)==1900?'-':props.row.pushTime.substring(0, 10) }}</span>
             </el-form-item>
             <el-form-item label="Start Time">
@@ -55,19 +43,13 @@
             </el-form-item>
             <el-form-item label="Out Time">
               <span>{{ props.row.outTime.substring(0, 4)==1900?'-':props.row.outTime.substring(0, 10) }}</span>
-            </el-form-item>
-            <el-form-item label="Instruction">
+            </el-form-item> -->
+            <el-form-item label="Quick Instruction">
               <span>{{ props.row.instruction }}</span>
-            </el-form-item>
-            <el-form-item label="Created By">
-              <span>{{ props.row.createdBy }}</span>
-            </el-form-item>
-            <el-form-item label="Closed By">
-              <span>{{ props.row.confirmedBy }}</span>
             </el-form-item>
           </el-form>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column
         sortable
         fixed
@@ -87,8 +69,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="container"
-        label="Container #"
+        prop="orderNumber"
+        label="Order #"
         sortable
         fixed
         width="200"
@@ -100,62 +82,56 @@
         :filters="customerCodeFilters"
         width="100"
       />
-      <el-table-column
+      <!-- <el-table-column
         prop="subCustomer"
         label="Sub-code"
         sortable
         width="120"
-      />
+      /> -->
       <el-table-column
-        label="Org Ctns"
-        prop="originalCtns"
+        label="CTNS"
+        prop="totalCtns"
         align="center"
         width="100"
       />
       <el-table-column
-        label="Actual Ctns"
-        prop="actualCtns"
+        label="PLTS"
+        prop="totalPlts"
         align="center"
         width="100"
       />
       <el-table-column
-        label="Org Plts"
-        prop="originalPlts"
-        align="center"
-        width="80"
-      />
-      <el-table-column
-        label="Actual Plts"
-        prop="actualPlts"
+        label="Batch #"
+        prop="batchNumber"
         align="center"
         width="100"
       />
       <el-table-column
-        prop="sku"
-        label="SKU #"
+        label="DEST"
+        prop="destination"
         align="center"
-        width="80"
+        width="100"
       />
       <el-table-column
-        prop="eta"
-        label="ETA"
+        prop="placeTime"
+        label="PUSH DATE"
+        align="center"
+        width="140"
         sortable
-        align="center"
-        width="100"
       >
         <template slot-scope="scope">
-          <font>{{ transferDate(scope.row.eta) }}</font>
+          <font>{{ transferDate(scope.row.placeTime) }}</font>
         </template>
       </el-table-column>
       <el-table-column
-        prop="inboundDate"
-        label="ATA"
-        sortable
+        prop="ets"
+        label="ETS"
         align="center"
-        width="100"
+        width="140"
+        sortable
       >
         <template slot-scope="scope">
-          <font>{{ transferDate(scope.row.inboundDate) }}</font>
+          <font>{{ transferDate(scope.row.ets) }}</font>
         </template>
       </el-table-column>
       <el-table-column
