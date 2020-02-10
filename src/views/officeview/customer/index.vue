@@ -2,6 +2,7 @@
   <div class="gb-maincontainer">
     <h1>Customer Manager</h1>
     <div class="input-bar">
+      <el-button type="primary" @click="onNewCustomerClicked">New Customer</el-button>
       <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input
         v-model="search"
@@ -30,7 +31,6 @@
         prop="customerCode"
         fixed
         label="Code"
-        sortable
         :column-key="'code'"
         :filters="customerCodeFilter"
         width="100"
@@ -38,7 +38,7 @@
       <el-table-column
         prop="processingCtns"
         label="Processing Ctns"
-        sortable
+        align="center"
         width="160"
       >
         <template slot-scope="scope">
@@ -47,8 +47,8 @@
       </el-table-column>
       <el-table-column
         prop="processingPlts"
+        align="center"
         label="Processing Plts"
-        sortable
         width="160"
       >
         <template slot-scope="scope">
@@ -58,7 +58,7 @@
       <el-table-column
         prop="instockCtns"
         label="In-stock Ctns"
-        sortable
+        align="center"
         width="135"
       >
         <template slot-scope="scope">
@@ -67,8 +67,8 @@
       </el-table-column>
       <el-table-column
         prop="instockPlts"
-        sortable
         label="In-stock Plts"
+        align="center"
         width="135"
       >
         <template slot-scope="scope">
@@ -77,13 +77,13 @@
       </el-table-column>
       <el-table-column
         prop="warningQuantityLevel"
+        align="center"
         label="Warning Ctns Lv"
-        sortable
         width="160"
       />
       <el-table-column
         prop="payableInvoices"
-        sortable
+        align="center"
         label="Payable Invoices"
         width="160"
       >
@@ -93,8 +93,7 @@
       </el-table-column>
       <el-table-column
         label="Status"
-        sortable
-        fixed="right"
+        align="center"
         width="100"
       >
         <template slot-scope="scope">
@@ -109,8 +108,8 @@
       >
         <template slot-scope="scope">
           <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
-          <el-button @click="editHandler(scope.row.id, scope.$index)">Services</el-button>
-          <el-button @click="editHandler(scope.row.id, scope.$index)">Instructions</el-button>
+          <el-button disabled>Services</el-button>
+          <el-button disabled>Instructions</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -126,39 +125,44 @@
       @current-change="handleCurrentChange"
     />
 
-    <el-dialog title="Edit Customer" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="Customer Name" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="on" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="Customer Code" :label-width="formLabelWidth">
-          <el-input v-model="form.customerCode" autocomplete="on" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="Department" :label-width="formLabelWidth">
-          <el-input v-model="form.departmentCode" autocomplete="on" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="Address Line 1" :label-width="formLabelWidth">
-          <el-input v-model="form.firstAddressLine" autocomplete="on" />
-        </el-form-item>
-        <el-form-item label="Address Line 2" :label-width="formLabelWidth">
-          <el-input v-model="form.secondAddressLine" autocomplete="on" />
-        </el-form-item>
-        <el-form-item label="Tel." :label-width="formLabelWidth">
-          <el-input v-model="form.telNumber" autocomplete="on" />
-        </el-form-item>
-        <el-form-item label="Email" :label-width="formLabelWidth">
-          <el-input v-model="form.emailAddress" autocomplete="on" />
-        </el-form-item>
-        <el-form-item label="Contact Person" :label-width="formLabelWidth">
-          <el-input v-model="form.contactPerson" autocomplete="on" />
-        </el-form-item>
-        <el-form-item label="Warning Level(Ctns)" :label-width="formLabelWidth">
-          <el-input v-model="form.warningQuantityLevel" autocomplete="on" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">Comfirm</el-button>
+    <el-dialog title="Edit Customer1" :visible.sync="editVisible" top="5vh" width="900px">
+      <div>
+        <el-form ref="customerForm" :model="form" :rules="rules" style="float:left">
+          <el-form-item label="Customer Name" :label-width="formLabelWidth" prop="name">
+            <el-input v-model="form.name" autocomplete="on" :disabled="isEdit" />
+          </el-form-item>
+          <el-form-item label="Customer Code" :label-width="formLabelWidth" prop="customerCode">
+            <el-input v-model="form.customerCode" autocomplete="on" :disabled="isEdit" />
+          </el-form-item>
+          <el-form-item label="Department" :label-width="formLabelWidth" prop="departmentCode">
+            <el-input v-model="form.departmentCode" autocomplete="on" :disabled="true" />
+          </el-form-item>
+          <el-form-item label="Warning Level(Ctns)" :label-width="formLabelWidth" prop="warningQuantityLevel">
+            <el-input v-model="form.warningQuantityLevel" type="number" autocomplete="on" />
+          </el-form-item>
+          <el-form-item label="Contact Person" :label-width="formLabelWidth" prop="contactPerson">
+            <el-input v-model="form.contactPerson" autocomplete="on" />
+          </el-form-item>
+        </el-form>
+        <el-form ref="customerForm2" :model="form" style="float:right;margin-right:30px">
+          <el-form-item label="Tel." :label-width="formLabelWidth" prop="telNumber">
+            <el-input v-model="form.telNumber" autocomplete="on" />
+          </el-form-item>
+          <el-form-item label="Email" :label-width="formLabelWidth" prop="emailAddress">
+            <el-input v-model="form.emailAddress" autocomplete="on" />
+          </el-form-item>
+          <el-form-item label="Address Line 1" :label-width="formLabelWidth" prop="firstAddressLine">
+            <el-input v-model="form.firstAddressLine" autocomplete="on" />
+          </el-form-item>
+          <el-form-item label="Address Line 2" :label-width="formLabelWidth" prop="secondAddressLine">
+            <el-input v-model="form.secondAddressLine" autocomplete="on" />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer" style="margin-right:40px;margin-bottom:30px">
+        <el-button v-if="isEdit" type="primary" @click="onUpdateClicked">Update</el-button>
+        <el-button v-if="!isEdit" type="primary" @click="onCreateClicked">Create</el-button>
+        <el-button @click="editVisible = false">Cancel</el-button>
       </div>
     </el-dialog>
   </div>
@@ -166,7 +170,7 @@
 
 <script>
 /* eslint-disable */
-import { getCustomerDB } from '@/api/customer'
+import { getCustomerDB, createCustomer, updateCustomer } from '@/api/customer'
 
 export default {
     data() {
@@ -177,9 +181,10 @@ export default {
             currentPage: 1,
             pageSize: 20,
             search: '',
-            dialogFormVisible : false,
+            editVisible : false,
             formLabelWidth : '200px',
             customerCodeFilter : [],
+            isEdit: false,
             form: {
               id : 0,
               name: '',
@@ -191,6 +196,17 @@ export default {
               telNumber: '',
               emailAddress: '',
               contactPerson: ''
+            },
+            rules: {
+              name: [
+                { required: true, message: 'Please input customer name', trigger: 'change' }
+              ],
+              customerCode: [
+                { required: true, message: 'Please input customer code', trigger: 'change' }
+              ],
+              warningQuantityLevel: [
+                { required: true, message: 'Please input the warning level', trigger: 'change' }
+              ]
             }
         };
     },
@@ -222,7 +238,12 @@ export default {
         this.currentPage = val;
       },
       editHandler: function(id, index) {
-        this.dialogFormVisible = true
+        if (this.$refs.customerForm != undefined)
+        {
+          this.$refs.customerForm.resetFields()
+        }
+        this.editVisible = true
+        this.isEdit = true
         this.tableData.find((i) => {
           if (i.id === id)
           {
@@ -231,12 +252,76 @@ export default {
           }
         });        
       },
+      onUpdateClicked() {
+        this.$refs['customerForm'].validate((valid) => {
+            if (valid) {
+                updateCustomer(this.form).then(() => {
+                  this.editVisible = false
+                  this.reloadCustomers()
+                })
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
+      },
+      onCreateClicked() {
+        this.$refs['customerForm'].validate((valid) => {
+            if (valid) {
+                createCustomer(this.form).then(() => {
+                  this.editVisible = false
+                  this.reloadCustomers()
+                })
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
+      },
+      onNewCustomerClicked() {
+        // this.$refs.customerForm.resetFields()
+        if (this.$refs.customerForm != undefined)
+        {
+          this.$refs.customerForm.resetFields()
+        }
+        this.form = {
+          id : 0,
+          name: '',
+          departmentCode: 'FBA',
+          customerCode: '',
+          warningQuantityLevel: 0,
+          firstAddressLine: '',
+          secondAddressLine: '',
+          telNumber: '',
+          emailAddress: '',
+          contactPerson: ''
+        }
+        this.isEdit = false
+        this.editVisible = true
+      },
+      reloadCustomers() {
+        getCustomerDB().then(
+            body => {
+                this.tableData = body.data
+                this.filteredData = body.data
+                this.totalEntries = body.data.length
+                body.data.forEach(element => {
+                    var newObj = {"text" : element.customerCode, "value" : element.customerCode};
+                    this.customerCodeFilter.push(newObj);
+                });
+                this.$message({
+                  message: 'Success',
+                  type: 'success'
+                })
+            }
+        )
+      }
     },
     mounted() {
         getCustomerDB().then(
             body => {
-                this.tableData = body.data;
-                this.filteredData = body.data;
+                this.tableData = body.data
+                this.filteredData = body.data
                 this.totalEntries = body.data.length
                 body.data.forEach(element => {
                     var newObj = {"text" : element.customerCode, "value" : element.customerCode};

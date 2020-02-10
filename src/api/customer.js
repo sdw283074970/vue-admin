@@ -9,3 +9,19 @@ export function getCustomerDB() {
     method: 'get'
   })
 }
+
+export function createCustomer(data) {
+  return request({
+    url: 'api/customermanagement/',
+    method: 'post',
+    data: data
+  })
+}
+
+export function updateCustomer(data) {
+  return request({
+    url: 'api/customermanagement/',
+    method: 'put',
+    data: data
+  })
+}
