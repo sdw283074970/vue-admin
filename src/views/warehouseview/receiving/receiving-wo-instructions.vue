@@ -19,7 +19,7 @@
     </div>
     <el-table
       ref="table-instructions"
-      :data="instructions"
+      :data="instructions.filter(x => { return x.handlingStatus!='N/A' })"
       stripe
       border
     >
@@ -44,11 +44,11 @@
         label="Reply From Office"
         min-width="90%"
       />
-      <el-table-column
+      <!-- <el-table-column
         prop="status"
         label="Charging Status"
         min-width="35%"
-      />
+      /> -->
       <el-table-column
         prop="handlingStatus"
         label="Status"

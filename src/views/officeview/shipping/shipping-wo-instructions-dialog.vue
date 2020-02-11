@@ -4,7 +4,7 @@
       <el-form-item v-if="!isResult" label="Description" prop="description">
         <el-input v-model="instruction.description" type="textarea" style="width:90%" maxlength="200" show-word-limit />
       </el-form-item>
-      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is Instruction (visible to warehouse, office, customer)">
+      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is customer's instruction(visible to warehouse, office, customer)">
         <el-switch
           v-model="instruction.isInstruction"
           style="margin-left:10px"
@@ -15,7 +15,7 @@
           :disabled="step>2"
         />
       </el-form-item>
-      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is Operation (visible to warehouse, office)">
+      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is inner operation(visible to warehouse, office)">
         <el-switch
           v-model="instruction.isOperation"
           style="margin-left:10px"
@@ -25,7 +25,7 @@
           inactive-text="No"
         />
       </el-form-item>
-      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is Charging (visible to office only)">
+      <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is charging item(visible to office only)">
         <el-switch
           v-model="instruction.isChargingItem"
           style="margin-left:10px"
