@@ -174,7 +174,19 @@ export const asyncRoutes = [
       }
     ]
   },
-
+  {
+    path: '/user',
+    component: Layout,
+    meta: { title: 'User', icon: 'user', role: ['office', 'accounting'] },
+    children: [
+      {
+        path: 'index',
+        name: 'User',
+        component: () => import('@/views/officeview/user/index'),
+        meta: { title: 'User', icon: 'user', role: ['office', 'accounting'] }
+      }
+    ]
+  },
   {
     path: '/receiving',
     component: Layout,

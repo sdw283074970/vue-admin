@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import csmRequest from '@/utils/request-no-interceptor'
 import config from '@/scripts/global'
 
 const baseURL = config.baseURL
@@ -23,5 +24,12 @@ export function logout() {
   return request({
     url: baseURL + 'api/users/',
     method: 'post'
+  })
+}
+
+export function getAllUsers() {
+  return csmRequest({
+    url: 'api/users/',
+    method: 'get'
   })
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="gb-maincontainer">
-    <h1>Customer Manager</h1>
+    <h1>System User Manager</h1>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus" @click="onNewCustomerClicked">New Customer</el-button>
+      <el-button type="primary" icon="el-icon-plus">Register New User</el-button>
       <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input
         v-model="search"
@@ -21,95 +21,48 @@
       @filter-change="filterChange"
     >
       <el-table-column
-        sortable
-        fixed=""
-        prop="id"
-        label="Id"
-        width="60"
+        prop="userName"
+        label="User Name"
+        width="240"
       />
+      <el-table-column
+        prop="email"
+        label="E-mail"
+        width="240"
+      />
+      <el-table-column
+        label="Roles"
+        align="center"
+        width="200"
+      >
+        <template slot-scope="scope">
+          <font>{{ scope.row.roles }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="customerCode"
-        fixed
-        label="Code"
-        :column-key="'code'"
-        :filters="customerCodeFilter"
-        width="100"
+        label="Connected Customer"
+        align="center"
+        width="180"
       />
       <el-table-column
-        prop="processingCtns"
-        label="Processing Ctns"
+        prop="latestLogin"
+        label="Latest Login"
         align="center"
-        width="160"
+        width="120"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.processingCtns===0?'-':scope.row.processingCtns }}</font>
+          <font>{{ transferDate(scope.row.latestLogin) }}</font>
         </template>
       </el-table-column>
       <el-table-column
-        prop="processingPlts"
-        align="center"
-        label="Processing Plts"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <font>{{ scope.row.processingPlts===0?'-':scope.row.processingPlts }}</font>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="instockCtns"
-        label="In-stock Ctns"
-        align="center"
-        width="135"
-      >
-        <template slot-scope="scope">
-          <font>{{ scope.row.instockCtns===0?'-':scope.row.instockCtns }}</font>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="instockPlts"
-        label="In-stock Plts"
-        align="center"
-        width="135"
-      >
-        <template slot-scope="scope">
-          <font>{{ scope.row.instockPlts===0?'-':scope.row.instockPlts }}</font>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="warningQuantityLevel"
-        align="center"
-        label="Warning Ctns Lv"
-        width="160"
-      />
-      <el-table-column
-        prop="payableInvoices"
-        align="center"
-        label="Payable Invoices"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <font :color="scope.row.payableInvoices==0?'blue':'red'">{{ scope.row.payableInvoices }}</font>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Status"
-        align="center"
-        width="100"
-      >
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status=='Active'?'success':'danger'" size="medium">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="operation"
         label="operation"
-        fixed="right"
-        width="450"
       >
-        <template slot-scope="scope">
-          <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
-          <el-button disabled>Services</el-button>
-          <el-button disabled>Instructions</el-button>
+        <template>
+          <!-- <template slot-scope="scope"> -->
+          <el-button disabled>Reset Password</el-button>
+          <el-button disabled>Connect to Customer</el-button>
+          <el-button disabled>Change Authority</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -171,6 +124,7 @@
 <script>
 /* eslint-disable */
 import { getCustomerDB, createCustomer, updateCustomer } from '@/api/customer'
+import { getAllUsers } from '@/api/user'
 
 export default {
     data() {
@@ -221,6 +175,9 @@ export default {
       }
     },
     methods:{
+      transferDate: function(date) {
+        return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
+      },
       filterHandler(value, row, column) {
         const property = column['property'];
         return row[property] === value;
@@ -299,8 +256,8 @@ export default {
         this.isEdit = false
         this.editVisible = true
       },
-      reloadCustomers() {
-        getCustomerDB().then(
+      reloadUsers() {
+        getAllUsers().then(
             body => {
                 this.tableData = body.data
                 this.filteredData = body.data
@@ -314,7 +271,7 @@ export default {
       }
     },
     mounted() {
-        getCustomerDB().then(
+        getAllUsers().then(
             body => {
                 this.tableData = body.data
                 this.filteredData = body.data
