@@ -13,6 +13,7 @@
     </div>
     <el-table
       ref="table"
+      v-loading="loading"
       :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
       border
@@ -33,13 +34,13 @@
         label="Code"
         :column-key="'code'"
         :filters="customerCodeFilter"
-        width="100"
+        width="140"
       />
       <el-table-column
         prop="processingCtns"
         label="Processing Ctns"
         align="center"
-        width="160"
+        width="100"
       >
         <template slot-scope="scope">
           <font>{{ scope.row.processingCtns===0?'-':scope.row.processingCtns }}</font>
@@ -49,7 +50,7 @@
         prop="processingPlts"
         align="center"
         label="Processing Plts"
-        width="160"
+        width="100"
       >
         <template slot-scope="scope">
           <font>{{ scope.row.processingPlts===0?'-':scope.row.processingPlts }}</font>
@@ -59,7 +60,7 @@
         prop="instockCtns"
         label="In-stock Ctns"
         align="center"
-        width="135"
+        width="120"
       >
         <template slot-scope="scope">
           <font>{{ scope.row.instockCtns===0?'-':scope.row.instockCtns }}</font>
@@ -69,7 +70,7 @@
         prop="instockPlts"
         label="In-stock Plts"
         align="center"
-        width="135"
+        width="120"
       >
         <template slot-scope="scope">
           <font>{{ scope.row.instockPlts===0?'-':scope.row.instockPlts }}</font>
@@ -79,13 +80,13 @@
         prop="warningQuantityLevel"
         align="center"
         label="Warning Ctns Lv"
-        width="160"
+        width="80"
       />
       <el-table-column
         prop="payableInvoices"
         align="center"
         label="Payable Invoices"
-        width="160"
+        width="80"
       >
         <template slot-scope="scope">
           <font :color="scope.row.payableInvoices==0?'blue':'red'">{{ scope.row.payableInvoices }}</font>
@@ -101,13 +102,18 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="linkedAccount"
+        align="center"
+        label="Linked Account"
+        width="220"
+      />
+      <el-table-column
         prop="operation"
         label="operation"
-        fixed="right"
-        width="450"
       >
         <template slot-scope="scope">
           <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
+          <el-button @click="onLinkToUserClicked(scope.row.id)">Link to User</el-button>
           <el-button disabled>Services</el-button>
           <el-button disabled>Instructions</el-button>
         </template>
@@ -165,12 +171,21 @@
         <el-button @click="editVisible = false">Cancel</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="Link user account" :visible.sync="linkVisible" top="5vh" width="400px">
+      <div style="text-align:center">
+        <label>User account (Email):</label><el-input v-model="linkForm.email" />
+        <P><font color="red">Input "DISMISS" to unlink</font></P>
+        <el-button type="primary" @click="onLinkClicked">Link</el-button>
+        <el-button @click="linkVisible = false">Cancel</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { getCustomerDB, createCustomer, updateCustomer } from '@/api/customer'
+import { getCustomerDB, createCustomer, updateCustomer, linkToUser } from '@/api/customer'
 
 export default {
     data() {
@@ -182,9 +197,15 @@ export default {
             pageSize: 20,
             search: '',
             editVisible : false,
+            linkVisible: false,
+            loading: true,
             formLabelWidth : '200px',
             customerCodeFilter : [],
             isEdit: false,
+            linkForm: {
+              id: 0,
+              email: ''
+            },
             form: {
               id : 0,
               name: '',
@@ -256,6 +277,7 @@ export default {
         this.$refs['customerForm'].validate((valid) => {
             if (valid) {
                 updateCustomer(this.form).then(() => {
+                  this.loading = true
                   this.editVisible = false
                   this.reloadCustomers()
                 })
@@ -270,6 +292,7 @@ export default {
             if (valid) {
                 createCustomer(this.form).then(() => {
                   this.editVisible = false
+                  this.loading = true
                   this.reloadCustomers()
                 })
             } else {
@@ -299,10 +322,21 @@ export default {
         this.isEdit = false
         this.editVisible = true
       },
+      onLinkToUserClicked(id) {
+        this.linkForm.id = id
+        this.linkVisible = true
+      },
+      onLinkClicked() {
+        linkToUser(this.linkForm).then(() => {
+          this.reloadCustomers()
+          this.linkVisible =false
+        })
+      },
       reloadCustomers() {
         getCustomerDB().then(
             body => {
                 this.tableData = body.data
+                this.loading = false
                 this.filteredData = body.data
                 this.totalEntries = body.data.length
                 this.$message({
@@ -319,6 +353,7 @@ export default {
                 this.tableData = body.data
                 this.filteredData = body.data
                 this.totalEntries = body.data.length
+                this.loading = false
             }
         )
     }

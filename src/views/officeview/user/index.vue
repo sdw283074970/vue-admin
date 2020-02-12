@@ -2,7 +2,7 @@
   <div class="gb-maincontainer">
     <h1>System User Manager</h1>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus">Register New User</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="onRegisterClicked">Register New User</el-button>
       <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input
         v-model="search"
@@ -13,6 +13,7 @@
     </div>
     <el-table
       ref="table"
+      v-loading="loading"
       :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
       border
@@ -40,11 +41,14 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="customerCode"
         label="Connected Customer"
         align="center"
-        width="180"
-      />
+        width="200"
+      >
+        <template slot-scope="scope">
+          <font>{{ scope.row.customerCodes }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="latestLogin"
         label="Latest Login"
@@ -61,7 +65,6 @@
         <template>
           <!-- <template slot-scope="scope"> -->
           <el-button disabled>Reset Password</el-button>
-          <el-button disabled>Connect to Customer</el-button>
           <el-button disabled>Change Authority</el-button>
         </template>
       </el-table-column>
@@ -78,41 +81,18 @@
       @current-change="handleCurrentChange"
     />
 
-    <el-dialog title="Edit Customer1" :visible.sync="editVisible" top="5vh" width="900px">
+    <el-dialog title="Register" :visible.sync="registerVisible" top="5vh" width="500px">
       <div>
-        <el-form ref="customerForm" :model="form" :rules="rules" style="float:left">
-          <el-form-item label="Customer Name" :label-width="formLabelWidth" prop="name">
+        <el-form ref="registerForm" :model="form" :rules="rules">
+          <el-form-item label="Email" :label-width="formLabelWidth" prop="name">
             <el-input v-model="form.name" autocomplete="on" :disabled="isEdit" />
-          </el-form-item>
-          <el-form-item label="Customer Code" :label-width="formLabelWidth" prop="customerCode">
-            <el-input v-model="form.customerCode" autocomplete="on" :disabled="isEdit" />
-          </el-form-item>
-          <el-form-item label="Department" :label-width="formLabelWidth" prop="departmentCode">
-            <el-input v-model="form.departmentCode" autocomplete="on" :disabled="true" />
           </el-form-item>
           <el-form-item label="Warning Level(Ctns)" :label-width="formLabelWidth" prop="warningQuantityLevel">
             <el-input v-model="form.warningQuantityLevel" type="number" autocomplete="on" />
           </el-form-item>
-          <el-form-item label="Contact Person" :label-width="formLabelWidth" prop="contactPerson">
-            <el-input v-model="form.contactPerson" autocomplete="on" />
-          </el-form-item>
-        </el-form>
-        <el-form ref="customerForm2" :model="form" style="float:right;margin-right:30px">
-          <el-form-item label="Tel." :label-width="formLabelWidth" prop="telNumber">
-            <el-input v-model="form.telNumber" autocomplete="on" />
-          </el-form-item>
-          <el-form-item label="Email" :label-width="formLabelWidth" prop="emailAddress">
-            <el-input v-model="form.emailAddress" autocomplete="on" />
-          </el-form-item>
-          <el-form-item label="Address Line 1" :label-width="formLabelWidth" prop="firstAddressLine">
-            <el-input v-model="form.firstAddressLine" autocomplete="on" />
-          </el-form-item>
-          <el-form-item label="Address Line 2" :label-width="formLabelWidth" prop="secondAddressLine">
-            <el-input v-model="form.secondAddressLine" autocomplete="on" />
-          </el-form-item>
         </el-form>
       </div>
-      <div slot="footer" class="dialog-footer" style="margin-right:40px;margin-bottom:30px">
+      <div slot="footer" class="dialog-footer" style="margin-bottom:30px;text-align:center">
         <el-button v-if="isEdit" type="primary" @click="onUpdateClicked">Update</el-button>
         <el-button v-if="!isEdit" type="primary" @click="onCreateClicked">Create</el-button>
         <el-button @click="editVisible = false">Cancel</el-button>
@@ -135,7 +115,8 @@ export default {
             currentPage: 1,
             pageSize: 20,
             search: '',
-            editVisible : false,
+            loading: true,
+            registerVisible : false,
             formLabelWidth : '200px',
             customerCodeFilter : [],
             isEdit: false,
@@ -235,26 +216,8 @@ export default {
             }
         });
       },
-      onNewCustomerClicked() {
-        // this.$refs.customerForm.resetFields()
-        if (this.$refs.customerForm != undefined)
-        {
-          this.$refs.customerForm.resetFields()
-        }
-        this.form = {
-          id : 0,
-          name: '',
-          departmentCode: 'FBA',
-          customerCode: '',
-          warningQuantityLevel: 0,
-          firstAddressLine: '',
-          secondAddressLine: '',
-          telNumber: '',
-          emailAddress: '',
-          contactPerson: ''
-        }
-        this.isEdit = false
-        this.editVisible = true
+      onRegisterClicked() {
+        this.registerVisible = true;
       },
       reloadUsers() {
         getAllUsers().then(
@@ -262,6 +225,7 @@ export default {
                 this.tableData = body.data
                 this.filteredData = body.data
                 this.totalEntries = body.data.length
+                this.loading = false
                 this.$message({
                   message: 'Success',
                   type: 'success'
@@ -276,6 +240,7 @@ export default {
                 this.tableData = body.data
                 this.filteredData = body.data
                 this.totalEntries = body.data.length
+                this.loading = false
             }
         )
     }

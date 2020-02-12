@@ -25,3 +25,10 @@ export function updateCustomer(data) {
     data: data
   })
 }
+
+export function linkToUser(linkForm) {
+  return request({
+    url: 'api/customermanagement/?customerId=' + linkForm.id + '&userAccount=' + encodeURIComponent(linkForm.email),
+    method: 'put'
+  })
+}

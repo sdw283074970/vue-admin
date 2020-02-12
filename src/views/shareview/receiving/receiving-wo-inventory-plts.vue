@@ -179,7 +179,7 @@
               Options<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :disabled="scope.row.availablePlts=0" @click.native="onUpdatePltsClicked(scope.row.id, scope.row.location)">Update</el-dropdown-item>
+              <el-dropdown-item :disabled="scope.row.availablePlts==0" @click.native="onUpdatePltsClicked(scope.row.id, scope.row.location)">Update</el-dropdown-item>
               <el-dropdown-item @click.native="onPltHistoryClicked(scope.row.id)">History</el-dropdown-item>
               <el-dropdown-item :disabled="scope.row.actualPlts!==scope.row.availablePlts" @click.native="onRelocateClicked(scope.row.id)">Re-allocate</el-dropdown-item>
             </el-dropdown-menu>
