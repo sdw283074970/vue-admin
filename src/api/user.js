@@ -33,3 +33,10 @@ export function getAllUsers() {
     method: 'get'
   })
 }
+
+export function registerUser(email, role) {
+  return csmRequest({
+    url: 'api/users/?email=' + email + '&tire=' + role,
+    method: 'post'
+  })
+}

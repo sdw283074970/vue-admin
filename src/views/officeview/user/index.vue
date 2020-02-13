@@ -85,15 +85,22 @@
       <div>
         <el-form ref="registerForm" :model="form" :rules="rules">
           <el-form-item label="Email" :label-width="formLabelWidth" prop="name">
-            <el-input v-model="form.name" autocomplete="on" :disabled="isEdit" />
+            <el-input v-model="form.name" autocomplete="on" placeholder="Email Address" :disabled="isEdit" />
           </el-form-item>
-          <el-form-item label="Warning Level(Ctns)" :label-width="formLabelWidth" prop="warningQuantityLevel">
-            <el-input v-model="form.warningQuantityLevel" type="number" autocomplete="on" />
+          <el-form-item label="Role" :label-width="formLabelWidth" prop="role">
+            <el-select v-model="form.role" placeholder="-- Select Role --">
+              <el-option label="Administrator" value="Admin" />
+              <el-option label="Customer" value="Client" />
+              <el-option label="Guest" value="T1" />
+              <el-option label="Warehouse" value="T2" />
+              <el-option label="Sales" value="T3" />
+              <el-option label="Office" value="T4" />
+              <el-option label="Accounting" value="T5" />
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer" style="margin-bottom:30px;text-align:center">
-        <el-button v-if="isEdit" type="primary" @click="onUpdateClicked">Update</el-button>
         <el-button v-if="!isEdit" type="primary" @click="onCreateClicked">Create</el-button>
         <el-button @click="editVisible = false">Cancel</el-button>
       </div>
@@ -104,7 +111,7 @@
 <script>
 /* eslint-disable */
 import { getCustomerDB, createCustomer, updateCustomer } from '@/api/customer'
-import { getAllUsers } from '@/api/user'
+import { getAllUsers , registerUser} from '@/api/user'
 
 export default {
     data() {
@@ -121,26 +128,15 @@ export default {
             customerCodeFilter : [],
             isEdit: false,
             form: {
-              id : 0,
               name: '',
-              departmentCode: '',
-              customerCode: '',
-              warningQuantityLevel: 0,
-              firstAddressLine: '',
-              secondAddressLine: '',
-              telNumber: '',
-              emailAddress: '',
-              contactPerson: ''
+              role: ''
             },
             rules: {
               name: [
                 { required: true, message: 'Please input customer name', trigger: 'change' }
               ],
-              customerCode: [
-                { required: true, message: 'Please input customer code', trigger: 'change' }
-              ],
-              warningQuantityLevel: [
-                { required: true, message: 'Please input the warning level', trigger: 'change' }
+              role: [
+                { required: true, message: 'Please select a role', trigger: 'change' }
               ]
             }
         };
@@ -190,25 +186,12 @@ export default {
           }
         });        
       },
-      onUpdateClicked() {
-        this.$refs['customerForm'].validate((valid) => {
-            if (valid) {
-                updateCustomer(this.form).then(() => {
-                  this.editVisible = false
-                  this.reloadCustomers()
-                })
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
-      },
       onCreateClicked() {
-        this.$refs['customerForm'].validate((valid) => {
+        this.$refs['registerForm'].validate((valid) => {
             if (valid) {
-                createCustomer(this.form).then(() => {
-                  this.editVisible = false
-                  this.reloadCustomers()
+                registerUser(this.form.name, this.form.role).then(() => {
+                  this.registerVisible = false
+                  this.reloadUsers()
                 })
             } else {
                 console.log('error submit!!');
