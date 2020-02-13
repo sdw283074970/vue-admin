@@ -14,7 +14,7 @@
           <el-button size="mini" type="text" @click="popVisible = false">No</el-button>
           <el-button type="primary" size="mini" @click="onResetClicked">Yes</el-button>
         </div>
-        <el-button slot="reference" class="gb-button" type="primary">Reset Instruction</el-button>
+        <el-button slot="reference" class="gb-button" type="primary" :disabled="step>2">Reset Instruction</el-button>
       </el-popover>
     </div>
     <el-table
@@ -150,6 +150,7 @@ export default {
       this.instruction.description = '';
       this.instruction.isChargingItem = true;
       this.instruction.isInstruction = false;
+      this.instruction.isOperation = false;
       this.instruction.reference = this.shipOrder.shipOrderNumber;
     },
     onUpdateClicked(id){
@@ -163,8 +164,8 @@ export default {
           return i;
         }
       });
-      let isChargingItem = selectedInstru.status=='Waiting for charging'?true:false;
-      let isInstruction = selectedInstru.handlingStatus=='N/A'?false:true;
+      let isChargingItem = selectedInstru.isCharging;
+      let isInstruction = selectedInstru.isInstruction;
       this.instruction.description = selectedInstru.description;
       this.instruction.id = id;
       this.instruction.isOperation = selectedInstru.isOperation;

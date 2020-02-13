@@ -12,7 +12,7 @@
           inactive-color="#ff4949"
           active-text="Yes"
           inactive-text="No"
-          :disabled="step>2"
+          :disabled="step>4"
         />
       </el-form-item>
       <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is inner operation(visible to warehouse, office)">
@@ -23,6 +23,7 @@
           inactive-color="#ff4949"
           active-text="Yes"
           inactive-text="No"
+          :disabled="step>4"
         />
       </el-form-item>
       <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is charging item(visible to office only)">
