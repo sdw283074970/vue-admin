@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-form ref="form-required" :rules="rules" :model="report" label-width="150px" style="float:left">
+      <el-form ref="form-required" :rules="rules" :model="report" label-width="150px">
         <el-form-item label="Arrived Date" prop="inboundDate">
           <el-date-picker v-model="report.inboundDate" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px;" />
         </el-form-item>
@@ -11,8 +11,8 @@
         <el-form-item label="Trailer Ava Date" prop="availableTime">
           <el-date-picker v-model="report.availableTime" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px;" />
         </el-form-item>
-      </el-form>
-      <el-form ref="form-optional" :rules="rules" :model="report" label-width="150px" style="float:right;margin-right:30px">
+        <!-- </el-form>
+      <el-form ref="form-optional" :rules="rules" :model="report" label-width="150px" style="float:right;margin-right:30px"> -->
         <el-form-item label="Trailer Out Date" prop="outTime">
           <el-date-picker v-model="report.outTime" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px;" />
         </el-form-item>

@@ -274,3 +274,10 @@ export function getWarehouseOutboundOrders() {
   })
 }
 
+export function updateProcessReport(id, operation, report) {
+  return request({
+    url: 'api/warehouseIndex/?shipOrderId=' + id + '&operation=' + operation,
+    method: '',
+    data: report
+  })
+}

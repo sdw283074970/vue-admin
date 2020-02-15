@@ -2,21 +2,25 @@
   <div>
     <h2>Control Panel {{ shipOrder.status }}</h2>
     <div style="margin-bottom:10px">
-      <el-button :disabled="step>2" class="gb-button" type="primary" @click="onPushClicked">Push WO</el-button>
+      <!-- <el-button :disabled="step>2" class="gb-button" type="primary" @click="onPushClicked">Push WO</el-button>
       <el-button :disabled="step==7||step<3" class="gb-button" type="warning" @click="onCallBackClicked">Recall WO</el-button>
       <el-button :disabled="step!=5" class="gb-button" type="primary" @click="onMarkReleasedClicked">Mark Released</el-button>
       <el-button :disabled="step<3||step==6" class="gb-button" type="danger" @click="onPushClicked">Push Status</el-button>
-      <el-button :disabled="step==7||step<4" class="gb-button" type="danger" @click="onCallBackClicked">Reverse Status</el-button>
+      <el-button :disabled="step==7||step<4" class="gb-button" type="danger" @click="onCallBackClicked">Reverse Status</el-button> -->
+      <div>
+        <el-button class="gb-button" :disabled="step!=3" type="success" @click="onStartClicked">Start</el-button>
+        <el-button class="gb-button" :disabled="step!=4" type="success" @click="onFinishProcessingClicked">Finish Processing</el-button>
+        <el-button class="gb-button" :disabled="step!=4" type="info" @click="onResetStatusClicked">Reset Order Status</el-button>
+      </div>
     </div>
     <el-dialog
-      title="Select Released Date"
-      :visible.sync="releaseVisible"
+      title="Processing Report"
+      :visible.sync="reportVisible"
       top="5vh"
-      width="380px"
+      width="400px"
       :lock-scroll="false"
     >
-      <el-date-picker v-model="shipOrder.releasedDate" type="date" placeholder="Select Released Date" value-format="yyyy-MM-dd" style="width:200px;" />
-      <el-button type="primary" @click="onConfirmReleasedClicked">Confirm</el-button>
+      <process-report :ship-order="shipOrder" :report="report" @onOperationSuccess="onOperationSuccess" />
     </el-dialog>
   </div>
 </template>
@@ -28,6 +32,9 @@
 import { pushShipOrderStatus } from '@/api/shipping'
 
 export default {
+  components: {
+    'process-report': () => import('@/views/shareview/generic/generic-shipping-report')
+  },
   props: {
     shipOrder: {},
     step: 0
@@ -36,7 +43,16 @@ export default {
     return {
       pushVisible: false,
       recallVisible: false,
-      releaseVisible: false
+      releaseVisible: false,
+      reportVisible: false,
+      report: {
+        startedTime: '',
+        readyTime: '',
+        confirmedBy: '',
+        placeTime: '',
+        pickMan: '',
+        lot: ''
+      }
     }
   },
   computed: {
@@ -80,6 +96,19 @@ export default {
         this.$emit('reloadOrder')
         this.releaseVisible = false
       })
+    },
+    onOperationSuccess() {
+      this.$emit('reloadOrder')
+    },
+    onStartClicked() {
+      pushShipOrderStatus(this.$route.params.shipOrderId, this.today).then(() => {
+        this.$emit('reloadOrder')
+      })
+    },
+    onFinishProcessingClicked() {
+      this.reportVisible = true
+    },
+    onResetStatusClicked() {
     }
   }
 }

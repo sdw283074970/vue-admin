@@ -241,7 +241,7 @@ export default {
         this.$emit('onCreateClicked');
       },
       woHandler: function(id){
-        this.$router.push({path: '/warehouse-receiving/receiving-wo/' + id});
+        this.$router.push({path: '/warehouse-shipping/shipping-wo/' + id});
       },
       changeStatusColor: function(status) {
         if (status == 'New Created')

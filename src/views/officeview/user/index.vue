@@ -99,6 +99,11 @@
             </el-select>
           </el-form-item>
         </el-form>
+        <div style="text-align:center">
+          <p>Default password is "Name123456*"</p>
+          <p>For Example: "newuser@grandchannel.us"</p>
+          <p>Password: "Newuser123456*"</p>
+        </div>
       </div>
       <div slot="footer" class="dialog-footer" style="margin-bottom:30px;text-align:center">
         <el-button v-if="!isEdit" type="primary" @click="onCreateClicked">Create</el-button>

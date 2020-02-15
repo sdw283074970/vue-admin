@@ -40,7 +40,7 @@
       title="Processing Report"
       :visible.sync="reportVisible"
       top="5vh"
-      width="800px"
+      width="400px"
       :lock-scroll="false"
     >
       <process-report :master-order="masterOrder" :report="report" @onOperationSuccess="onOperationSuccess" />

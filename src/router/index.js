@@ -396,14 +396,14 @@ export const asyncRoutes = [
         name: 'Warehouse Shipping Overview',
         component: () => import('@/views/warehouseview/shipping/index'),
         meta: { title: 'WHS Shipping', icon: 'table' }
+      },
+      {
+        path: '/warehouse-shipping/shipping-wo/:shipOrderId',
+        name: 'Warehouse shipping WO',
+        component: () => import('@/views/warehouseview/shipping/shipping-wo'),
+        hidden: true,
+        meta: { title: 'WO', breadcrumb: true }
       }
-      // {
-      //   path: '/warehouse-receiving/receiving-wo/:masterOrderId',
-      //   name: 'Warehouse Receiving WO',
-      //   component: () => import('@/views/warehouseview/receiving/receiving-wo'),
-      //   hidden: true,
-      //   meta: { title: 'WO', breadcrumb: true }
-      // }
     ]
   },
   // 404 page must be placed at the end !!!
