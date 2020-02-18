@@ -10,7 +10,7 @@
       <div>
         <el-button class="gb-button" :disabled="step!=3" type="success" @click="onStartClicked">Start</el-button>
         <el-button class="gb-button" :disabled="step!=4" type="success" @click="onFinishProcessingClicked">Finish Processing</el-button>
-        <el-button class="gb-button" :disabled="step!=4" type="info" @click="onResetStatusClicked">Reset Order Status</el-button>
+        <el-button class="gb-button" :disabled="step!=4&&step!=5" type="info" @click="onResetStatusClicked">Reset Order Status</el-button>
       </div>
     </div>
     <el-dialog
@@ -29,7 +29,7 @@
 /* eslint-disable vue/require-prop-type-constructor */
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
-import { pushShipOrderStatus } from '@/api/shipping'
+import { pushShipOrderStatus, updateOrder } from '@/api/shipping'
 
 export default {
   components: {
@@ -79,25 +79,8 @@ export default {
 
   },
   methods: {
-    onMarkReleasedClicked() {
-      this.releaseVisible = true
-      this.shipOrder.releasedDate = ''
-    },
-    onPushClicked() {
-      pushShipOrderStatus(this.$route.params.shipOrderId, this.today).then(() => {
-        this.$emit('reloadOrder')
-      })
-    },
-    onCallBackClicked() {
-      this.$emit('onCallBackClicked')
-    },
-    onConfirmReleasedClicked() {
-      pushShipOrderStatus(this.$route.params.shipOrderId, this.shipOrder.releasedDate).then(() => {
-        this.$emit('reloadOrder')
-        this.releaseVisible = false
-      })
-    },
     onOperationSuccess() {
+      this.reportVisible = false
       this.$emit('reloadOrder')
     },
     onStartClicked() {
@@ -109,6 +92,9 @@ export default {
       this.reportVisible = true
     },
     onResetStatusClicked() {
+      updateOrder(this.shipOrder.id, 'Reset', {}).then(() => {
+        this.$emit('reloadOrder')
+      })
     }
   }
 }

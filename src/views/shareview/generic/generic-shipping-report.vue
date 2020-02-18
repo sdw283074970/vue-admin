@@ -30,7 +30,7 @@
 </template>
 <script>
 /* eslint-disable */
-import { finishProcessing, updateProcessReport } from '@/api/receiving'
+import { updateOrder } from '@/api/shipping'
 
 export default {
     props: {
@@ -71,18 +71,7 @@ export default {
         onFinishProcessingClicked() {
             this.$refs['form-required'].validate((valid) => {
                 if (valid) {
-                    if (this.report.outTime === '')
-                    //TO DO
-                    updateProcessReport()
-                    finishProcessing(this.shipOrder.id, 'Report', this.report).then(() => {
-                        this.shipOrder.inboundDate = this.report.inboundDate
-                        this.shipOrder.unloadFinishTime = this.report.unloadFinishTime
-                        this.shipOrder.outTime = this.report.outTime
-                        this.shipOrder.availableTime = this.report.availableTime
-                        this.shipOrder.dockNumber = this.report.dockNumber
-                        this.shipOrder.verifiedBy = this.report.verifiedBy
-                        this.shipOrder.status = 'Received'
-                        this.reportVisible = false
+                    updateOrder(this.shipOrder.id, 'Finish', this.report).then(() => {
                         this.$emit('onOperationSuccess')
                     })
                 } else {
@@ -94,19 +83,7 @@ export default {
         onUpdateClicked() {
             this.$refs['form-required'].validate((valid) => {
                 if (valid) {
-                    if (this.report.outTime === '')
-                    {
-                        this.report.outTime = '1900-01-01'
-                    }
-
-                    finishProcessing(this.shipOrder.id, 'Update', this.report).then(() => {
-                        this.shipOrder.inboundDate = this.report.inboundDate
-                        this.shipOrder.unloadFinishTime = this.report.unloadFinishTime
-                        this.shipOrder.outTime = this.report.outTime
-                        this.shipOrder.availableTime = this.report.availableTime
-                        this.shipOrder.dockNumber = this.report.dockNumber
-                        this.shipOrder.verifiedBy = this.report.verifiedBy
-                        this.shipOrder.status = 'Received'
+                    updateOrder(this.shipOrder.id, 'Save', this.report).then(() => {
                         this.$emit('onOperationSuccess')
                     })
                 } else {
