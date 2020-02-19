@@ -23,7 +23,19 @@
       </el-form>
     </div>
     <div style="text-align:center">
-      <el-button type="success" @click="onFinishProcessingClicked">Finish Processing</el-button>
+      <el-popover
+        v-model="popVisible"
+        placement="top"
+        width="370"
+      >
+        <p>Please make sure you have adjusted the picked pallets from inventory.</p>
+        <p>Are you sure you want to continue?</p>
+        <div style="text-align: right; margin: 0">
+          <el-button size="mini" type="text" @click="popVisible = false">No, I will double check it again</el-button>
+          <el-button type="primary" size="mini" @click="onFinishProcessingClicked">Yes, I will be responsible for all pallet numbers</el-button>
+        </div>
+        <el-button slot="reference" type="success">Finish Processing</el-button>
+      </el-popover>
       <el-button type="info" @click="onUpdateClicked">Save&Update</el-button>
     </div>
   </div>
@@ -39,6 +51,7 @@ export default {
     },
     data(){
         return {
+            popVisible: false,
             rules: {
                 placeTime: [
                     { required: true, message: 'Please select a date', trigger: 'change' }
@@ -73,6 +86,7 @@ export default {
                 if (valid) {
                     updateOrder(this.shipOrder.id, 'Finish', this.report).then(() => {
                         this.$emit('onOperationSuccess')
+                        this.popVisible = false
                     })
                 } else {
                     console.log('error submit!!');
