@@ -7,6 +7,7 @@
         v-model="search"
         style="width:250px"
         size="large"
+        :disabled="loading"
         placeholder="Search..."
       />
     </div>

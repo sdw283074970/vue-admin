@@ -115,7 +115,7 @@
           <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
           <el-button @click="onLinkToUserClicked(scope.row.id)">Link to User</el-button>
           <el-button disabled>Services</el-button>
-          <el-button disabled>Instructions</el-button>
+          <el-button @click="onInstructionsClicked(scope.row.id)">Instructions</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -180,6 +180,9 @@
         <el-button @click="linkVisible = false">Cancel</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="Instruction Template" :visible.sync="instructionVisible" top="5vh" width="400px">
+      <instructions />
+    </el-dialog>
   </div>
 </template>
 
@@ -202,6 +205,7 @@ export default {
             formLabelWidth : '200px',
             customerCodeFilter : [],
             isEdit: false,
+            instructionVisible: false,
             linkForm: {
               id: 0,
               email: ''
@@ -230,6 +234,9 @@ export default {
               ]
             }
         };
+    },
+    components: {
+        "instructions": () => import('@/views/officeview/customer/instructions'),
     },
     watch:{
       search: function(val, oldVal){
@@ -345,6 +352,9 @@ export default {
                 })
             }
         )
+      },
+      onInstructionsClicked() {
+        this.instructionVisible = true
       }
     },
     mounted() {

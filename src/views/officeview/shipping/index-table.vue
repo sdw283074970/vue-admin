@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div class="input-bar" style="margin-bottom:10px;margin-right:10px">
+      <el-button :loading="localLoading" type="info" @click="onNewCreatedClicked">New Created</el-button>
+      <el-button :loading="localLoading" type="warning" @click="onNewOrderClicked">New Order</el-button>
+      <el-button :loading="localLoading" type="danger" @click="onProcessingClicked">Processing</el-button>
+      <el-button :loading="localLoading" type="success" @click="onReadyClicked">Ready</el-button>
+      <el-button :loading="localLoading" type="info" @click="onReleasedClicked">Released</el-button>
+      <el-button :loading="localLoading" type="primary" @click="onShippedClicked">Shipped</el-button>
+    </div>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="createHandler">New SO</el-button>
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
@@ -8,6 +16,7 @@
         v-model="search"
         style="width:250px"
         size="large"
+        :disabled="loading"
         placeholder="Search..."
       />
     </div>
@@ -371,6 +380,36 @@ export default {
     },
     onCancelClicked() {
       this.editVisible = false
+    },
+    onNewCreatedClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'New Created' || row.status === 'Draft'
+      })
+    },
+    onNewOrderClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'New Order'
+      })
+    },
+    onProcessingClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Processing' || row.status === 'Pending' || row.status === 'Updated'
+      })
+    },
+    onReadyClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Ready'
+      })
+    },
+    onReleasedClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Released'
+      })
+    },
+    onShippedClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Shipped'
+      })
     }
   }
 }

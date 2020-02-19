@@ -2,12 +2,17 @@
   <div>
     <div class="input-bar">
       <!-- <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button> -->
-      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
+      <el-button :loading="localLoading" type="warning" @click="onNewOrderClicked">New Order</el-button>
+      <el-button :loading="localLoading" type="danger" @click="onProcessingClicked">Processing</el-button>
+      <el-button :loading="localLoading" type="success" @click="onReadyClicked">Ready</el-button>
+      <el-button :loading="localLoading" type="info" @click="onReleasedClicked">Released</el-button>
+      <el-button :loading="localLoading" icon="el-icon-refresh" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"
         style="width:250px"
         size="large"
         placeholder="Search..."
+        :disabled="loading"
       />
     </div>
     <el-table
@@ -51,7 +56,6 @@
         </template>
       </el-table-column>
       <el-table-column
-        sortable
         fixed
         prop="id"
         label="Id"
@@ -61,7 +65,6 @@
         fixed
         prop="status"
         label="Status"
-        sortable
         width="120"
       >
         <template slot-scope="scope">
@@ -71,7 +74,6 @@
       <el-table-column
         prop="orderNumber"
         label="Order #"
-        sortable
         fixed
         width="200"
       />
@@ -246,13 +248,13 @@ export default {
       changeStatusColor: function(status) {
         if (status == 'New Created')
             return 'gray';
-        else if (status == 'Picking' || status == 'Processing' || status == 'Pending' || status == 'Draft')
+        else if (status == 'Picking' || status == 'Processing' || status == 'Pending' || status == 'Draft' || status == 'Updated')
             return 'red';
-        else if (status == 'Incoming' || status == 'Returned')
+        else if (status == 'Incoming' || status == 'Returned' || status == 'New Order')
             return 'orange';
-        else if (status == 'Allocated')
+        else if (status == 'Allocated' || status == 'Released')
             return 'brown';
-        else if (status == 'Received')
+        else if (status == 'Received' || status == 'Ready')
             return 'green';
         else if (status == 'Registered')
             return 'purple';
@@ -285,6 +287,26 @@ export default {
       onFilterConfirmed(filter) {
         this.filterVisible = false;
         this.$emit('onFilterConfirmed', filter);
+      },
+      onNewOrderClicked() {
+        this.filteredData = this.tableData.filter((row) => {
+          return row.status == 'New Order'
+        })
+      },
+      onProcessingClicked() {
+        this.filteredData = this.tableData.filter((row) => {
+          return row.status == 'Processing'|| row.status == 'Pending' || row.status == 'Updated'
+        })
+      },
+      onReadyClicked() {
+        this.filteredData = this.tableData.filter((row) => {
+          return row.status == 'Ready'
+        })
+      },
+      onReleasedClicked() {
+        this.filteredData = this.tableData.filter((row) => {
+          return row.status == 'Released'
+        })
       }
     },
     mounted() {

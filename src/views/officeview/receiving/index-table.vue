@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div class="input-bar" style="margin-bottom:10px;margin-right:10px">
+      <el-button :loading="localLoading" type="info" @click="onNewCreatedClicked">New Created</el-button>
+      <el-button :loading="localLoading" type="warning" @click="onIncomingClicked">Incoming</el-button>
+      <el-button :loading="localLoading" type="success" @click="onArrivedClicked">Arrived</el-button>
+      <el-button :loading="localLoading" type="danger" @click="onProcessingClicked">Processing</el-button>
+      <el-button :loading="localLoading" type="success" @click="onReceivedClicked">Received</el-button>
+      <el-button :loading="localLoading" type="info" @click="onRegisteredClicked">Registered</el-button>
+      <el-button :loading="localLoading" type="primary" @click="onAllocatedClicked">Allocated</el-button>
+    </div>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
@@ -9,6 +18,7 @@
         style="width:250px"
         size="large"
         placeholder="Search..."
+        :disabled="loading"
       />
     </div>
     <el-table
@@ -91,6 +101,7 @@
       <el-table-column
         fixed
         prop="status"
+        :column-key="'status'"
         label="Status"
         sortable
         width="120"
@@ -354,7 +365,7 @@ export default {
       this.$router.push({ path: '/receiving/receiving-wo/' + id })
     },
     changeStatusColor: function(status) {
-      if (status === 'New Created') { return 'gray' } else if (status === 'Picking' || status === 'Processing' || status === 'Pending' || status === 'Draft') { return 'red' } else if (status === 'Incoming' || status === 'Returned') { return 'orange' } else if (status === 'Allocated') { return 'brown' } else if (status === 'Received') { return 'green' } else if (status === 'Registered') { return 'purple' } else if (status === 'Arrived') { return 'darkcyan' } else { return 'black' }
+      if (status === 'New Created' || status === 'Draft') { return 'gray' } else if (status === 'Picking' || status === 'Processing' || status === 'Pending' || status === 'Updated') { return 'red' } else if (status === 'Incoming' || status === 'Returned') { return 'orange' } else if (status === 'Allocated') { return 'brown' } else if (status === 'Received') { return 'green' } else if (status === 'Registered') { return 'purple' } else if (status === 'Arrived') { return 'darkcyan' } else { return 'black' }
     },
     onEfilesClicked(reference) {
       this.$emit('onEfilesClicked', reference)
@@ -434,6 +445,41 @@ export default {
         sealNumber: '',
         instruction: ''
       }
+    },
+    onNewCreatedClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'New Created' || row.status === 'Draft'
+      })
+    },
+    onIncomingClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Incoming'
+      })
+    },
+    onArrivedClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Arrived'
+      })
+    },
+    onReceivedClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Received'
+      })
+    },
+    onRegisteredClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Registered'
+      })
+    },
+    onAllocatedClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Allocated'
+      })
+    },
+    onProcessingClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Processing' || row.status === 'Pending' || row.status === 'Updated'
+      })
     }
   }
 }

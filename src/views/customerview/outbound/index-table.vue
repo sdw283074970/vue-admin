@@ -8,6 +8,7 @@
         style="width:250px"
         size="large"
         placeholder="Search..."
+        :disabled="loading"
       />
     </div>
     <el-table
