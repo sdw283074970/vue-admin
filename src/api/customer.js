@@ -32,3 +32,17 @@ export function linkToUser(linkForm) {
     method: 'put'
   })
 }
+
+export function getInstructionTemplates(id) {
+  return request({
+    url: 'api/customermanagement/?customerId=' + id,
+    method: 'get'
+  })
+}
+
+export function getInstructionTemplate(id) {
+  return request({
+    url: 'api/customermanagement/?templateId=' + id,
+    method: 'get'
+  })
+}

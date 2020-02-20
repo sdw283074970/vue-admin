@@ -180,15 +180,16 @@
         <el-button @click="linkVisible = false">Cancel</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="Instruction Template" :visible.sync="instructionVisible" top="5vh" width="400px">
-      <instructions />
+
+    <el-dialog title="Instruction Template" :visible.sync="instructionVisible" top="5vh" width="1400px">
+      <instructions :templates="templates" />
     </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { getCustomerDB, createCustomer, updateCustomer, linkToUser } from '@/api/customer'
+import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates } from '@/api/customer'
 
 export default {
     data() {
@@ -210,6 +211,7 @@ export default {
               id: 0,
               email: ''
             },
+            templates: [],
             form: {
               id : 0,
               name: '',
@@ -353,8 +355,11 @@ export default {
             }
         )
       },
-      onInstructionsClicked() {
+      onInstructionsClicked(id) {
         this.instructionVisible = true
+        getInstructionTemplates(id).then(body => {
+          this.templates = body.data
+        })
       }
     },
     mounted() {
