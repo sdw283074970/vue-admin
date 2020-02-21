@@ -45,19 +45,44 @@
         min-width="90%"
       />
       <el-table-column
+        label="Visibility"
+        align="center"
+      >
+        <el-table-column
+          label="Customer"
+          align="center"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <font>{{ scope.row.isInstruction ? '√' : 'X' }}</font>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Warehouse"
+          align="center"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <font>{{ scope.row.isInstruction||scope.row.isOperation ? '√' : 'X' }}</font>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column
         prop="status"
         label="Charging Status"
-        min-width="35%"
+        align="center"
+        width="180"
       />
       <el-table-column
         prop="handlingStatus"
         label="Status"
-        min-width="19%"
+        align="center"
+        width="100"
       />
       <el-table-column
         prop="operation"
         label="operation"
-        min-width="25%"
+        width="110"
       >
         <template slot-scope="scope">
           <el-dropdown>
