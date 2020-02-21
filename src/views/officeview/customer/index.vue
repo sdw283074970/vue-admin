@@ -182,7 +182,7 @@
     </el-dialog>
 
     <el-dialog title="Instruction Template" :visible.sync="instructionVisible" top="5vh" width="1400px">
-      <instructions :templates="templates" />
+      <instructions :templates="templates" :customer-id="customerId" @reloadTemplates="reloadTemplates" />
     </el-dialog>
   </div>
 </template>
@@ -206,6 +206,7 @@ export default {
             formLabelWidth : '200px',
             customerCodeFilter : [],
             isEdit: false,
+            customerId: 0,
             instructionVisible: false,
             linkForm: {
               id: 0,
@@ -357,8 +358,18 @@ export default {
       },
       onInstructionsClicked(id) {
         this.instructionVisible = true
+        this.customerId = id
         getInstructionTemplates(id).then(body => {
           this.templates = body.data
+        })
+      },
+      reloadTemplates() {
+        getInstructionTemplates(this.customerId).then(body => {
+          this.templates = body.data
+        })
+        this.$message({
+          message: 'Success',
+          type: 'success'
         })
       }
     },

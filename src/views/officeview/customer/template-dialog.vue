@@ -57,6 +57,7 @@
       <el-form-item label-width="550px" label="Is Apply To All Customer">
         <el-switch
           v-model="template.isApplyToAll"
+          :disabled="isEdit"
           style="margin-left:10px"
           active-color="#13ce66"
           inactive-color="#ff4949"
@@ -66,8 +67,8 @@
       </el-form-item>
     </el-form>
     <div style="text-align:right;margin-right:7%">
-      <el-button type="primary" @click="createHandler">Create</el-button>
-      <el-button type="primary" @click="createHandler">Update</el-button>
+      <el-button v-if="!isEdit" type="primary" @click="onCreateClicked">Create</el-button>
+      <el-button v-if="isEdit" type="primary" @click="onUpdateClicked">Update</el-button>
       <el-button @click="onCancelClicked">Cancel</el-button>
     </div>
   </div>
@@ -76,12 +77,13 @@
 <script>
 /* eslint-disable */
 
-import { createNewInstruction, updateInstruction, resultInstruction, updateComment, createNewInstructionByModel, updateInstructionbyModel } from '@/api/shipping'
-import { ALPN_ENABLED } from 'constants';
+import { createNewInstructionTemplate, updateInstructionTemplate } from '@/api/customer'
 
 export default {
   props: {
-      template: Object
+      template: Object,
+      customerId: Number,
+      isEdit: Boolean
   },
   data(){
     return{
@@ -90,77 +92,23 @@ export default {
         rules: {
           description: [
             { required: true, message: 'Please input description', trigger: 'change' }
-          ],
-          result: [
-            { required: true, message: 'Please input result', trigger: 'change' }
           ]
         }
     }
   },
-  // 同时computed和watch变量isChargingItem是为了监视父模块传来的值的变化，还要满足有setter传用户输入的新值
-//   computed: {
-//     isChargingItem: function(){ return this.instruction.isChargingItem },
-//   },
-//   watch: {
-//     isChargingItem: function(val){ this.isChargingItemLocal = val}
-//   },
   methods:{
-    createHandler: function(){
-        this.$refs['form-required'].validate((valid) => {
-            if (valid) {
-                createNewInstructionByModel(this.instruction).then(body => {
-                    this.$emit('onCreatedSucceed', body.data);
-                    this.$emit('onCancelClicked');
-                })
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
+    onCreateClicked() {
+      createNewInstructionTemplate(this.customerId, this.template).then(() => {
+        this.$emit('reloadTemplates')
+      })
     },
-    updateHandler: function(){
-        this.$refs['form-required'].validate((valid) => {
-            if (valid) {
-                updateInstructionbyModel('UpdateInstruction', this.instruction).then(() => {
-                    this.$emit('onUpdateSucceed');
-                    this.$emit('onCancelClicked');
-                });
-            }
-            else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
+    onUpdateClicked() {
+      updateInstructionTemplate(this.template.id, this.template).then(() => {
+        this.$emit('reloadTemplates')
+      })
     },
-    resultHandler: function(){
-        this.$refs['form-required'].validate((valid) => {
-            if (valid) {
-                updateInstructionbyModel('UpdateResult', this.instruction).then(() => {
-                    this.$emit('onResultSucceed');
-                    this.$emit('onCancelClicked');
-                });
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
-    },
-    onCancelClicked: function(){
-        this.$emit('onCancelClicked');
-    },
-    onCommentClicked() {
-        this.$refs['form-required'].validate((valid) => {
-            if (valid) {
-                updateInstructionbyModel('UpdateComment', this.instruction).then(() => {
-                    this.$emit('onUpdateSucceed');
-                    this.$emit('onCancelClicked');
-                });
-            }
-            else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
+    onCancelClicked() {
+      this.$emit('closeDialog')
     }
   },
   mounted() {

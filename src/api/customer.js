@@ -46,3 +46,26 @@ export function getInstructionTemplate(id) {
     method: 'get'
   })
 }
+
+export function createNewInstructionTemplate(id, data) {
+  return request({
+    url: 'api/customermanagement/?customerId=' + id,
+    method: 'post',
+    data: data
+  })
+}
+
+export function updateInstructionTemplate(id, data) {
+  return request({
+    url: 'api/customermanagement/?templateId=' + id,
+    method: 'put',
+    data: data
+  })
+}
+
+export function deleteInstructionTemplate(id) {
+  return request({
+    url: 'api/customermanagement/?instructionId=' + id,
+    method: 'delete'
+  })
+}

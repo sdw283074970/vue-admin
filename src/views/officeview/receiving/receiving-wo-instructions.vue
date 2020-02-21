@@ -65,7 +65,7 @@
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
+              <el-dropdown-item :disabled="scope.row.handlingStatus=='Finished'||scope.row.handlingStatus=='Confirmed'||masterOrder.invoiceStatus=='Closed'" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
               <el-dropdown-item :disabled="!(scope.row.handlingStatus=='Pending'||scope.row.handlingStatus=='Updated')" @click.native="onResultClicked(scope.row.id)">Result</el-dropdown-item>
               <el-dropdown-item divided @click.native="deleteHandler(scope.row.id)">Delete</el-dropdown-item>
             </el-dropdown-menu>
