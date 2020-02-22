@@ -406,6 +406,48 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/accounting-receiving',
+    component: Layout,
+    name: 'Accounting Receiving',
+    meta: { title: 'Receiving Orders', icon: 'table', role: ['accounting'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Accounting Receiving Overview',
+        component: () => import('@/views/accountingview/receiving/index'),
+        meta: { title: 'ACCT Receiving', icon: 'table' }
+      },
+      {
+        path: '/accounting-receiving/receiving-wo/:masterOrderId',
+        name: 'Accounting Receiving WO',
+        component: () => import('@/views/accountingview/receiving/receiving-wo'),
+        hidden: true,
+        meta: { title: 'WO', breadcrumb: true }
+      }
+    ]
+  },
+  {
+    path: '/accounting-shipping',
+    component: Layout,
+    name: 'Accounting Shipping',
+    meta: { title: 'Accounting Shipping Orders', icon: 'table', role: ['accounting'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Accounting Shipping Overview',
+        component: () => import('@/views/accountingview/shipping/index'),
+        meta: { title: 'ACCT Shipping', icon: 'table' }
+      },
+      {
+        path: '/accounting-shipping/shipping-wo/:shipOrderId',
+        name: 'Accounting shipping WO',
+        component: () => import('@/views/accountingview/shipping/shipping-wo'),
+        hidden: true,
+        meta: { title: 'WO', breadcrumb: true }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
