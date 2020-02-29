@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="input-bar" style="margin-bottom:10px;margin-right:10px">
+    <!-- <div class="input-bar" style="margin-bottom:10px;margin-right:10px">
       <el-button :loading="localLoading" type="info" @click="onNewCreatedClicked">New Created</el-button>
       <el-button :loading="localLoading" type="warning" @click="onIncomingClicked">Incoming</el-button>
       <el-button :loading="localLoading" type="success" @click="onArrivedClicked">Arrived</el-button>
@@ -8,7 +8,7 @@
       <el-button :loading="localLoading" type="success" @click="onReceivedClicked">Received</el-button>
       <el-button :loading="localLoading" type="info" @click="onRegisteredClicked">Registered</el-button>
       <el-button :loading="localLoading" type="primary" @click="onAllocatedClicked">Allocated</el-button>
-    </div>
+    </div> -->
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
@@ -20,6 +20,9 @@
         placeholder="Search..."
         :disabled="loading"
       />
+    </div>
+    <div class="input-bar">
+      <generic-order-multiple-filters :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
     </div>
     <el-table
       ref="table"
@@ -119,11 +122,17 @@
       />
       <el-table-column
         prop="customerCode"
+        label="Customer Code"
+        align="center"
+        width="100"
+      />
+      <!-- <el-table-column
+        prop="customerCode"
         label="Code"
         :column-key="'code'"
         :filters="customerCodeFilters"
         width="100"
-      />
+      /> -->
       <el-table-column
         prop="subCustomer"
         label="Sub-code"
@@ -201,14 +210,37 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="invoiceStatus"
+        align="center"
+        label="Invoice Status"
+        width="80"
+      />
+      <el-table-column
+        prop="closeDate"
+        label="Close Date"
+        align="center"
+        width="100"
+      >
+        <template slot-scope="scope">
+          <font>{{ transferDate(scope.row.closeDate) }}</font>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="operation"
+        align="center"
         label="operation"
       >
         <template slot-scope="scope">
-          <el-button @click="onEfilesClicked(scope.row.container)">eFiles</el-button>
-          <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
-          <el-button @click="woHandler(scope.row.id)">WO & Details</el-button>
-          <!-- <el-button type="danger" plain @click="editHandler(scope.row.id, scope.$index)">Delete</el-button> -->
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              Operations<i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="onEfilesClicked(scope.row.container)">eFiles</el-dropdown-item>
+              <el-dropdown-item @click.native="editHandler(scope.row.id, scope.$index)">Edit</el-dropdown-item>
+              <el-dropdown-item @click.native="woHandler(scope.row.id)">Details</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -257,6 +289,7 @@ import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderIn
 
 export default {
   components: {
+    'generic-order-multiple-filters': () => import('@/views/shareview/generic/generic-order-multiple-filters'),
     'generic-order-filter': () => import('@/views/shareview/generic/generic-order-filter'),
     'receiving-index-edit-form': () => import('@/views/officeview/receiving/index-edit-form')
   },
@@ -314,6 +347,27 @@ export default {
         { value: 'Received', text: 'Received' },
         { value: 'Registered', text: 'Registered' },
         { value: 'Allocated', text: 'Allocated' }
+      ],
+      sortByOptions: [
+        { text: 'Id', value: 'Id' },
+        { text: 'Status', value: 'Status' },
+        { text: 'Container #', value: 'Container' },
+        { text: 'Customer Code', value: 'CustomerCode' },
+        { text: 'Container Size', value: 'ContainerSize' },
+        { text: 'Inbound Type', value: 'InboundType' },
+        { text: 'Subcustomer Code', value: 'SubCustomer' },
+        { text: 'Org Ctns', value: 'TotalCtns' },
+        { text: 'Actual Ctns', value: 'ActualCtns' },
+        { text: 'Org Plts', value: 'OriginalPlts' },
+        { text: 'Actual Plts', value: 'ActualPlts' },
+        { text: 'SKU #', value: 'SKUNumber' },
+        { text: 'ETA', value: 'Eta' },
+        { text: 'ATA', value: 'InboundDate' },
+        { text: '$ Amount', value: 'TotalAmount' },
+        { text: '$ Cost', value: 'TotalCost' },
+        { text: '$ Net', value: 'Net' },
+        { text: 'Invoice Status', value: 'InvoiceStatus' },
+        { text: 'Close Date', value: 'CloseDate' }
       ]
     }
   },
@@ -374,19 +428,6 @@ export default {
       this.filteredData = this.tableData.filter((row) => {
         return row.customerCode === filters.code[0]
       })
-
-      // var arr = [];
-      // this.filteredData.filter(row => {
-      //   if (row.customerCode == filters.code[0])
-      //   {
-      //     arr.push(row);
-      //   }
-      // })
-      // this.filteredData = arr;
-
-      // this.filteredData = this.tableData.filter((row) => {
-      //   return row.status = filters.status[0]
-      // })
     },
     onFilterConfirmed(filter) {
       this.filterVisible = false
@@ -446,40 +487,8 @@ export default {
         instruction: ''
       }
     },
-    onNewCreatedClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'New Created' || row.status === 'Draft'
-      })
-    },
-    onIncomingClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Incoming'
-      })
-    },
-    onArrivedClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Arrived'
-      })
-    },
-    onReceivedClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Received'
-      })
-    },
-    onRegisteredClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Registered'
-      })
-    },
-    onAllocatedClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Allocated'
-      })
-    },
-    onProcessingClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Processing' || row.status === 'Pending' || row.status === 'Updated'
-      })
+    onFilterFinish(filter) {
+      this.$emit('onFilterFinish', filter)
     }
   }
 }
@@ -488,5 +497,18 @@ export default {
 <style lang="scss" scoped>
     .input-bar{
       text-align: right
+    }
+    .el-dropdown-link {
+      cursor: pointer;
+      color: #409EFF;
+    }
+    .el-icon-arrow-down {
+      font-size: 12px;
+    }
+    .demonstration {
+      display: block;
+      color: #8492a6;
+      font-size: 14px;
+      margin-bottom: 20px;
     }
 </style>

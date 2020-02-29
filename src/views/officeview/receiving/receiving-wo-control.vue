@@ -4,7 +4,7 @@
     <div style="margin-bottom:10px">
       <div>
         <el-button class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
-        <el-button class="gb-button" type="warning" :disabled="step!=3" @click="onRecallClicked">Recall WO</el-button>
+        <el-button class="gb-button" type="warning" :disabled="step!=3&&step!=4" @click="onRecallClicked">Recall WO</el-button>
         <el-button :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
         <el-button type="info" class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
         <!-- <el-button class="gb-button" disabled>Push Status</el-button>

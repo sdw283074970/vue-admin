@@ -173,15 +173,38 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="operation"
-        label="operation"
+        prop="invoiceStatus"
+        align="center"
+        label="Invoice Status"
+        width="80"
+      />
+      <el-table-column
+        prop="closeDate"
+        label="Close Date"
+        align="center"
+        width="100"
       >
         <template slot-scope="scope">
-          <el-button @click="onEfilesClicked(scope.row.shipOrderNumber)">eFiles</el-button>
-          <!-- <el-button @click="editHandler(scope.row.id, scope.$index)">Fee</el-button> -->
-          <el-button @click="editHandler(scope.row.id)">Edit</el-button>
-          <el-button @click="woHandler(scope.row.id)">WO & Details</el-button>
-          <!-- <el-button type="danger" plain @click="editHandler(scope.row.id, scope.$index)">Delete</el-button> -->
+          <font>{{ transferDate(scope.row.closeDate) }}</font>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="operation"
+        width="110"
+        label="operation"
+        fixed="right"
+      >
+        <template slot-scope="scope">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              Operations<i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="onEfilesClicked(scope.row.shipOrderNumber)">eFiles</el-dropdown-item>
+              <el-dropdown-item @click.native="editHandler(scope.row.id)">Edit</el-dropdown-item>
+              <el-dropdown-item @click.native="woHandler(scope.row.id)">Details</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -418,5 +441,18 @@ export default {
 <style lang="scss" scoped>
     .input-bar{
       text-align: right
+    }
+    .el-dropdown-link {
+      cursor: pointer;
+      color: #409EFF;
+    }
+    .el-icon-arrow-down {
+      font-size: 12px;
+    }
+    .demonstration {
+      display: block;
+      color: #8492a6;
+      font-size: 14px;
+      margin-bottom: 20px;
     }
 </style>

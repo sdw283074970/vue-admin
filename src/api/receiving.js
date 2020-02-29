@@ -350,3 +350,11 @@ export function updatePltLocation(id, location) {
     method: 'put'
   })
 }
+
+export function getFilteredMasterOrders(filter) {
+  return request({
+    url: 'api/fba/fbamasterorder/?orderType=MasterOrder',
+    method: 'post',
+    data: filter
+  })
+}

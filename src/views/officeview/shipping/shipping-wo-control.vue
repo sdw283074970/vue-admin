@@ -3,10 +3,10 @@
     <h2>Control Panel {{ shipOrder.status }}</h2>
     <div style="margin-bottom:10px">
       <el-button :disabled="step>2" class="gb-button" type="primary" @click="onPushClicked">Push WO</el-button>
-      <el-button :disabled="step==7||step<3" class="gb-button" type="warning" @click="onCallBackClicked">Recall WO</el-button>
+      <el-button :disabled="step==8||step<3" class="gb-button" type="warning" @click="onCallBackClicked">Recall WO</el-button>
       <el-button :disabled="step!=5" class="gb-button" type="primary" @click="onMarkReleasedClicked">Mark Released</el-button>
-      <el-button :disabled="step<3||step==6" class="gb-button" type="danger" @click="onPushClicked">Push Status</el-button>
-      <el-button :disabled="step==7||step<4" class="gb-button" type="danger" @click="onCallBackClicked">Reverse Status</el-button>
+      <el-button :disabled="step<3||step>=6" class="gb-button" type="danger" @click="onPushClicked">Push Status</el-button>
+      <el-button :disabled="step==8||step<4" class="gb-button" type="danger" @click="onCallBackClicked">Reverse Status</el-button>
     </div>
     <el-dialog
       title="Select Released Date"

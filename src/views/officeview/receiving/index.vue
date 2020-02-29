@@ -11,6 +11,7 @@
       @onSearchChanged="onSearchChanged"
       @onFilterConfirmed="onFilterConfirmed"
       @onRefreshClicked="onRefreshClicked"
+      @onFilterFinish="onFilterFinish"
     />
     <div>
       <el-dialog
@@ -32,7 +33,7 @@
 
 <script>
 /* eslint-disable */
-import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters, getFilteredDate } from '@/api/receiving'
+import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters, getFilteredDate, getFilteredMasterOrders } from '@/api/receiving'
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 
 export default {
@@ -103,6 +104,19 @@ export default {
         this.loading = true;
         getReceivingOrders().then(body => {
           this.tableData = body.data.reverse();
+          this.filteredData = body.data;
+          this.totalEntries = body.data.length
+          this.loading = false;
+          this.$message({
+            message: 'Success!',
+            type: 'success'
+          });
+        })
+      },
+      onFilterFinish(filter) {
+        this.loading = true;
+        getFilteredMasterOrders(filter).then(body => {
+          this.tableData = body.data;
           this.filteredData = body.data;
           this.totalEntries = body.data.length
           this.loading = false;

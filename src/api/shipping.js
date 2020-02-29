@@ -281,3 +281,11 @@ export function updateOrder(id, operation, report) {
     data: report
   })
 }
+
+export function getFilteredShipOrders(filter) {
+  return request({
+    url: 'api/fba/fbamasterorder/?orderType=ShipOrder',
+    method: 'post',
+    data: filter
+  })
+}
