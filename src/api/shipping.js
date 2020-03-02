@@ -284,7 +284,7 @@ export function updateOrder(id, operation, report) {
 
 export function getFilteredShipOrders(filter) {
   return request({
-    url: 'api/fba/fbamasterorder/?orderType=ShipOrder',
+    url: 'api/fba/fbafilter/?orderType=ShipOrder',
     method: 'post',
     data: filter
   })

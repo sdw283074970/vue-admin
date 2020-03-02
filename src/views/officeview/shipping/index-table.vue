@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="input-bar" style="margin-bottom:10px;margin-right:10px">
+    <!-- <div class="input-bar" style="margin-bottom:10px;margin-right:10px">
       <el-button :loading="localLoading" type="info" @click="onNewCreatedClicked">New Created</el-button>
       <el-button :loading="localLoading" type="warning" @click="onNewOrderClicked">New Order</el-button>
       <el-button :loading="localLoading" type="danger" @click="onProcessingClicked">Processing</el-button>
       <el-button :loading="localLoading" type="success" @click="onReadyClicked">Ready</el-button>
       <el-button :loading="localLoading" type="info" @click="onReleasedClicked">Released</el-button>
       <el-button :loading="localLoading" type="primary" @click="onShippedClicked">Shipped</el-button>
-    </div>
+    </div> -->
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="createHandler">New SO</el-button>
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
@@ -19,6 +19,9 @@
         :disabled="loading"
         placeholder="Search..."
       />
+    </div>
+    <div class="input-bar">
+      <generic-order-multiple-filters :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
     </div>
     <el-table
       ref="table"
@@ -124,9 +127,8 @@
       />
       <el-table-column
         prop="customerCode"
-        label="Code"
-        :column-key="'code'"
-        :filters="customerCodeFilters"
+        label="Customer Code"
+        align="center"
         width="100"
       />
       <el-table-column
@@ -253,6 +255,7 @@ import { getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api
 
 export default {
   components: {
+    'generic-order-multiple-filters': () => import('@/views/shareview/generic/generic-order-multiple-filters'),
     'generic-order-filter': () => import('@/views/shareview/generic/generic-order-filter'),
     'shipping-index-edit-form': () => import('@/views/officeview/shipping/index-edit-form')
   },
@@ -294,7 +297,38 @@ export default {
         subCustomer: '',
         purchaseOrderNumber: '',
         instruction: ''
-      }
+      },
+      statusFilters: [
+        { value: 'New Created', text: 'New Created' },
+        { value: 'Picking', text: 'Picking' },
+        { value: 'Draft', text: 'Draft' },
+        { value: 'New Order', text: 'New Order' },
+        { value: 'Updated', text: 'Updated' },
+        { value: 'Returned', text: 'Returned' },
+        { value: 'Processing', text: 'Processing' },
+        { value: 'Ready', text: 'Ready' },
+        { value: 'Released', text: 'Released' },
+        { value: 'Shipped', text: 'Shipped' }
+      ],
+      sortByOptions: [
+        { text: 'Id', value: 'Id' },
+        { text: 'Status', value: 'Status' },
+        { text: 'Ship Order #', value: 'ShipOrderNumber' },
+        { text: 'Customer Code', value: 'CustomerCode' },
+        { text: 'Container Size', value: 'ContainerSize' },
+        { text: 'Batch #', value: 'BatchNumber' },
+        { text: 'Subcustomer Code', value: 'SubCustomer' },
+        { text: 'Dest', value: 'Destination' },
+        { text: 'ETS', value: 'ETS' },
+        { text: 'Total Ctns', value: 'TotalCtns' },
+        { text: 'Total Plts', value: 'TotalPlts' },
+        { text: 'POD', value: 'PODStatus' },
+        { text: '$ Amount', value: 'TotalAmount' },
+        { text: '$ Cost', value: 'TotalCost' },
+        { text: '$ Net', value: 'Net' },
+        { text: 'Invoice Status', value: 'InvoiceStatus' },
+        { text: 'Close Date', value: 'CloseDate' }
+      ]
     }
   },
   computed: {
@@ -404,35 +438,8 @@ export default {
     onCancelClicked() {
       this.editVisible = false
     },
-    onNewCreatedClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'New Created' || row.status === 'Draft'
-      })
-    },
-    onNewOrderClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'New Order'
-      })
-    },
-    onProcessingClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Processing' || row.status === 'Pending' || row.status === 'Updated'
-      })
-    },
-    onReadyClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Ready'
-      })
-    },
-    onReleasedClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Released'
-      })
-    },
-    onShippedClicked() {
-      this.filteredData = this.tableData.filter((row) => {
-        return row.status === 'Shipped'
-      })
+    onFilterFinish(filter) {
+      this.$emit('onFilterFinish', filter)
     }
   }
 }

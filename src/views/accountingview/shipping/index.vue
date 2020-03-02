@@ -11,6 +11,7 @@
       @onSearchChanged="onSearchChanged"
       @onFilterConfirmed="onFilterConfirmed"
       @onRefreshClicked="onRefreshClicked"
+      @onFilterFinish="onFilterFinish"
     />
     <div>
       <el-dialog
@@ -33,7 +34,8 @@
 <script>
 /* eslint-disable */
 import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, getEfiles, getCustomerCodeFilters, getFilteredDate } from '@/api/receiving'
-import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
+import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo, getFilteredShipOrders } from '@/api/shipping'
+
 import Axios from 'axios';
 import qs from 'qs';
 
@@ -104,6 +106,19 @@ export default {
           this.efiles = body.data
         })
       },
+      onFilterFinish(filter) {
+        this.loading = true;
+        getFilteredShipOrders(filter).then(body => {
+          this.tableData = body.data;
+          this.totalEntries = body.data.length;
+          this.filteredData = body.data;
+          this.loading = false;
+          this.$message({
+            message: 'Success!',
+            type: 'success'
+          });
+        })
+      }
     },
     mounted() {
       getShippingOrders().then(body => {

@@ -353,7 +353,7 @@ export function updatePltLocation(id, location) {
 
 export function getFilteredMasterOrders(filter) {
   return request({
-    url: 'api/fba/fbamasterorder/?orderType=MasterOrder',
+    url: 'api/fba/fbafilter/?orderType=MasterOrder',
     method: 'post',
     data: filter
   })
