@@ -26,7 +26,7 @@ import { getInvoices } from '@/api/accounting'
 export default {
   components: {
     'receiving-wo-sum': () => import('@/views/shareview/receiving/receiving-wo-sum'),
-    'receiving-wo-control': () => import('@/views/officeview/receiving/receiving-wo-control'),
+    'receiving-wo-control': () => import('@/views/accountingview/receiving/receiving-wo-control'),
     'receiving-wo-packinglist': () => import('@/views/shareview/receiving/receiving-wo-packinglist'),
     'receiving-wo-instruction': () => import('@/views/officeview/receiving/receiving-wo-instructions'),
     'invoice-detail': () => import('@/views/accountingview/invoice/invoice-detail')
@@ -132,8 +132,15 @@ export default {
       getCtnsInventory(this.$route.params.masterOrderId).then(d => {
         this.ctnInventoryData = d.data
       })
-      getInvoices(this.masterOrder.container, 'MasterOrder').then(ivs => {
-        this.invoices = ivs.data
+      getRO(this.$route.params.masterOrderId).then(body => {
+        this.masterOrder = body.data
+        getInvoices(this.masterOrder.container, 'MasterOrder').then(ivs => {
+          this.invoices = ivs.data
+        })
+      })
+      this.$message({
+        message: 'Success',
+        type: 'success'
       })
     }
   }

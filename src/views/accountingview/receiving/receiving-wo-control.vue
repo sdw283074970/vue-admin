@@ -1,19 +1,27 @@
 <template>
   <div>
     <h2>Control Panel</h2>
+    <h3>Invoice Status: {{ masterOrder.invoiceStatus }}</h3>
     <div style="margin-bottom:10px">
       <div>
-        <el-button class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
-        <el-button class="gb-button" type="warning" :disabled="step!=3||step!=4" @click="onRecallClicked">Recall WO</el-button>
-        <el-button :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
+        <el-button class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Await'" @click="closeVisible=true">Close Order</el-button>
+
+        <el-popover
+          v-model="popVisible2"
+          placement="top"
+          width="295"
+        >
+          <p>The invoice status and closing date of this order will be reset.</p>
+          <p>Are you sure you want to continue?</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="popVisible2 = false">No</el-button>
+            <el-button type="primary" size="mini" @click="onOpenClicked">Yes</el-button>
+          </div>
+          <el-button slot="reference" class="gb-button" type="warning" :disabled="masterOrder.invoiceStatus=='Await'">Re-open Order</el-button>
+        </el-popover>
+
+        <el-button :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Set Arrived Date</el-button>
         <el-button type="info" class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
-        <!-- <el-button class="gb-button" disabled>Push Status</el-button>
-        <el-button class="gb-button" disabled>Reverse Status</el-button> -->
-      </div>
-      <div style="margin-top:10px">
-        <!-- <el-button class="gb-button" disabled>Auto Receive</el-button> -->
-        <!-- <el-button class="gb-button" @click="registerVisible = true">Register Plt Info</el-button>
-        <el-button class="gb-button" @click="onAllocateClicked">Allocate Location</el-button> -->
       </div>
     </div>
     <el-dialog
@@ -26,40 +34,78 @@
       <receiving-register :master-order="masterOrder" :order-details="orderDetails" @reloadOrder="reloadOrder" />
     </el-dialog>
     <el-dialog
-      title="Select Arrive Date"
-      :visible.sync="arrivedVisible"
+      title="Close Order"
+      :visible.sync="closeVisible"
       top="5vh"
       width="350px"
       :lock-scroll="false"
     >
-      <el-date-picker v-model="arrivedTime" type="date" placeholder="Select Arrive Date" value-format="yyyy-MM-dd" style="width:180px;" />
-      <el-button type="primary" @click="onConfirmArrivedTimeClicked">Confirm</el-button>
-    </el-dialog>
-    <el-dialog
-      title="Allocate Location"
-      :visible.sync="allocateVisible"
-      width="85%"
-      top="5vh"
-      :lock-scroll="false"
-    >
-      <receiving-allocate :master-order="masterOrder" :plt-data="pltData" :ctn-data="ctnData" @reloadOrder="reloadOrder" />
-    </el-dialog>
-    <el-dialog
-      title="Inventory"
-      :visible.sync="inventoryVisible"
-      width="85%"
-      top="5vh"
-      :lock-scroll="false"
-    >
-      <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" @reloadOrder="reloadOrder" />
-    </el-dialog>
-  </div>
+      <div style="text-align:right">
+        <label>Close Date: </label><el-date-picker v-model="closeDate" type="date" placeholder="Select close Date" value-format="yyyy-MM-dd" style="width:180px;" />
+      </div>
+      <div style="text-align:right;margin-right:20px">
+        <label>Apply min-charge?</label>
+        <el-switch
+          v-model="isAppliedMinCharge"
+          style="display: block"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-text="YES"
+          inactive-text="NO"
+        />
+      </div>
+      <div style="margin-top:20px;margin-right:10px;text-align:right">
+        <el-popover
+          v-model="popVisible1"
+          placement="top"
+          width="330"
+        >
+          <p>This order will be uneditable after this operation unless re-opren it.</p>
+          <p>Are you sure you want to continue?</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="popVisible1 = false">No</el-button>
+            <el-button type="primary" size="mini" @click="onCloseClicked">Yes</el-button>
+          </div>
+          <el-button slot="reference" class="gb-button" type="primary">Confirm Close</el-button>
+        </el-popover>
+      </div>
+      <el-dialog
+        title="Select Arrive Date"
+        :visible.sync="arrivedVisible"
+        top="5vh"
+        width="350px"
+        :lock-scroll="false"
+      >
+        <el-date-picker v-model="arrivedTime" type="date" placeholder="Select Arrive Date" value-format="yyyy-MM-dd" style="width:180px;" />
+        <el-button type="primary" @click="onConfirmArrivedTimeClicked">Confirm</el-button>
+      </el-dialog>
+      <el-dialog
+        title="Allocate Location"
+        :visible.sync="allocateVisible"
+        width="85%"
+        top="5vh"
+        :lock-scroll="false"
+      >
+        <receiving-allocate :master-order="masterOrder" :plt-data="pltData" :ctn-data="ctnData" @reloadOrder="reloadOrder" />
+      </el-dialog>
+
+      <el-dialog
+        title="Inventory"
+        :visible.sync="inventoryVisible"
+        width="85%"
+        top="5vh"
+        :lock-scroll="false"
+      >
+        <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" @reloadOrder="reloadOrder" />
+      </el-dialog>
+    </el-dialog></div>
 </template>
 
 <script>
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
-import { pushMasterOrder, recallMasterOrder, setInboundDate } from '@/api/receiving'
+import { setInboundDate } from '@/api/receiving'
+import { CloseOrder, OpenOrder } from '@/api/accounting'
 
 export default {
   components: {
@@ -82,6 +128,11 @@ export default {
       allocateVisible: false,
       inventoryVisible: false,
       arrivedVisible: false,
+      closeVisible: false,
+      popVisible1: false,
+      popVisible2: false,
+      isAppliedMinCharge: false,
+      closeDate: '',
       arrivedTime: ''
     }
   },
@@ -89,22 +140,24 @@ export default {
 
   },
   methods: {
-    onPushClicked() {
-      pushMasterOrder(this.masterOrder.id).then(() => {
-        this.masterOrder.status = 'Incoming'
-        this.$message({
-          message: 'Push success',
-          type: 'success'
+    onCloseClicked() {
+      if (this.closeDate) {
+        this.popVisible1 = false
+        CloseOrder(this.masterOrder.container, 'MasterOrder', this.closeDate, this.isAppliedMinCharge).then(() => {
+          this.$emit('reloadOrder')
+          this.closeVisible = false
         })
-      })
+      } else {
+        this.$message({
+          message: 'Please select a close date',
+          type: 'error'
+        })
+      }
     },
-    onRecallClicked() {
-      recallMasterOrder(this.masterOrder.id).then(() => {
-        this.masterOrder.status = 'New Created'
-        this.$message({
-          message: 'Recall success',
-          type: 'success'
-        })
+    onOpenClicked() {
+      this.popVisible2 = false
+      OpenOrder(this.masterOrder.container, 'MasterOrder').then(() => {
+        this.$emit('reloadOrder')
       })
     },
     onConfirmArrivedTimeClicked() {

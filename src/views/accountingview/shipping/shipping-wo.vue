@@ -15,7 +15,7 @@ import { getInvoices } from '@/api/accounting'
 export default {
   components: {
     'shipping-wo-sum': () => import('@/views/shareview/shipping/shipping-wo-sum'),
-    'shipping-wo-control': () => import('@/views/officeview/shipping/shipping-wo-control'),
+    'shipping-wo-control': () => import('@/views/accountingview/shipping/shipping-wo-control'),
     'shipping-wo-picking': () => import('@/views/officeview/shipping/shipping-wo-picking'),
     'shipping-wo-instruction': () => import('@/views/officeview/shipping/shipping-wo-instructions'),
     'invoice-detail': () => import('@/views/accountingview/invoice/invoice-detail')

@@ -1,14 +1,5 @@
 <template>
   <div>
-    <!-- <div class="input-bar" style="margin-bottom:10px;margin-right:10px">
-      <el-button :loading="localLoading" type="info" @click="onNewCreatedClicked">New Created</el-button>
-      <el-button :loading="localLoading" type="warning" @click="onIncomingClicked">Incoming</el-button>
-      <el-button :loading="localLoading" type="success" @click="onArrivedClicked">Arrived</el-button>
-      <el-button :loading="localLoading" type="danger" @click="onProcessingClicked">Processing</el-button>
-      <el-button :loading="localLoading" type="success" @click="onReceivedClicked">Received</el-button>
-      <el-button :loading="localLoading" type="info" @click="onRegisteredClicked">Registered</el-button>
-      <el-button :loading="localLoading" type="primary" @click="onAllocatedClicked">Allocated</el-button>
-    </div> -->
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
@@ -116,13 +107,6 @@
         align="center"
         width="100"
       />
-      <!-- <el-table-column
-        prop="customerCode"
-        label="Code"
-        :column-key="'code'"
-        :filters="customerCodeFilters"
-        width="100"
-      /> -->
       <el-table-column
         prop="subCustomer"
         label="Sub-code"
@@ -416,7 +400,7 @@ export default {
       })
     },
     woHandler: function(id) {
-      this.$router.push({ path: '/receiving/receiving-wo/' + id })
+      this.$router.push({ path: '/accounting-receiving/receiving-wo/' + id })
     },
     changeStatusColor: function(status) {
       if (status === 'New Created' || status === 'Draft') { return 'gray' } else if (status === 'Picking' || status === 'Processing' || status === 'Pending' || status === 'Updated') { return 'red' } else if (status === 'Incoming' || status === 'Returned') { return 'orange' } else if (status === 'Allocated') { return 'brown' } else if (status === 'Received') { return 'green' } else if (status === 'Registered') { return 'purple' } else if (status === 'Arrived') { return 'darkcyan' } else { return 'black' }

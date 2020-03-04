@@ -87,6 +87,9 @@
         <el-form-item label="Out Date">
           <span>{{ transferDate(masterOrder.outTime) }}</span>
         </el-form-item>
+        <el-form-item label="Close Date">
+          <span>{{ transferDate(masterOrder.closeDate) }}</span>
+        </el-form-item>
       </el-form>
     </div>
   </div>

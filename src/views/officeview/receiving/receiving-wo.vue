@@ -132,8 +132,15 @@ export default {
       getCtnsInventory(this.$route.params.masterOrderId).then(d => {
         this.ctnInventoryData = d.data
       })
-      getInvoices(this.masterOrder.container, 'MasterOrder').then(ivs => {
-        this.invoices = ivs.data
+      getRO(this.$route.params.masterOrderId).then(body => {
+        this.masterOrder = body.data
+        getInvoices(this.masterOrder.container, 'MasterOrder').then(ivs => {
+          this.invoices = ivs.data
+        })
+      })
+      this.$message({
+        message: 'Success',
+        type: 'success'
       })
     }
   }

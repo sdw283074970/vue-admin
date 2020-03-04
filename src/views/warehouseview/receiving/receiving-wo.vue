@@ -125,6 +125,13 @@ export default {
       getCtnsInventory(this.$route.params.masterOrderId).then(d => {
         this.ctnInventoryData = d.data
       })
+      getRO(this.$route.params.masterOrderId).then(body => {
+        this.masterOrder = body.data
+      })
+      this.$message({
+        message: 'Success',
+        type: 'success'
+      })
     }
   }
 }

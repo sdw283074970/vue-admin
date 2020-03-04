@@ -15,3 +15,24 @@ export function updateInvoiceStatus(id, type) {
     method: 'put'
   })
 }
+
+export function CloseOrder(reference, type, date, isMinCharge) {
+  return request({
+    url: 'api/fba/fbainvoicedetail/?reference=' + reference + '&invoiceType=' + type + '&closeDate=' + date + '&isAppliedMinCharge=' + isMinCharge,
+    method: 'put'
+  })
+}
+
+export function OpenOrder(reference, type) {
+  return request({
+    url: 'api/fba/fbainvoicedetail/?reference=' + reference + '&invoiceType=' + type,
+    method: 'put'
+  })
+}
+
+export function markOrderShipped(id, date) {
+  return request({
+    url: 'api/fba/fbashiporder/?shipOrderId=' + id + '&operationDate=' + date + '&operation=ChangeStatus',
+    method: 'put'
+  })
+}

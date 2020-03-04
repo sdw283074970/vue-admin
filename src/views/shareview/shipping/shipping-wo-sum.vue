@@ -67,6 +67,9 @@
         <el-form-item label="Shipped Date">
           <span>{{ transferDate(shipOrder.shipDate) }}</span>
         </el-form-item>
+        <el-form-item label="Closed Date">
+          <span>{{ transferDate(shipOrder.closeDate) }}</span>
+        </el-form-item>
       </el-form>
     </div>
   </div>
