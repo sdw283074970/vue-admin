@@ -4,7 +4,7 @@ import request from '@/utils/request-no-interceptor'
 
 export function getInvoices(reference, orderType) {
   return request({
-    url: 'api/fbainvoicedetail/?reference=' + reference + '&invoiceType=' + orderType,
+    url: 'api/fbainvoicedetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + orderType,
     method: 'get'
   })
 }
@@ -18,14 +18,14 @@ export function updateInvoiceStatus(id, type) {
 
 export function CloseOrder(reference, type, date, isMinCharge) {
   return request({
-    url: 'api/fba/fbainvoicedetail/?reference=' + reference + '&invoiceType=' + type + '&closeDate=' + date + '&isAppliedMinCharge=' + isMinCharge,
+    url: 'api/fba/fbainvoicedetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + type + '&closeDate=' + date + '&isAppliedMinCharge=' + isMinCharge,
     method: 'put'
   })
 }
 
 export function OpenOrder(reference, type) {
   return request({
-    url: 'api/fba/fbainvoicedetail/?reference=' + reference + '&invoiceType=' + type,
+    url: 'api/fba/fbainvoicedetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + type,
     method: 'put'
   })
 }

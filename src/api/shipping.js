@@ -209,7 +209,7 @@ export function reverseShipOrderStatus(shipOrderId, operationDate) {
 
 export function createNewInstructionByCustomer(reference, description) {
   return request({
-    url: 'api/FBAInvoiceDetail/?reference=' + reference + '&invoiceType=ShipOrder&description=' + encodeURIComponent(description),
+    url: 'api/FBAInvoiceDetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=ShipOrder&description=' + encodeURIComponent(description),
     method: 'post'
   })
 }

@@ -161,7 +161,7 @@ export function downloadFile(path, fileName) {
 
 export function createNewInstructionByCustomer(reference, description) {
   return request({
-    url: '/api/FBAInvoiceDetail/?reference=' + reference + '&invoiceType=MasterOrder&description=' + encodeURIComponent(description),
+    url: '/api/FBAInvoiceDetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=MasterOrder&description=' + encodeURIComponent(description),
     method: 'post'
   })
 }
@@ -196,7 +196,7 @@ export function CallbackWO(id) {
 
 export function getEfiles(reference, orderType) {
   return request({
-    url: '/api/fba/FBAEfolder/?reference=' + reference + '&orderType=' + orderType,
+    url: '/api/fba/FBAEfolder/?reference=' + encodeURIComponent(reference) + '&orderType=' + orderType,
     method: 'get'
   })
 }

@@ -88,7 +88,7 @@ export default {
   },
   computed: {
       uploadAction: function() {
-          return baseURL + 'api/fba/FBAEfolder/?reference=' + this.reference + '&orderType=' + this.orderType + '&fileName=File&version=V1'
+          return baseURL + 'api/fba/FBAEfolder/?reference=' + encodeURIComponent(this.reference) + '&orderType=' + this.orderType + '&fileName=File&version=V1'
       }
   },
   methods:{
