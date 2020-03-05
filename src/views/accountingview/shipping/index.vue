@@ -40,6 +40,7 @@ import Axios from 'axios';
 import qs from 'qs';
 
 export default {
+    name: 'accounting-shipping-index',
     components:{
         "shipping-index-table": () => import('@/views/accountingview/shipping/index-table'),
         "generic-efiles": () => import('@/views/shareview/generic/generic-efiles')

@@ -2,6 +2,7 @@
   <div>
     <h2>Control Panel</h2>
     <h3>Invoice Status: {{ masterOrder.invoiceStatus }}</h3>
+
     <div style="margin-bottom:10px">
       <div>
         <el-button class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Await'" @click="closeVisible=true">Close Order</el-button>
@@ -24,15 +25,7 @@
         <el-button type="info" class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
       </div>
     </div>
-    <el-dialog
-      title="Register Pallets Info"
-      :visible.sync="registerVisible"
-      top="5vh"
-      width="85%"
-      :lock-scroll="false"
-    >
-      <receiving-register :master-order="masterOrder" :order-details="orderDetails" @reloadOrder="reloadOrder" />
-    </el-dialog>
+
     <el-dialog
       title="Close Order"
       :visible.sync="closeVisible"
@@ -54,6 +47,7 @@
           inactive-text="NO"
         />
       </div>
+
       <div style="margin-top:20px;margin-right:10px;text-align:right">
         <el-popover
           v-model="popVisible1"
@@ -69,36 +63,29 @@
           <el-button slot="reference" class="gb-button" type="primary">Confirm Close</el-button>
         </el-popover>
       </div>
-      <el-dialog
-        title="Select Arrive Date"
-        :visible.sync="arrivedVisible"
-        top="5vh"
-        width="350px"
-        :lock-scroll="false"
-      >
-        <el-date-picker v-model="arrivedTime" type="date" placeholder="Select Arrive Date" value-format="yyyy-MM-dd" style="width:180px;" />
-        <el-button type="primary" @click="onConfirmArrivedTimeClicked">Confirm</el-button>
-      </el-dialog>
-      <el-dialog
-        title="Allocate Location"
-        :visible.sync="allocateVisible"
-        width="85%"
-        top="5vh"
-        :lock-scroll="false"
-      >
-        <receiving-allocate :master-order="masterOrder" :plt-data="pltData" :ctn-data="ctnData" @reloadOrder="reloadOrder" />
-      </el-dialog>
+    </el-dialog>
 
-      <el-dialog
-        title="Inventory"
-        :visible.sync="inventoryVisible"
-        width="85%"
-        top="5vh"
-        :lock-scroll="false"
-      >
-        <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" @reloadOrder="reloadOrder" />
-      </el-dialog>
-    </el-dialog></div>
+    <el-dialog
+      title="Select Arrive Date"
+      :visible.sync="arrivedVisible"
+      top="5vh"
+      width="350px"
+      :lock-scroll="false"
+    >
+      <el-date-picker v-model="arrivedTime" type="date" placeholder="Select Arrive Date" value-format="yyyy-MM-dd" style="width:180px;" />
+      <el-button type="primary" @click="onConfirmArrivedTimeClicked">Confirm</el-button>
+    </el-dialog>
+
+    <el-dialog
+      title="Inventory"
+      :visible.sync="inventoryVisible"
+      width="85%"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" @reloadOrder="reloadOrder" />
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -109,8 +96,6 @@ import { CloseOrder, OpenOrder } from '@/api/accounting'
 
 export default {
   components: {
-    'receiving-register': () => import('@/views/shareview/receiving/receiving-wo-register'),
-    'receiving-allocate': () => import('@/views/shareview/receiving/receiving-wo-allocate'),
     'receiving-inventory': () => import('@/views/shareview/receiving/receiving-wo-inventory')
   },
   props: {
@@ -124,8 +109,6 @@ export default {
   },
   data() {
     return {
-      registerVisible: false,
-      allocateVisible: false,
       inventoryVisible: false,
       arrivedVisible: false,
       closeVisible: false,

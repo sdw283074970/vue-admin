@@ -37,6 +37,7 @@ import { getReceivingOrders, createNewrReceivingOrder, getReceivingOrderInfo, up
 import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 
 export default {
+    name: 'accounting-receiving-index',
     data() {
         return {
             loading: true,
