@@ -358,3 +358,11 @@ export function getFilteredMasterOrders(filter) {
     data: filter
   })
 }
+
+export function deleteReceivingOrder(grandNumber) {
+  return request({
+    url: 'api/fba/fbamasterorder/?grandNumber=' + grandNumber,
+    method: 'delete'
+  })
+}
+

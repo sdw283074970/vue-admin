@@ -125,7 +125,8 @@ export default {
             type: 'success'
           });
         })
-      }
+      },
+
     },
     mounted() {
       getReceivingOrders().then(body => {

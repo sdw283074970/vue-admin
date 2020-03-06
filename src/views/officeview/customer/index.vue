@@ -114,7 +114,7 @@
         <template slot-scope="scope">
           <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
           <el-button @click="onLinkToUserClicked(scope.row.id)">Link to User</el-button>
-          <el-button disabled>Services</el-button>
+          <el-button @click="onServicesClicked(scope.row.id)">Services</el-button>
           <el-button @click="onInstructionsClicked(scope.row.id)">Instructions</el-button>
         </template>
       </el-table-column>
@@ -184,12 +184,16 @@
     <el-dialog title="Instruction Template" :visible.sync="instructionVisible" top="5vh" width="1400px">
       <instructions :templates="templates" :customer-id="customerId" @reloadTemplates="reloadTemplates" />
     </el-dialog>
+
+    <el-dialog title="Manage Services" :visible.sync="serviceVisible" top="5vh" width="1400px">
+      <services :services="services" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates } from '@/api/customer'
+import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates, getCustomerServices } from '@/api/customer'
 
 export default {
     data() {
@@ -208,11 +212,13 @@ export default {
             isEdit: false,
             customerId: 0,
             instructionVisible: false,
+            serviceVisible: false,
             linkForm: {
               id: 0,
               email: ''
             },
             templates: [],
+            services: [],
             form: {
               id : 0,
               name: '',
@@ -240,6 +246,7 @@ export default {
     },
     components: {
         "instructions": () => import('@/views/officeview/customer/instructions'),
+        "services": () => import('@/views/officeview/customer/services'),
     },
     watch:{
       search: function(val, oldVal){
@@ -370,6 +377,12 @@ export default {
         this.$message({
           message: 'Success',
           type: 'success'
+        })
+      },
+      onServicesClicked(id) {
+        this.serviceVisible = true
+        getCustomerServices(id).then(body => {
+          this.services = body.data
         })
       }
     },

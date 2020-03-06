@@ -69,3 +69,11 @@ export function deleteInstructionTemplate(id) {
     method: 'delete'
   })
 }
+
+export function getCustomerServices(id) {
+  return request({
+    url: 'api/chargingitemmanagement/?customerId=' + id,
+    method: 'get'
+  })
+}
+

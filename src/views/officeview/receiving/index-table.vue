@@ -22,7 +22,7 @@
       />
     </div>
     <div class="input-bar">
-      <generic-order-multiple-filters :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
+      <generic-order-multiple-filters ref="child" :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
     </div>
     <el-table
       ref="table"
@@ -239,6 +239,7 @@
               <el-dropdown-item @click.native="onEfilesClicked(scope.row.container)">eFiles</el-dropdown-item>
               <el-dropdown-item @click.native="editHandler(scope.row.id, scope.$index)">Edit</el-dropdown-item>
               <el-dropdown-item @click.native="woHandler(scope.row.id)">Details</el-dropdown-item>
+              <el-dropdown-item divided @click.native="onDeleteClicked(scope.row.grandNumber)">Delete</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -281,11 +282,25 @@
         @onCancelClicked="onCancelClicked"
       />
     </el-dialog>
+
+    <el-dialog
+      title="NOTICE"
+      :visible.sync="deleteVisible"
+      width="350px"
+      center
+    >
+      <span>WARNNING: This operation is unreversiable.</span>
+      <p>Are you sure?</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="deleteVisible = false">Cancel</el-button>
+        <el-button type="danger" @click="onDeleteConfirmed">Delete</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 /* eslint-disable vue/require-default-prop */
-import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo } from '@/api/receiving'
+import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, deleteReceivingOrder } from '@/api/receiving'
 
 export default {
   components: {
@@ -304,6 +319,8 @@ export default {
     return {
       tableHeight: window.innerHeight * 0.75,
       currentPage: 1,
+      deleteVisible: false,
+      grandNumber: '',
       pageSize: 20,
       search: '',
       customerCodeFilter: [],
@@ -374,6 +391,15 @@ export default {
   computed: {
     totalEntries() {
       return this.filteredData.length
+    },
+    filter() {
+      return {
+        status: this.$refs.child.status,
+        customerCodes: this.$refs.child.customerCodes,
+        invoiceStatus: this.$refs.child.invoiceStatus,
+        sortBy: this.$refs.child.sortBy,
+        isDesc: this.$refs.child.isDesc
+      }
     }
   },
   watch: {
@@ -489,6 +515,16 @@ export default {
     },
     onFilterFinish(filter) {
       this.$emit('onFilterFinish', filter)
+    },
+    onDeleteClicked(number) {
+      this.deleteVisible = true
+      this.grandNumber = number
+    },
+    onDeleteConfirmed() {
+      deleteReceivingOrder(this.grandNumber).then(() => {
+        this.deleteVisible = false
+        this.$emit('onFilterFinish', this.filter)
+      })
     }
   }
 }

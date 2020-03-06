@@ -71,8 +71,8 @@ export default {
   },
   data() {
     return {
-      sortBy: '',
-      isDesc: false,
+      sortBy: 'Id',
+      isDesc: true,
       status: [],
       invoiceStatus: [],
       customerCodes: [],

@@ -289,3 +289,10 @@ export function getFilteredShipOrders(filter) {
     data: filter
   })
 }
+
+export function deleteShippingOrder(id) {
+  return request({
+    url: 'api/fba/fbashiporder/?shipOrderId=' + id,
+    method: 'delete'
+  })
+}
