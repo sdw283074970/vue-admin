@@ -1,73 +1,38 @@
 <template>
   <div>
-    <el-form ref="form-required" :rules="rules" :model="template" label-width="150px">
-      <el-form-item label="Description" prop="description">
-        <el-input v-model="template.description" type="textarea" style="width:90%" maxlength="200" show-word-limit />
+    <el-form ref="form-required" :rules="rules" :model="service" label-width="150px">
+      <el-form-item label="Charging Type">
+        <el-select v-model="service.chargingType" placeholder="-- Please Select --">
+          <el-option
+            v-for="item in chargingTypes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label-width="550px" label="Is customer's instruction(visible to warehouse, office, customer)">
-        <el-switch
-          v-model="template.isInstruction"
-          style="margin-left:10px"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="Yes"
-          inactive-text="No"
-        />
+      <el-form-item label="Charging Name">
+        <el-input v-model="service.name" />
       </el-form-item>
-      <el-form-item label-width="550px" label="Is inner operation(visible to warehouse, office)">
-        <el-switch
-          v-model="template.isOperation"
-          style="margin-left:10px"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="Yes"
-          inactive-text="No"
-        />
+      <el-form-item label="Rate">
+        <el-input-number v-model="service.rate" :precision="2" :step="1" :min="0" />
       </el-form-item>
-      <el-form-item label-width="550px" label="Is charging item(visible to office only)">
-        <el-switch
-          v-model="template.isCharging"
-          style="margin-left:10px"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="Yes"
-          inactive-text="No"
-        />
+      <el-form-item label="UOM">
+        <el-select v-model="service.unit" placeholder="-- Please Select --">
+          <el-option
+            v-for="item in units"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label-width="550px" label="Is Apply To Master Order">
-        <el-switch
-          v-model="template.isApplyToMasterOrder"
-          style="margin-left:10px"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="Yes"
-          inactive-text="No"
-        />
-      </el-form-item>
-      <el-form-item label-width="550px" label="Is Apply To Ship Order">
-        <el-switch
-          v-model="template.isApplyToShipOrder"
-          style="margin-left:10px"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="Yes"
-          inactive-text="No"
-        />
-      </el-form-item>
-      <el-form-item label-width="550px" label="Is Apply To All Customer">
-        <el-switch
-          v-model="template.isApplyToAll"
-          :disabled="isEdit"
-          style="margin-left:10px"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="Yes"
-          inactive-text="No"
-        />
+      <el-form-item label="Description">
+        <el-input v-model="service.description" :autosize="{ minRows: 2, maxRows: 6}" type="textarea" />
       </el-form-item>
     </el-form>
     <div style="text-align:right;margin-right:7%">
-      <el-button v-if="!isEdit" type="primary" @click="onCreateClicked">Create</el-button>
+      <el-button v-if="!isEdit" type="primary" @click="onCreateClicked">Add</el-button>
       <el-button v-if="isEdit" type="primary" @click="onUpdateClicked">Update</el-button>
       <el-button @click="onCancelClicked">Cancel</el-button>
     </div>
@@ -81,14 +46,38 @@ import { createNewInstructionTemplate, updateInstructionTemplate } from '@/api/c
 
 export default {
   props: {
-      template: Object,
+      service: Object,
       customerId: Number,
       isEdit: Boolean
   },
   data(){
     return{
-        // isChargingItem: this.instruction.isChargingItem,
-        // isChargingItemLocal: false,
+        chargingTypes: [
+          {label: 'Receiving', value: 'receiving'},
+          {label: 'Operation', value: 'Operation'},
+          {label: 'Storage', value: 'Storage'},
+          {label: 'Shipping', value: 'Shipping'},
+          {label: 'Other', value: 'Other'}
+        ],
+        units: [
+          {label: 'CBM', value: 'CBM'},
+          {label: 'CONTAINER', value: 'CONTAINER'},
+          {label: 'CTNS', value: 'CTNS'},
+          {label: 'WAITING HOUR', value: 'WH'},
+          {label: 'WORK HOUR', value: 'HR'},
+          {label: 'CTNS', value: 'CTNS'},
+          {label: 'LABEL', value: 'LABEL'},
+          {label: 'PC', value: 'PC'},
+          {label: 'PLT', value: 'PLT'},
+          {label: 'PO', value: 'PO'},
+          {label: 'ORDER', value: 'ORDER'},
+          {label: 'OTHER', value: 'OTHER'},
+          {label: 'SET', value: 'SET'},
+          {label: 'SHIPMENT', value: 'SHIPMENT'},
+          {label: 'SKU', value: 'SKU'},
+          {label: 'STORAGE', value: 'STORAGE'},
+          {label: 'TRAILER', value: 'TRAILER'}
+        ],
         rules: {
           description: [
             { required: true, message: 'Please input description', trigger: 'change' }

@@ -74,8 +74,8 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="Services" :visible.sync="dialogVisible" top="10vh" width="800px" append-to-body>
-      <services-dialog :is-edit="isEdit" :template="template" :customer-id="customerId" @reloadTemplates="reloadTemplates" @closeDialog="closeDialog" />
+    <el-dialog title="Services" :visible.sync="dialogVisible" top="10vh" width="400px" append-to-body>
+      <services-dialog :is-edit="isEdit" :service="service" :customer-id="customerId" @reloadTemplates="reloadTemplates" @closeDialog="closeDialog" />
     </el-dialog>
   </div>
 </template>
@@ -97,16 +97,15 @@ export default {
     return {
         isEdit: false,
         dialogVisible: false,
-        template: {
-            id: 0,
-            description: '',
-            isInstruction: false,
-            isOperation: false,
-            isCharging: false,
-            isApplyToMasterOrder: false,
-            isApplyToShipOrder: false,
-            isApplyToAll: false
-        }
+        service: {
+          chargingType: '', 
+          customerId: 0,
+          description: '',
+          isApplyToAll: false,
+          name: '',
+          rate: 0,
+          unit: ''
+        },
     }
   },
   components: {
