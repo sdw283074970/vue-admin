@@ -77,3 +77,11 @@ export function getCustomerServices(id) {
   })
 }
 
+export function createNewService(data) {
+  return request({
+    url: 'api/chargingitemmanagement/',
+    method: 'post',
+    data: data
+  })
+}
+

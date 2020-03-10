@@ -42,7 +42,7 @@
 <script>
 /* eslint-disable */
 
-import { createNewInstructionTemplate, updateInstructionTemplate } from '@/api/customer'
+import { createNewService, updateInstructionTemplate  } from '@/api/customer'
 
 export default {
   props: {
@@ -65,7 +65,6 @@ export default {
           {label: 'CTNS', value: 'CTNS'},
           {label: 'WAITING HOUR', value: 'WH'},
           {label: 'WORK HOUR', value: 'HR'},
-          {label: 'CTNS', value: 'CTNS'},
           {label: 'LABEL', value: 'LABEL'},
           {label: 'PC', value: 'PC'},
           {label: 'PLT', value: 'PLT'},
@@ -87,13 +86,13 @@ export default {
   },
   methods:{
     onCreateClicked() {
-      createNewInstructionTemplate(this.customerId, this.template).then(() => {
-        this.$emit('reloadTemplates')
+      createNewService(this.service).then(() => {
+        this.$emit('reloadServices')
       })
     },
     onUpdateClicked() {
       updateInstructionTemplate(this.template.id, this.template).then(() => {
-        this.$emit('reloadTemplates')
+        this.$emit('reloadServices')
       })
     },
     onCancelClicked() {

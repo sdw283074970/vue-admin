@@ -75,7 +75,7 @@
     </el-table>
 
     <el-dialog title="Services" :visible.sync="dialogVisible" top="10vh" width="400px" append-to-body>
-      <services-dialog :is-edit="isEdit" :service="service" :customer-id="customerId" @reloadTemplates="reloadTemplates" @closeDialog="closeDialog" />
+      <services-dialog :is-edit="isEdit" :service="service" :customer-id="customerId" @reloadServices="reloadServices" @closeDialog="closeDialog" />
     </el-dialog>
   </div>
 </template>
@@ -116,18 +116,18 @@ export default {
         return date.substring(0,10);
     },
     onNewClicked() {
-        this.dialogVisible = true,
-        this.isEdit = false,
-        this.template = {
-            id: 0,
-            description: '',
-            isInstruction: false,
-            isOperation: false,
-            isCharging: false,
-            isApplyToMasterOrder: false,
-            isApplyToShipOrder: false,
-            isApplyToAll: false
+        this.isEdit = false
+        let id = this.customerId
+        this.service = {
+          chargingType: '', 
+          customerId: id,
+          description: '',
+          isApplyToAll: false,
+          name: '',
+          rate: 0,
+          unit: ''
         }
+        this.dialogVisible = true
     },
     onEditClicked(id) {
         this.isEdit = true,
@@ -137,9 +137,9 @@ export default {
             this.template.isApplyToAll = false
         })
     },
-    reloadTemplates() {
+    reloadServices() {
       this.dialogVisible = false
-      this.$emit('reloadTemplates')
+      this.$emit('reloadServices')
     },
     closeDialog() {
       this.dialogVisible = false

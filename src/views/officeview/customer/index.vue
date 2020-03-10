@@ -186,7 +186,7 @@
     </el-dialog>
 
     <el-dialog title="Manage Services" :visible.sync="serviceVisible" top="5vh" width="1400px">
-      <services :services="services" />
+      <services :services="services" :customer-id="customerId" @reloadServices="reloadServices" />
     </el-dialog>
   </div>
 </template>
@@ -373,16 +373,26 @@ export default {
       reloadTemplates() {
         getInstructionTemplates(this.customerId).then(body => {
           this.templates = body.data
-        })
-        this.$message({
-          message: 'Success',
-          type: 'success'
+          this.$message({
+            message: 'Success',
+            type: 'success'
+          })
         })
       },
       onServicesClicked(id) {
         this.serviceVisible = true
+        this.customerId = id
         getCustomerServices(id).then(body => {
           this.services = body.data
+        })
+      },
+      reloadServices() {
+        getCustomerServices(this.customerId).then(body => {
+          this.services = body.data
+          this.$message({
+            message: 'Success',
+            type: 'success'
+          })
         })
       }
     },
