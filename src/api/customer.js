@@ -85,3 +85,25 @@ export function createNewService(data) {
   })
 }
 
+export function getService(id) {
+  return request({
+    url: 'api/chargingitemmanagement/?itemId=' + id,
+    method: 'get'
+  })
+}
+
+export function updateService(id, data) {
+  return request({
+    url: 'api/chargingitemmanagement/?itemId=' + id,
+    method: 'put',
+    data: data
+  })
+}
+
+export function deleteService(id) {
+  return request({
+    url: 'api/chargingitemmanagement/?itemId=' + id,
+    method: 'delete'
+  })
+}
+

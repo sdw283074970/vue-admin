@@ -83,7 +83,7 @@
 <script>
 /* eslint-disable */
 import config from '@/scripts/global'
-import { getInstructionTemplate, deleteInstructionTemplate } from '@/api/customer'
+import { getService, deleteService } from '@/api/customer'
 
 const baseURL = config.baseURL
 
@@ -130,11 +130,12 @@ export default {
         this.dialogVisible = true
     },
     onEditClicked(id) {
-        this.isEdit = true,
-        getInstructionTemplate(id).then(body => {
-            this.template = body.data
+        this.isEdit = true
+        let cid = this.customerId
+        getService(id).then(body => {
+            this.service = body.data
+            this.service.customerId = cid
             this.dialogVisible = true
-            this.template.isApplyToAll = false
         })
     },
     reloadServices() {
@@ -145,8 +146,8 @@ export default {
       this.dialogVisible = false
     },
     onDeleteClicked(id) {
-      deleteInstructionTemplate(id).then(() => {
-        this.$emit('reloadTemplates')
+      deleteService(id).then(() => {
+        this.$emit('reloadServices')
       })
     }
   },

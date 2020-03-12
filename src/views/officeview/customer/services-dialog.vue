@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form ref="form-required" :rules="rules" :model="service" label-width="150px">
-      <el-form-item label="Charging Type">
+      <el-form-item label="Charging Type" prop="chargingType">
         <el-select v-model="service.chargingType" placeholder="-- Please Select --">
           <el-option
             v-for="item in chargingTypes"
@@ -11,13 +11,13 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="Charging Name">
+      <el-form-item label="Charging Name" prop="name">
         <el-input v-model="service.name" />
       </el-form-item>
-      <el-form-item label="Rate">
+      <el-form-item label="Rate" prop="rate">
         <el-input-number v-model="service.rate" :precision="2" :step="1" :min="0" />
       </el-form-item>
-      <el-form-item label="UOM">
+      <el-form-item label="UOM" prop="unit">
         <el-select v-model="service.unit" placeholder="-- Please Select --">
           <el-option
             v-for="item in units"
@@ -42,7 +42,7 @@
 <script>
 /* eslint-disable */
 
-import { createNewService, updateInstructionTemplate  } from '@/api/customer'
+import { createNewService, updateService  } from '@/api/customer'
 
 export default {
   props: {
@@ -78,20 +78,37 @@ export default {
           {label: 'TRAILER', value: 'TRAILER'}
         ],
         rules: {
-          description: [
-            { required: true, message: 'Please input description', trigger: 'change' }
-          ]
+          name: [
+            { required: true, message: 'Please input name', trigger: 'change' }
+          ],
+          chargingType: [
+            { required: true, message: 'Please select type', trigger: 'change' }
+          ],
+          rate: [
+            { required: true, message: 'Please input rate', trigger: 'change' }
+          ],
+          unit: [
+            { required: true, message: 'Please select unit', trigger: 'change' }
+          ],
         }
     }
   },
   methods:{
     onCreateClicked() {
-      createNewService(this.service).then(() => {
-        this.$emit('reloadServices')
+      this.$$refs['form-required'].validate((valid) => {
+        if (valid)
+        {
+          createNewService(this.service).then(() => {
+            this.$emit('reloadServices')
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
       })
     },
     onUpdateClicked() {
-      updateInstructionTemplate(this.template.id, this.template).then(() => {
+      updateService(this.service.id, this.service).then(() => {
         this.$emit('reloadServices')
       })
     },
