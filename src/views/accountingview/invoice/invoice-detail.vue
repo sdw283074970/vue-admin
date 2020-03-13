@@ -1,9 +1,9 @@
 <template>
   <div>
     <h2>Invoice Detail</h2>
-    <!-- <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onNewClicked">New</el-button>
-      <el-popover
+    <div style="margin-bottom:10px">
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onAddClicked">Add Charging Item</el-button>
+      <!-- <el-popover
         v-model="popVisible"
         placement="top"
         width="380"
@@ -15,8 +15,8 @@
           <el-button type="primary" size="mini" @click="onResetClicked">Yes</el-button>
         </div>
         <el-button slot="reference" class="gb-button" type="primary">Reset Instruction</el-button>
-      </el-popover>
-    </div> -->
+      </el-popover> -->
+    </div>
     <el-table
       ref="table-instructions"
       :data="invoices"
@@ -163,26 +163,21 @@
         </template> -->
       </el-table-column>
     </el-table>
-    <!-- <el-dialog
-      title="Instruction & Charging"
-      :visible.sync="instructionVisible"
-      width="40%"
+    <el-dialog
+      title="Charging"
+      :visible.sync="chargingVisible"
+      width="500px"
       top="5vh"
       :lock-scroll="false"
     >
-      <picking-wo-instructions-dialog
-        :instruction="instruction"
-        :is-result="isResult"
+      <invoice-dialog
         :is-edit="isEdit"
-        :step="step"
-        :reference="masterOrder.container"
+        :reference="reference"
         :order-type="orderType"
-        @onUpdateSucceed="onUpdateSucceed"
-        @onCancelClicked="onCancelClicked"
-        @onCreatedSucceed="onCreatedSucceed"
-        @onResultSucceed="onResultSucceed"
+        @reloadOrder="reloadOrder"
+        @closeDialog="closeDialog"
       />
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -197,8 +192,13 @@ export default {
     invoiceStatus: String,
     invoices: Array
   },
+  components: {
+    'invoice-dialog': () => import('@/views/accountingview/invoice/invoice-dialog')
+  },
   data() {
       return {
+        isEdit: false,
+        chargingVisible: false
       };
   },
   methods:{
@@ -206,6 +206,15 @@ export default {
       updateInvoiceStatus(id, type).then(() => {
         this.$emit('reloadOrder')
       })
+    },
+    onAddClicked() {
+      this.chargingVisible = true
+    },
+    reloadOrder() {
+      this.$emit('reloadOrder')
+    },
+    closeDialog() {
+      this.chargingVisible = false
     }
   },
   mounted() {

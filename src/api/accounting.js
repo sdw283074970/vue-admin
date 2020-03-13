@@ -36,3 +36,39 @@ export function markOrderShipped(id, date) {
     method: 'put'
   })
 }
+
+export function getQuantityInfo(reference, orderType) {
+  return request({
+    url: 'api/FBAInvoiceDetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + orderType + '&ajaxStep=0',
+    method: 'get'
+  })
+}
+
+export function getChargingType(reference, orderType) {
+  return request({
+    url: 'api/FBAInvoiceDetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + orderType + '&ajaxStep=1',
+    method: 'get'
+  })
+}
+
+export function getChargingItemNames(reference, orderType, type) {
+  return request({
+    url: 'api/FBAInvoiceDetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + orderType + '&chargingType=' + encodeURIComponent(type),
+    method: 'get'
+  })
+}
+
+export function getChargingDetailByName(reference, orderType, name) {
+  return request({
+    url: 'api/FBAInvoiceDetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + orderType + '&itemName=' + encodeURIComponent(name),
+    method: 'get'
+  })
+}
+
+export function createNewChargingDetail(reference, orderType, data) {
+  return request({
+    url: 'api/fbainvoicedetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + orderType,
+    method: 'post',
+    data: data
+  })
+}

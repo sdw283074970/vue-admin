@@ -95,7 +95,7 @@ export default {
   },
   methods:{
     onCreateClicked() {
-      this.$$refs['form-required'].validate((valid) => {
+      this.$refs['form-required'].validate((valid) => {
         if (valid)
         {
           createNewService(this.service).then(() => {
