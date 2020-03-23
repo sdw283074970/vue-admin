@@ -2,8 +2,8 @@
   <div>
     <h2>Invoice Detail</h2>
     <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onAddClicked">Add Charging</el-button>
-      <el-button class="gb-button" type="primary" icon="el-icon-download" disabled>Export Report</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus=='Closed'" @click="onAddClicked">Add Charging</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-download" :disabled="invoiceStatus!='Closed'">Export Report</el-button>
       <!-- <el-popover
         v-model="popVisible"
         placement="top"
@@ -22,6 +22,7 @@
       ref="table-instructions"
       :data="invoices"
       show-summary
+      :summary-method="getSummaries"
       stripe
       border
     >
@@ -157,8 +158,8 @@
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
-              <el-dropdown-item divided @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
+              <el-dropdown-item :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
+              <el-dropdown-item divided :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -246,7 +247,45 @@ export default {
       deleteChargingDetail(id).then(() => {
         this.$emit('reloadOrder')
       })
-    }
+    },
+      getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = 'Sum';
+            return;
+          }
+
+          if (index === 4)
+          {
+
+          }
+
+          if (index === 7 || index === 12 || index === 13 || index === 11)
+          {
+            sums[index] = 'N/A'
+            return
+          }
+
+          const values = data.map(item => Number(item[column.property]));
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] = '$ ' + sums[index].toFixed(2);
+          } else {
+            sums[index] = 'N/A';
+          }
+        });
+
+        return sums;
+      }
   },
   mounted() {
 
