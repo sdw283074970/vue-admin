@@ -2,7 +2,8 @@
   <div>
     <h2>Invoice Detail</h2>
     <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onAddClicked">Add Charging Item</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" @click="onAddClicked">Add Charging</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-download" disabled>Export Report</el-button>
       <!-- <el-popover
         v-model="popVisible"
         placement="top"
@@ -20,6 +21,7 @@
     <el-table
       ref="table-instructions"
       :data="invoices"
+      show-summary
       stripe
       border
     >
@@ -149,24 +151,23 @@
         label="operation"
         min-width="25%"
       >
-        <!-- <template slot-scope="scope">
+        <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
-              <el-dropdown-item :disabled="!(scope.row.handlingStatus=='Pending'||scope.row.handlingStatus=='Updated')" @click.native="onResultClicked(scope.row.id)">Result</el-dropdown-item>
-              <el-dropdown-item divided @click.native="deleteHandler(scope.row.id)">Delete</el-dropdown-item>
+              <el-dropdown-item divided @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </template> -->
+        </template>
       </el-table-column>
     </el-table>
     <el-dialog
       title="Charging"
       :visible.sync="chargingVisible"
-      width="500px"
+      width="800px"
       top="5vh"
       :lock-scroll="false"
     >
@@ -174,6 +175,7 @@
         :is-edit="isEdit"
         :reference="reference"
         :order-type="orderType"
+        :service="service"
         @reloadOrder="reloadOrder"
         @closeDialog="closeDialog"
       />
@@ -183,7 +185,7 @@
 
 <script>
 /* eslint-disable */
-import { updateInvoiceStatus } from '@/api/accounting'
+import { updateInvoiceStatus, getChargingInfo, deleteChargingDetail } from '@/api/accounting'
 
 export default {
   props: {
@@ -198,7 +200,21 @@ export default {
   data() {
       return {
         isEdit: false,
-        chargingVisible: false
+        chargingVisible: false,
+        service: {
+            activity: '',
+            amount: 0,
+            chargingType: '',
+            cost: 0,
+            dateOfCost: '',
+            inoviceType: '',
+            discount: 1,
+            memo: '',
+            quantity: 0,
+            rate: 0,
+            unit: '',
+            description: ''
+        },
       };
   },
   methods:{
@@ -209,12 +225,27 @@ export default {
     },
     onAddClicked() {
       this.chargingVisible = true
+      this.isEdit = false
     },
     reloadOrder() {
+      this.chargingVisible = false
       this.$emit('reloadOrder')
     },
     closeDialog() {
       this.chargingVisible = false
+    },
+    onUpdateClicked(id) {
+      this.chargingVisible = true
+      this.isEdit = true
+      getChargingInfo(id).then(body => {
+        this.service = body.data
+        this.service.id = id
+      })
+    },
+    onDeleteClicked(id) {
+      deleteChargingDetail(id).then(() => {
+        this.$emit('reloadOrder')
+      })
     }
   },
   mounted() {

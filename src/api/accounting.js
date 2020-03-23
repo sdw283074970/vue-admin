@@ -72,3 +72,26 @@ export function createNewChargingDetail(reference, orderType, data) {
     data: data
   })
 }
+
+export function getChargingInfo(id) {
+  return request({
+    url: 'api/fbainvoicedetail/?invoiceDetailId=' + id,
+    method: 'get'
+  })
+}
+
+export function updateChargingDetail(id, data) {
+  return request({
+    url: 'api/fbainvoicedetail/?invoiceDetailId=' + id,
+    method: 'put',
+    data: data
+  })
+}
+
+export function deleteChargingDetail(id) {
+  return request({
+    url: 'api/invoicedetail/' + id,
+    method: 'delete'
+  })
+}
+
