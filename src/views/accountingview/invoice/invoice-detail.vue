@@ -2,8 +2,8 @@
   <div>
     <h2>Invoice Detail</h2>
     <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus=='Closed'" @click="onAddClicked">Add Charging</el-button>
-      <el-button class="gb-button" type="primary" icon="el-icon-download" :disabled="invoiceStatus!='Closed'">Export Report</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus=='Closed'" :loading="loading" @click="onAddClicked">Add Charging</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-download" :disabled="invoiceStatus!='Closed'" :loading="loading" @click="downloadInvoiceHandler">Export Report</el-button>
       <!-- <el-popover
         v-model="popVisible"
         placement="top"
@@ -186,7 +186,8 @@
 
 <script>
 /* eslint-disable */
-import { updateInvoiceStatus, getChargingInfo, deleteChargingDetail } from '@/api/accounting'
+import { updateInvoiceStatus, getChargingInfo, deleteChargingDetail, generateInvoice } from '@/api/accounting'
+import { downloadFile } from '@/api/receiving'
 
 export default {
   props: {
@@ -202,6 +203,7 @@ export default {
       return {
         isEdit: false,
         chargingVisible: false,
+        loading: false,
         service: {
             activity: '',
             amount: 0,
@@ -248,44 +250,64 @@ export default {
         this.$emit('reloadOrder')
       })
     },
-      getSummaries(param) {
-        const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          if (index === 0) {
-            sums[index] = 'Sum';
-            return;
-          }
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = 'Sum';
+          return
+        }
 
-          if (index === 4)
-          {
-
-          }
-
-          if (index === 7 || index === 12 || index === 13 || index === 11)
-          {
-            sums[index] = 'N/A'
-            return
-          }
-
+        if (index === 4)
+        {
           const values = data.map(item => Number(item[column.property]));
           if (!values.every(value => isNaN(value))) {
             sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
+              return prev + curr;
             }, 0);
-            sums[index] = '$ ' + sums[index].toFixed(2);
-          } else {
-            sums[index] = 'N/A';
+            sums[index] = sums[index].toFixed(2)
           }
-        });
+          return
+        }
 
-        return sums;
-      }
+        if (index === 7 || index === 12 || index === 13 || index === 11)
+        {
+          sums[index] = 'N/A'
+          return
+        }
+
+        const values = data.map(item => Number(item[column.property]));
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[index] = '$ ' + sums[index].toFixed(2);
+        } else {
+          sums[index] = 'N/A';
+        }
+      });
+
+      return sums;
+    },
+    downloadInvoiceHandler() {
+      this.loading = true
+      generateInvoice(this.reference, this.orderType).then(body => {
+        this.$message({
+          message: 'Downloading...',
+          type: 'success'
+        })
+        downloadFile(body.data, 'Invoice')
+        this.loading = false
+      }).catch(error => {
+        this.loading = false
+      })
+    }
   },
   mounted() {
 

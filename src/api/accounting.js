@@ -95,3 +95,9 @@ export function deleteChargingDetail(id) {
   })
 }
 
+export function generateInvoice(reference, type) {
+  return request({
+    url: 'api/fba/FBAReportDonwload/?reference=' + reference + '&invoicetype=' + type,
+    method: 'get'
+  })
+}

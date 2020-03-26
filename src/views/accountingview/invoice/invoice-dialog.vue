@@ -12,6 +12,7 @@
           <el-form-item label="Charging Type" prop="chargingType">
             <el-select
               v-model="service.chargingType"
+              filterable
               placeholder="-- Please Select --"
               @change="onChargingTypeChange"
             >
@@ -26,6 +27,7 @@
           <el-form-item label="Charging Item" prop="activity">
             <el-select
               v-model="service.activity"
+              filterable
               placeholder="-- Please Select --"
               @change="onChargingNameChange"
             >
@@ -46,7 +48,9 @@
             <el-input v-model="service.cost" />
           </el-form-item>
           <el-form-item label="Rate" prop="rate">
-            <el-input v-model="service.rate" @change="onChargingInputChange" />
+            <el-input v-model="service.rate" @change="onChargingInputChange">
+              <template slot="append">{{ '/' + service.unit }}</template>
+            </el-input>
           </el-form-item>
           <el-form-item label="Quantity" prop="quantity">
             <el-input v-model="service.quantity" @change="onChargingInputChange" />
@@ -163,6 +167,7 @@ export default {
       getChargingDetailByName(this.reference, this.orderType, value).then(body => {
           this.service.rate = body.data.rate
           this.service.unit = body.data.unit
+          this.service.quantity = 0
           this.service.description = body.data.description
           this.onChargingInputChange()
       })
