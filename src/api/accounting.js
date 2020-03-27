@@ -101,3 +101,10 @@ export function generateInvoice(reference, type) {
     method: 'get'
   })
 }
+
+export function generateInvoiceByCustomerCode(code, start, end, show) {
+  return request({
+    url: 'api/fba/fbaindex/?customerCode=' + code + '&startDate=' + start + '&closeDate=' + end + '&ifShowUnclosed=' + show,
+    method: 'get'
+  })
+}
