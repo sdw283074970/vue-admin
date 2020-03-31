@@ -60,7 +60,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.fee + ' ' + scope.row.currency + '/' + scope.row.timeUnit }}</font>
+          <font>{{ scope.row.fee + ' ' + storageTemp.currency + '/' + storageTemp.chargePeriod }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -82,7 +82,7 @@
       </el-table-column>
     </el-table>
     <el-dialog :title="storageTemp.customerCode + ' Charging Ladder'" :visible.sync="detailDialogVisible" top="10vh" width="400px" append-to-body>
-      <storage-details-dialog :storage-temp="storageTemp" :temp-details="tempDetails" :is-edit="isEdit" :ladder="ladder" @reloadStorage="reloadStorage" @closeDialog="closeDialog" />
+      <storage-details-dialog :storage-temp="storageTemp" :temp-details="tempDetails" :is-edit="isEdit" :ladder="ladder" @reloadStorageDetails="reloadStorageDetails" @closeDialog="closeDialog" />
     </el-dialog>
   </div>
 </template>
@@ -90,7 +90,7 @@
 <script>
 /* eslint-disable */
 import config from '@/scripts/global'
-import { getStorageTemp, deleteStorageTemp } from '@/api/customer'
+import { deleteStorageDetail } from '@/api/customer'
 
 const baseURL = config.baseURL
 
@@ -156,16 +156,16 @@ export default {
     onEditClicked(id) {
         this.isEdit = true
     },
-    reloadStorage() {
+    reloadStorageDetails() {
       this.detailDialogVisible = false
-      this.$emit('reloadStorage')
+      this.$emit('reloadStorageDetails')
     },
     closeDialog() {
       this.detailDialogVisible = false
     },
     onDeleteClicked(id) {
-      deleteStorageTemp(id).then(() => {
-        this.$emit('reloadStorage')
+      deleteStorageDetail(id).then(() => {
+        this.$emit('reloadStorageDetails')
       })
     },
     onBackClicked() {

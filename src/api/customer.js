@@ -148,3 +148,18 @@ export function getTempDetails(id) {
     method: 'get'
   })
 }
+
+export function createNewLadder(id, from, to, fee) {
+  return request({
+    url: 'api/fba/chargemethod/?templateId=' + id + '&from=' + from + '&to=' + to + '&fee=' + fee,
+    method: 'post'
+  })
+}
+
+export function deleteStorageDetail(id) {
+  return request({
+    url: 'api/fba/chargemethod/?methodId=' + id,
+    method: 'delete'
+  })
+}
+

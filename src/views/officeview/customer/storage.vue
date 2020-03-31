@@ -65,7 +65,7 @@
     </el-dialog>
 
     <el-dialog title="Storage Template Details" :visible.sync="detailVisible" top="10vh" width="900px" append-to-body>
-      <storage-details :storage-temp="storageTemp" :temp-details="tempDetails" :customer-id="customerId" @reloadStorage="reloadStorage" @closeDetailOnly="closeDetailOnly" />
+      <storage-details :storage-temp="storageTemp" :temp-details="tempDetails" :customer-id="customerId" @reloadStorageDetails="reloadStorageDetails" @closeDetailOnly="closeDetailOnly" />
     </el-dialog>
   </div>
 </template>
@@ -153,6 +153,16 @@ export default {
       deleteStorageTemp(id).then(() => {
         this.$emit('reloadStorage')
       })
+    },
+    reloadStorageDetails() {
+      getTempDetails(this.storageTemp.id).then(body => {
+          this.tempDetails = body.data
+          this.detailVisible = true
+          this.$message({
+            message: 'Success',
+            type: 'success'
+          })
+      }) 
     }
   },
   mounted() {

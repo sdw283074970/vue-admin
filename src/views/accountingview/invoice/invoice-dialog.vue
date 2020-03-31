@@ -92,6 +92,18 @@ export default {
       service: Object
   },
   data(){
+    const validatePrice = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('This filed is required'))
+      }
+      value = Number(value)
+      if (typeof value === 'number' && !isNaN(value)) {
+        callback()
+      } else {
+        callback(new Error('Please enter valid number'))
+      }
+    }
+
     return{
         originalPallets: 0,
         pallets: 0,
@@ -112,16 +124,16 @@ export default {
             { required: true, message: 'Please input cost', trigger: 'change' }
           ],
           rate: [
-            { required: true, message: 'Please input rate', trigger: 'change' }
+            { validator: validatePrice, trigger: 'change'}
           ],
           unit: [
             { required: true, message: 'Please select unit', trigger: 'change' }
           ],
           quantity: [
-            { required: true, message: 'Please input quantity', trigger: 'change' }
+            { validator: validatePrice, trigger: 'change'}
           ],
           amount: [
-            { required: true, message: 'Please input amount', trigger: 'change' }
+            { validator: validatePrice, trigger: 'change'}
           ],
           discount: [
             { required: true, message: 'Please input discount', trigger: 'change' }

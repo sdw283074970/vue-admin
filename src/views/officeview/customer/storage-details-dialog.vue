@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ ladder.from }}
     <el-form ref="form-required" :rules="rules" :model="ladder" label-width="150px">
       <el-form-item label="From" prop="from">
         <el-input v-model.number="ladder.from" controls-position="right" disabled>
@@ -12,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="Fee" prop="fee">
-        <el-input v-model.number="ladder.fee">
+        <el-input v-model="ladder.fee">
           <template slot="append">{{ storageTemp.currency + '/' + storageTemp.chargePeriod }}</template>
         </el-input>
       </el-form-item>
@@ -27,7 +28,7 @@
 
 <script>
 /* eslint-disable */
-
+// import { validators, validateNumber } from '@/scripts/validator'
 import { createNewLadder, updateLadder  } from '@/api/customer'
 
 export default {
@@ -40,12 +41,33 @@ export default {
   },
   data(){
     const validateTo = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('This filed is required'))
+      }
+      value = Number(value)
+      if (typeof value === 'number' && !isNaN(value)) {
         if (value < this.ladder.from) {
-        callback(new Error('Cannot be smaller than FROM value'))
+          callback(new Error('Cannot be smaller than FROM value'))
         } else {
-        callback()
+          callback()
         }
+      } else {
+        callback(new Error('Please enter valid number'))
+      }
     }
+
+    const validatePrice = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('This filed is required'))
+      }
+      value = Number(value)
+      if (typeof value === 'number' && !isNaN(value)) {
+        callback()
+      } else {
+        callback(new Error('Please enter valid number'))
+      }
+    }
+
     return{
         chargePeriods: [
           {label: 'Day', value: 'Day'},
@@ -59,13 +81,10 @@ export default {
         ],
         rules: {
           to: [
-            { required: true, message: 'This filed is required', trigger: 'change' },
-            { type: 'number', message: 'This filed must be number', trigger: 'change' },
             { validator: validateTo, trigger: 'change'}
           ],
           fee: [
-            { required: true, message: 'This filed is required', trigger: 'change' },
-            { type: 'number', message: 'This filed must be number'}
+            { validator: validatePrice, trigger: 'change'}
           ]
         }
     }
@@ -75,8 +94,8 @@ export default {
       this.$refs['form-required'].validate((valid) => {
         if (valid)
         {
-          createNewStorageTemp(this.storageTemp.templateName, this.storageTemp.customerCode, this.storageTemp.chargePeriod, this.storageTemp.currency).then(() => {
-            this.$emit('reloadStorage')
+          createNewLadder(this.storageTemp.id, this.ladder.from, this.ladder.to, this.ladder.fee).then(() => {
+            this.$emit('reloadStorageDetails')
           })
         } else {
           console.log('error submit!!');
@@ -86,7 +105,7 @@ export default {
     },
     onUpdateClicked() {
       updateStorageTemp(this.storageTemp.id, this.storageTemp.templateName, this.storageTemp.customerCode, this.storageTemp.chargePeriod, this.storageTemp.currency).then(() => {
-        this.$emit('reloadStorage')
+        this.$emit('reloadStorageDetails')
       })
     },
     onCancelClicked() {
