@@ -2,7 +2,7 @@
   <div class="gb-maincontainer">
     <h1>Expenses Reports</h1>
     <el-collapse v-model="activeNames">
-      <el-collapse-item title="Export Operation Charging Report" name="1">
+      <el-collapse-item title="Export Operation Expenses Report" name="1">
         <el-form ref="form-required" :rules="rules" :model="queryData" label-width="150px">
           <el-row type="flex" class="row-bg">
             <el-col :span="4">
@@ -48,7 +48,7 @@
           </el-row>
         </el-form>
       </el-collapse-item>
-      <el-collapse-item title="Comming Soon" name="2" />
+      <el-collapse-item title="Export Storage Expenses Report" name="2" />
       <el-collapse-item title="Comming Soon" name="3" />
       <el-collapse-item title="Comming Soon" name="4" />
       <el-collapse-item title="Comming Soon" name="5" />

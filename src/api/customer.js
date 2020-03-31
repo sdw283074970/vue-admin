@@ -107,3 +107,44 @@ export function deleteService(id) {
   })
 }
 
+export function getCustomerStoragePriceTable(id) {
+  return request({
+    url: 'api/fba/chargetemplate/?customerId=' + id,
+    method: 'get'
+  })
+}
+
+export function createNewStorageTemp(name, code, unit, currency) {
+  return request({
+    url: 'api/fba/chargetemplate/?templateName=' + name + '&customer=' + code + '&timeunit=' + unit + '&currency=' + currency,
+    method: 'post'
+  })
+}
+
+export function getStorageTemp(id) {
+  return request({
+    url: 'api/fba/chargetemplate/?storageTempId=' + id,
+    method: 'get'
+  })
+}
+
+export function updateStorageTemp(id, name, code, unit, currency) {
+  return request({
+    url: 'api/fba/chargetemplate/?storageTempId=' + id + '&templateName=' + name + '&customer=' + code + '&timeunit=' + unit + '&currency=' + currency,
+    method: 'put'
+  })
+}
+
+export function deleteStorageTemp(id) {
+  return request({
+    url: 'api/fba/chargetemplate/?templateId=' + id,
+    method: 'delete'
+  })
+}
+
+export function getTempDetails(id) {
+  return request({
+    url: 'api/fba/chargemethod/?templateId=' + id,
+    method: 'get'
+  })
+}

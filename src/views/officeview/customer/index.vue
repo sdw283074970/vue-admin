@@ -34,7 +34,7 @@
         label="Code"
         :column-key="'code'"
         :filters="customerCodeFilter"
-        width="140"
+        width="130"
       />
       <el-table-column
         prop="processingCtns"
@@ -60,7 +60,7 @@
         prop="instockCtns"
         label="In-stock Ctns"
         align="center"
-        width="120"
+        width="110"
       >
         <template slot-scope="scope">
           <font>{{ scope.row.instockCtns===0?'-':scope.row.instockCtns }}</font>
@@ -70,7 +70,7 @@
         prop="instockPlts"
         label="In-stock Plts"
         align="center"
-        width="120"
+        width="105"
       >
         <template slot-scope="scope">
           <font>{{ scope.row.instockPlts===0?'-':scope.row.instockPlts }}</font>
@@ -114,8 +114,9 @@
         <template slot-scope="scope">
           <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
           <el-button @click="onLinkToUserClicked(scope.row.id)">Link to User</el-button>
-          <el-button @click="onServicesClicked(scope.row.id)">Services</el-button>
           <el-button @click="onInstructionsClicked(scope.row.id)">Instructions</el-button>
+          <el-button @click="onServicesClicked(scope.row.id)">Services</el-button>
+          <el-button @click="onStorageClicked(scope.row.id, scope.row.customerCode)">Storage</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -188,12 +189,16 @@
     <el-dialog title="Manage Services" :visible.sync="serviceVisible" top="5vh" width="1400px">
       <services :services="services" :customer-id="customerId" @reloadServices="reloadServices" />
     </el-dialog>
+
+    <el-dialog title="Manage Storage Charging Template" :visible.sync="storageVisible" top="5vh" width="800px">
+      <storage :storage-price-table="storagePriceTable" :customer-id="customerId" :customer-code="customerCode" @reloadStorage="reloadStorage" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates, getCustomerServices } from '@/api/customer'
+import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates, getCustomerServices, getCustomerStoragePriceTable } from '@/api/customer'
 
 export default {
     data() {
@@ -202,6 +207,7 @@ export default {
             filteredData: [],
             totalEntries: 0,
             currentPage: 1,
+            customerCode: '',
             pageSize: 20,
             search: '',
             editVisible : false,
@@ -213,12 +219,14 @@ export default {
             customerId: 0,
             instructionVisible: false,
             serviceVisible: false,
+            storageVisible: false,
             linkForm: {
               id: 0,
               email: ''
             },
             templates: [],
             services: [],
+            storagePriceTable: [],
             form: {
               id : 0,
               name: '',
@@ -247,6 +255,7 @@ export default {
     components: {
         "instructions": () => import('@/views/officeview/customer/instructions'),
         "services": () => import('@/views/officeview/customer/services'),
+        "storage": () => import('@/views/officeview/customer/storage'),
     },
     watch:{
       search: function(val, oldVal){
@@ -370,6 +379,14 @@ export default {
           this.templates = body.data
         })
       },
+      onStorageClicked(id, code) {
+        this.storageVisible = true
+        this.customerId = id
+        this.customerCode = code
+        getCustomerStoragePriceTable(id).then(body => {
+          this.storagePriceTable = body.data
+        })
+      },
       reloadTemplates() {
         getInstructionTemplates(this.customerId).then(body => {
           this.templates = body.data
@@ -389,6 +406,15 @@ export default {
       reloadServices() {
         getCustomerServices(this.customerId).then(body => {
           this.services = body.data
+          this.$message({
+            message: 'Success',
+            type: 'success'
+          })
+        })
+      },
+      reloadStorage() {
+        getCustomerStoragePriceTable(this.customerId).then(body => {
+          this.storagePriceTable = body.data
           this.$message({
             message: 'Success',
             type: 'success'

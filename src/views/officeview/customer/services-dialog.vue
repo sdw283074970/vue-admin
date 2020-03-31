@@ -53,7 +53,7 @@ export default {
   data(){
     return{
         chargingTypes: [
-          {label: 'Receiving', value: 'receiving'},
+          {label: 'Receiving', value: 'Receiving'},
           {label: 'Operation', value: 'Operation'},
           {label: 'Storage', value: 'Storage'},
           {label: 'Shipping', value: 'Shipping'},
