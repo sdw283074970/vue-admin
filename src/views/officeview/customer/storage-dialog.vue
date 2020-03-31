@@ -1,5 +1,8 @@
 <template>
   <div>
+    <p>
+      {{ storageTemp }}
+    </p>
     <el-form ref="form-required" :rules="rules" :model="storageTemp" label-width="150px">
       <el-form-item label="Template Name" prop="templateName">
         <el-input v-model="storageTemp.templateName" />
@@ -8,7 +11,7 @@
         <el-input v-model="storageTemp.customerCode" disabled />
       </el-form-item>
       <el-form-item label="Period" prop="chargePeriod">
-        <el-select v-model="storageTemp.chargePeriod" placeholder="-- Please Select --">
+        <el-select v-model="storageTemp.chargePeriod" placeholder="-- Please Select --" @change="$forceUpdate()">
           <el-option
             v-for="item in chargePeriods"
             :key="item.value"
@@ -64,6 +67,12 @@ export default {
             { required: true, message: 'This filed is required', trigger: 'change' }
           ],
           customerCode: [
+            { required: true, message: 'This filed is required', trigger: 'change' }
+          ],
+          chargePeriod: [
+            { required: true, message: 'This filed is required', trigger: 'change' }
+          ],
+          currency: [
             { required: true, message: 'This filed is required', trigger: 'change' }
           ]
         }

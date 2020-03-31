@@ -92,8 +92,8 @@ export default {
         storageTemp: {
           templateName: '',
           customerCode: '',
-          chargePeriod: 'Week',
-          currency: 'USD'
+          chargePeriod: '',
+          currency: ''
         }
     }
   },
@@ -112,8 +112,8 @@ export default {
         this.storageTemp = {
           templateName: '',
           customerCode: code,
-          chargePeriod: 'Week',
-          currency: 'USD'
+          chargePeriod: '',
+          currency: ''
         }
         this.dialogVisible = true
     },
@@ -123,7 +123,6 @@ export default {
             this.storageTemp = body.data
             this.storageTemp.customerCode = this.customerCode
             this.storageTemp.chargePeriod = body.data.timeUnit
-            this.storageTemp.id = id
             this.dialogVisible = true
         })
     },
@@ -132,7 +131,6 @@ export default {
           this.storageTemp = body.data
           this.storageTemp.customerCode = this.customerCode
           this.storageTemp.chargePeriod = body.data.timeUnit
-          this.storageTemp.id = id
           getTempDetails(id).then(body => {
               this.tempDetails = body.data
               this.detailVisible = true

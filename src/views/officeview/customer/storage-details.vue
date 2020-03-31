@@ -14,7 +14,6 @@
         prop="id"
         label="Id"
         align="center"
-        sortable
         width="60"
       />
       <el-table-column
@@ -33,7 +32,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <font>{{ transTimeUnit(scope.row.from, scope.row.timeUnit) }}</font>
+          <font>{{ transTimeUnit(scope.row.from, storageTemp.chargePeriod) }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -43,7 +42,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <font>{{ transTimeUnit(scope.row.to, scope.row.timeUnit) }}</font>
+          <font>{{ transTimeUnit(scope.row.to, storageTemp.chargePeriod) }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -52,7 +51,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <font>{{ transTimeUnit(scope.row.to - scope.row.from, scope.row.timeUnit) + '(s)' }}</font>
+          <font>{{ (scope.row.to - scope.row.from) + storageTemp.chargePeriod + '(s)' }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -128,7 +127,20 @@ export default {
         return date.substring(0,10);
     },
     transTimeUnit(num, timeUnit) {
-        var unit = num != 1 && num !=2 ? 'th' : (num == 1 ? 'st' : 'nd')
+        var unit = ''
+        switch(num) {
+            case 1:
+                unit = 'st'
+                break;
+            case 2:
+                unit = 'nd'
+                break;
+            case 3:
+                unit = 'rd'
+                break;
+            default:
+                unit = 'th'
+        } 
         return num + unit + ' ' + timeUnit
     },
     onNewClicked() {
