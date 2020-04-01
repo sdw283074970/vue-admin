@@ -1,14 +1,13 @@
 <template>
   <div>
-    {{ ladder.from }}
-    <el-form ref="form-required" :rules="rules" :model="ladder" label-width="150px">
+    <el-form ref="form-required" :rules="rules" :model="ladder" label-width="80px">
       <el-form-item label="From" prop="from">
         <el-input v-model.number="ladder.from" controls-position="right" disabled>
           <template slot="append">{{ '(th) ' + storageTemp.chargePeriod }}</template>
         </el-input>
       </el-form-item>
       <el-form-item label="To" prop="to">
-        <el-input v-model.number="ladder.to" controls-position="right">
+        <el-input v-model.number="ladder.to" controls-position="right" :disabled="isEdit">
           <template slot="append">{{ '(th) ' + storageTemp.chargePeriod }}</template>
         </el-input>
       </el-form-item>
@@ -57,7 +56,7 @@ export default {
     }
 
     const validatePrice = (rule, value, callback) => {
-      if (!value) {
+      if (value === undefined || value === null || value === '') {
         callback(new Error('This filed is required'))
       }
       value = Number(value)
@@ -104,7 +103,7 @@ export default {
       })
     },
     onUpdateClicked() {
-      updateStorageTemp(this.storageTemp.id, this.storageTemp.templateName, this.storageTemp.customerCode, this.storageTemp.chargePeriod, this.storageTemp.currency).then(() => {
+      updateLadder(this.ladder.id, this.ladder.from, this.ladder.to, this.ladder.fee).then(() => {
         this.$emit('reloadStorageDetails')
       })
     },

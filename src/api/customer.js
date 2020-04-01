@@ -163,3 +163,9 @@ export function deleteStorageDetail(id) {
   })
 }
 
+export function updateLadder(id, from, to, fee) {
+  return request({
+    url: 'api/fba/chargemethod/?methodId=' + id + '&from=' + from + '&to=' + to + '&fee=' + fee,
+    method: 'put'
+  })
+}

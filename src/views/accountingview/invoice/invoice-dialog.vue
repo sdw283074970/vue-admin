@@ -93,7 +93,7 @@ export default {
   },
   data(){
     const validatePrice = (rule, value, callback) => {
-      if (!value) {
+      if (value === undefined || value === null || value === '') {
         callback(new Error('This filed is required'))
       }
       value = Number(value)

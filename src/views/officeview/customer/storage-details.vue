@@ -51,7 +51,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <font>{{ (scope.row.to - scope.row.from) + storageTemp.chargePeriod + '(s)' }}</font>
+          <font>{{ (scope.row.to - scope.row.from + 1) + ' ' + storageTemp.chargePeriod + ((scope.row.to - scope.row.from + 1) == 1 ? '' : 's') }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -75,13 +75,13 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onEditClicked(scope.row.id)">Edit</el-dropdown-item>
-              <el-dropdown-item divided @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
+              <el-dropdown-item divided :disabled="sortedData[sortedData.length-1].from!=scope.row.from" @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :title="storageTemp.customerCode + ' Charging Ladder'" :visible.sync="detailDialogVisible" top="10vh" width="400px" append-to-body>
+    <el-dialog :title="storageTemp.customerCode + ' Charging Ladder'" :visible.sync="detailDialogVisible" top="15vh" width="350px" append-to-body>
       <storage-details-dialog :storage-temp="storageTemp" :temp-details="tempDetails" :is-edit="isEdit" :ladder="ladder" @reloadStorageDetails="reloadStorageDetails" @closeDialog="closeDialog" />
     </el-dialog>
   </div>
@@ -105,9 +105,10 @@ export default {
         isEdit: false,
         detailDialogVisible: false,
         ladder: {
-            from: 1,
-            to: 1,
-            fee: 0
+            id: 0,
+            from: '',
+            to: '',
+            fee: ''
         }
     }
   },
@@ -149,12 +150,18 @@ export default {
         this.ladder = {
             from: defaultFrom,
             to: defaultFrom,
-            fee: 0
+            fee: ''
         }
         this.detailDialogVisible = true
     },
     onEditClicked(id) {
+        let l = this.tempDetails.find(x => x.id == id)
+        this.ladder.id = id
+        this.ladder.from = l.from
+        this.ladder.to = l.to
+        this.ladder.fee = l.fee
         this.isEdit = true
+        this.detailDialogVisible = true
     },
     reloadStorageDetails() {
       this.detailDialogVisible = false

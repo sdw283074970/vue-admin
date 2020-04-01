@@ -1,8 +1,5 @@
 <template>
   <div>
-    <p>
-      {{ storageTemp }}
-    </p>
     <el-form ref="form-required" :rules="rules" :model="storageTemp" label-width="150px">
       <el-form-item label="Template Name" prop="templateName">
         <el-input v-model="storageTemp.templateName" />
