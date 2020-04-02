@@ -1,14 +1,5 @@
 <template>
   <div>
-    <!-- <div class="input-bar" style="margin-bottom:10px;margin-right:10px">
-      <el-button :loading="localLoading" type="info" @click="onNewCreatedClicked">New Created</el-button>
-      <el-button :loading="localLoading" type="warning" @click="onIncomingClicked">Incoming</el-button>
-      <el-button :loading="localLoading" type="success" @click="onArrivedClicked">Arrived</el-button>
-      <el-button :loading="localLoading" type="danger" @click="onProcessingClicked">Processing</el-button>
-      <el-button :loading="localLoading" type="success" @click="onReceivedClicked">Received</el-button>
-      <el-button :loading="localLoading" type="info" @click="onRegisteredClicked">Registered</el-button>
-      <el-button :loading="localLoading" type="primary" @click="onAllocatedClicked">Allocated</el-button>
-    </div> -->
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>

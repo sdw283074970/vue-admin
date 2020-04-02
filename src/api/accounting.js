@@ -108,3 +108,10 @@ export function generateInvoiceByCustomerCode(code, start, end, show) {
     method: 'get'
   })
 }
+
+export function generateStorageInvoiceByStorageTemplate(id, code, start, end, p1, p2) {
+  return request({
+    url: 'api/fba/chargetemplate/?templateId=' + id + '&customerCode=' + code + '&lastBillingDate=' + start + '&currentBillingDate=' + end + '&p1Discount=' + p1 + '&p2Discount=' + p2,
+    method: 'get'
+  })
+}

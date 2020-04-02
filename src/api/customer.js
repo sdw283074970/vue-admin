@@ -114,6 +114,13 @@ export function getCustomerStoragePriceTable(id) {
   })
 }
 
+export function getCustomerStoragePriceTableByCustomerCode(code) {
+  return request({
+    url: 'api/fba/chargetemplate/?customerCode=' + code,
+    method: 'get'
+  })
+}
+
 export function createNewStorageTemp(name, code, unit, currency) {
   return request({
     url: 'api/fba/chargetemplate/?templateName=' + name + '&customer=' + code + '&timeunit=' + unit + '&currency=' + currency,

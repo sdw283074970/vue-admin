@@ -80,9 +80,11 @@ export default {
         ],
         rules: {
           to: [
+            { required: true, message: 'This filed is required', trigger: 'change' },
             { validator: validateTo, trigger: 'change'}
           ],
           fee: [
+            { required: true, message: 'This filed is required', trigger: 'change' },
             { validator: validatePrice, trigger: 'change'}
           ]
         }

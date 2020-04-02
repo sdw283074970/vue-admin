@@ -34,7 +34,7 @@
         label="Code"
         :column-key="'code'"
         :filters="customerCodeFilter"
-        width="130"
+        width="120"
       />
       <el-table-column
         prop="processingCtns"
