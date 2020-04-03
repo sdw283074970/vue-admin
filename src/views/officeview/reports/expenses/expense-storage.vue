@@ -249,23 +249,20 @@ export default {
         },
         onUseAndDownloadClicked(id) {
             this.$refs['form-required'].validate((valid) => {
-
-                const fullscreenLoading = this.$loading({
-                    lock: false,
-                    text: 'Downloading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-                });
-
                 if (valid) {
-                  generateStorageInvoiceByStorageTemplate(id, this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.p1Discount, this.queryData.p2Discount).then(body => {
-                    fullscreenLoading.close()
-                    downloadFile(body.data, "Storage Expense Report");
-                  }).catch(e => {
-                    fullscreenLoading.close()
-                  })
+                    const fullscreenLoading = this.$loading({
+                        lock: false,
+                        text: 'Downloading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    generateStorageInvoiceByStorageTemplate(id, this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.p1Discount, this.queryData.p2Discount).then(body => {
+                        fullscreenLoading.close()
+                        downloadFile(body.data, "Storage Expense Report");
+                    }).catch(e => {
+                        fullscreenLoading.close()
+                    })
                 } else {
-                    fullscreenLoading.close()
                     console.log('error submit!!');
                     return false;
                 }

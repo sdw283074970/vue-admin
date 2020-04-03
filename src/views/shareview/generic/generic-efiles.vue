@@ -99,8 +99,8 @@ export default {
         discardFile(id).then(() => {
             this.efiles.find(x => x.id === id).status = 'Invalid'
             this.$message({
-            message: 'Discard Success',
-            type: 'success'
+              message: 'Discard Success',
+              type: 'success'
             });
         })
     },

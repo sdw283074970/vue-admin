@@ -176,3 +176,10 @@ export function updateLadder(id, from, to, fee) {
     method: 'put'
   })
 }
+
+export function changePassword(email, old, psw) {
+  return request({
+    url: 'api/users/?email=' + encodeURIComponent(email) + '&oldPassword=' + encodeURIComponent(old) + '&password=' + encodeURIComponent(psw),
+    method: 'put'
+  })
+}

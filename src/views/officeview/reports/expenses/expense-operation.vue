@@ -48,7 +48,7 @@
         </el-row>
         <el-row type="flex" class="row-bg" :gutter="5">
           <el-col :span="10">
-            <el-button type="primary" style="margin-left:20px" @click="onDownloadInvoiceClicked">Export Report</el-button>
+            <el-button type="primary" style="margin-left:20px" @click="onDownloadInvoiceClicked">Export</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -94,23 +94,20 @@ export default {
     methods:{
         onDownloadInvoiceClicked() {
             this.$refs['form-required'].validate((valid) => {
-
-                const fullscreenLoading = this.$loading({
-                    lock: false,
-                    text: 'Downloading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-                });
-
                 if (valid) {
-                  generateInvoiceByCustomerCode(this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.ifShowUnclosed).then(body => {
-                    fullscreenLoading.close()
-                    downloadFile(body.data, "Operation Expense Report");
-                  }).catch(e => {
-                    fullscreenLoading.close()
-                  })
+                    const fullscreenLoading = this.$loading({
+                        lock: false,
+                        text: 'Downloading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    generateInvoiceByCustomerCode(this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.ifShowUnclosed).then(body => {
+                        fullscreenLoading.close()
+                        downloadFile(body.data, "Operation Expense Report");
+                    }).catch(e => {
+                        fullscreenLoading.close()
+                    })
                 } else {
-                    fullscreenLoading.close()
                     console.log('error submit!!');
                     return false;
                 }

@@ -98,8 +98,8 @@ export default {
     }
   },
   components: {
-      "storage-dialog": () => import('@/views/officeview/customer/storage-dialog'),
-      "storage-details": () => import('@/views/officeview/customer/storage-details')
+      'storage-dialog': () => import('@/views/officeview/customer/storage-dialog'),
+      'storage-details': () => import('@/views/officeview/customer/storage-details')
   },
   methods:{
     transferDate: function(date){

@@ -54,6 +54,18 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
+  },
+
+  {
+    path: '/account',
+    component: Layout,
+    children: [{
+      path: 'manage',
+      name: 'Account',
+      component: () => import('@/views/shareview/generic/generic-account'),
+      meta: { title: 'Account', icon: 'table' }
+    }],
+    hidden: true
   }
 ]
 
