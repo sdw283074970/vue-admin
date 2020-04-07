@@ -62,10 +62,11 @@
       <el-table-column
         label="operation"
       >
-        <template>
+        <template slot-scope="scope">
           <!-- <template slot-scope="scope"> -->
-          <el-button disabled>Reset Password</el-button>
-          <el-button disabled>Change Authority</el-button>
+          <el-button v-if="checkPermission(['admin'])" disabled="true">Reset Password</el-button>
+          <el-button v-if="checkPermission(['admin'])" type="primary" @click="onChangeClicke(scope.row.id)">Change Authority</el-button>
+          <el-button v-if="checkPermission(['admin'])" type="danger" @click="onDeleteClicked(scope.row.id)">Delete User</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -100,9 +101,7 @@
           </el-form-item>
         </el-form>
         <div style="text-align:center">
-          <p>Default password is "Name123456*"</p>
-          <p>For Example: "newuser@grandchannel.us"</p>
-          <p>Password: "Newuser123456*"</p>
+          <p>Default password is "User123456*"</p>
         </div>
       </div>
       <div slot="footer" class="dialog-footer" style="margin-bottom:30px;text-align:center">
@@ -110,13 +109,50 @@
         <el-button @click="editVisible = false">Cancel</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="Change Authority" :visible.sync="authVisible" top="5vh" width="500px">
+      <div>
+        <el-form ref="authority-form" :model="form" :rules="rules">
+          <el-form-item label="Role" :label-width="formLabelWidth" prop="role">
+            <el-select v-model="form.role" placeholder="-- Select Role --">
+              <el-option label="Administrator" value="CanDeleteEverything" />
+              <el-option label="Customer" value="CanViewAsClientOnly" />
+              <el-option label="Guest" value="CanOperateAsT1" />
+              <el-option label="Warehouse" value="CanOperateAsT2" />
+              <el-option label="Sales" value="CanOperateAsT3" />
+              <el-option label="Office" value="CanOperateAsT4" />
+              <el-option label="Accounting" value="CanOperateAsT5" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer" style="margin-bottom:30px;text-align:center">
+        <el-button v-if="!isEdit" type="primary" @click="onChangeConfirmed">Change</el-button>
+        <el-button @click="editVisible = false">Cancel</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      title="NOTICE"
+      :visible.sync="deleteVisible"
+      width="350px"
+      center
+    >
+      <span>WARNNING: This operation is unreversiable.</span>
+      <p>Are you sure?</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="deleteVisible = false">Cancel</el-button>
+        <el-button type="danger" @click="onDeleteConfirmed">Delete</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import { getCustomerDB, createCustomer, updateCustomer } from '@/api/customer'
-import { getAllUsers , registerUser} from '@/api/user'
+import { getAllUsers , registerUser, deleteUser, changeAuthority } from '@/api/user'
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
     data() {
@@ -126,12 +162,15 @@ export default {
             totalEntries: 0,
             currentPage: 1,
             pageSize: 20,
+            deleteVisible: false,
             search: '',
             loading: true,
+            authVisible: false,
             registerVisible : false,
             formLabelWidth : '200px',
             customerCodeFilter : [],
             isEdit: false,
+            userId: '',
             form: {
               name: '',
               role: ''
@@ -157,6 +196,7 @@ export default {
       }
     },
     methods:{
+      checkPermission,
       transferDate: function(date) {
         return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
       },
@@ -205,6 +245,7 @@ export default {
         });
       },
       onRegisterClicked() {
+        this.form.role = ''
         this.registerVisible = true;
       },
       reloadUsers() {
@@ -220,6 +261,34 @@ export default {
                 })
             }
         )
+      },
+      onDeleteClicked(id) {
+        this.userId = id
+        this.deleteVisible = true
+      },
+      onDeleteConfirmed() {
+        deleteUser(this.userId).then(() => {
+          this.reloadUsers()
+          this.deleteVisible = false
+        })
+      },
+      onChangeClicke(id) {
+        this.userId = id
+        this.authVisible = true
+        this.form.role = ''
+      },
+      onChangeConfirmed() {
+        this.$refs['authority-form'].validate((valid) => {
+            if (valid) {
+              changeAuthority(this.userId, this.form.role).then(() => {
+                this.reloadUsers()
+                this.authVisible = false
+              })
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
       }
     },
     mounted() {

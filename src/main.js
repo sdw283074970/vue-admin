@@ -20,6 +20,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 import onlyNumber from '@/scripts'
+// import permission from '@/directive/permission/index.js'
 
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false

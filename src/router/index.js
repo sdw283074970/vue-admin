@@ -71,6 +71,32 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
   {
+    path: '/tutorial',
+    component: Layout,
+    name: 'Customer Tutorial',
+    meta: { title: 'Tutorial', icon: 'table', role: ['customer'] },
+    children: [
+      {
+        path: 'inbound',
+        name: 'Inbound Tutorial',
+        component: () => import('@/views/customerview/tutorial/inbound'),
+        meta: { title: 'Inbound', icon: 'table' }
+      },
+      {
+        path: 'outbound',
+        name: 'Outbound Tutorial',
+        component: () => import('@/views/customerview/tutorial/outbound'),
+        meta: { title: 'Outbound', icon: 'table' }
+      },
+      {
+        path: 'inventory',
+        name: 'Inventory Tutorial',
+        component: () => import('@/views/customerview/tutorial/inventory'),
+        meta: { title: 'Inventory', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/customer',
     component: Layout,
     meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'TBD'] },
@@ -135,26 +161,6 @@ export const asyncRoutes = [
         component: () => import('@/views/officeview/shipping/shipping-wo'),
         hidden: true,
         meta: { title: 'WO', breadcrumb: true }
-      }
-    ]
-  },
-  {
-    path: '/reports',
-    component: Layout,
-    name: 'Reports',
-    meta: { title: 'Reports', icon: 'table', role: ['office', 'accounting', 'TBD'] },
-    children: [
-      {
-        path: '/reports/inventory/index',
-        name: 'InventoryReport',
-        component: () => import('@/views/shareview/inventory/location'),
-        meta: { title: 'Inventory Report', icon: 'table' }
-      },
-      {
-        path: '/reports/expenses/index',
-        name: 'ExpensesReport',
-        component: () => import('@/views/officeview/reports/expenses/index'),
-        meta: { title: 'Expenses Report', icon: 'table' }
       }
     ]
   },
@@ -248,32 +254,6 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/tutorial',
-    component: Layout,
-    name: 'Customer Tutorial',
-    meta: { title: 'Tutorial', icon: 'table', role: ['customer'] },
-    children: [
-      {
-        path: 'inbound',
-        name: 'Inbound Tutorial',
-        component: () => import('@/views/customerview/tutorial/inbound'),
-        meta: { title: 'Inbound', icon: 'table' }
-      },
-      {
-        path: 'outbound',
-        name: 'Outbound Tutorial',
-        component: () => import('@/views/customerview/tutorial/outbound'),
-        meta: { title: 'Outbound', icon: 'table' }
-      },
-      {
-        path: 'inventory',
-        name: 'Inventory Tutorial',
-        component: () => import('@/views/customerview/tutorial/inventory'),
-        meta: { title: 'Inventory', icon: 'table' }
-      }
-    ]
-  },
-  {
     path: '/warehouse-receiving',
     component: Layout,
     name: 'Warehouse Receiving',
@@ -354,6 +334,26 @@ export const asyncRoutes = [
         component: () => import('@/views/accountingview/shipping/shipping-wo'),
         hidden: true,
         meta: { title: 'WO', breadcrumb: true }
+      }
+    ]
+  },
+  {
+    path: '/reports',
+    component: Layout,
+    name: 'Reports',
+    meta: { title: 'Reports', icon: 'table', role: ['office', 'accounting', 'TBD'] },
+    children: [
+      {
+        path: '/reports/inventory/index',
+        name: 'InventoryReport',
+        component: () => import('@/views/shareview/inventory/location'),
+        meta: { title: 'Inventory Report', icon: 'table' }
+      },
+      {
+        path: '/reports/expenses/index',
+        name: 'ExpensesReport',
+        component: () => import('@/views/officeview/reports/expenses/index'),
+        meta: { title: 'Expenses Report', icon: 'table' }
       }
     ]
   },

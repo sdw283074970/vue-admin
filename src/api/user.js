@@ -40,3 +40,17 @@ export function registerUser(email, role) {
     method: 'post'
   })
 }
+
+export function deleteUser(id) {
+  return csmRequest({
+    url: 'api/users/?userId=' + id,
+    method: 'delete'
+  })
+}
+
+export function changeAuthority(id, tire) {
+  return csmRequest({
+    url: 'api/users/?userId=' + id + '&tire=' + tire,
+    method: 'put'
+  })
+}
