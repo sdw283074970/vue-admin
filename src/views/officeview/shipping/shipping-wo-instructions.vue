@@ -92,6 +92,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :disabled="shipOrder.invoiceStatus=='Closed'" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
               <el-dropdown-item :disabled="!(scope.row.handlingStatus=='Pending'||scope.row.handlingStatus=='Updated')" @click.native="onResultClicked(scope.row.id)">Result</el-dropdown-item>
+              <el-dropdown-item divided @click.native="onChangeStatusClicked(scope.row.id)">Change Charging Mark</el-dropdown-item>
               <el-dropdown-item divided @click.native="deleteHandler(scope.row.id)">Delete</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -124,6 +125,7 @@
 <script>
 /* eslint-disable */
 import { deleteInstruction } from '@/api/shipping'
+import { changeChargingStatus } from '@/api/accounting'
 
 export default {
   props: {
@@ -227,6 +229,11 @@ export default {
       message: 'Update succeed',
       type: 'success'
       });
+    },
+    onChangeStatusClicked(id) {
+      changeChargingStatus(id).then(() => {
+        this.$emit('referashInstructions');
+      })
     },
     onResultSucceed(){
       this.$emit('referashInstructions');

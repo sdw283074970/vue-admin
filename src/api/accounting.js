@@ -115,3 +115,10 @@ export function generateStorageInvoiceByStorageTemplate(id, code, start, end, p1
     method: 'get'
   })
 }
+
+export function changeChargingStatus(id) {
+  return request({
+    url: 'api/fba/fbainvoicedetail/?chargingItemDetailId=' + id,
+    method: 'put'
+  })
+}
