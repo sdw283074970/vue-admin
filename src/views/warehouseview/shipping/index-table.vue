@@ -21,7 +21,6 @@
       :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
       border
-      :height="tableHeight"
       style="width: 100%"
       @filter-change="onFilterChange"
     >
@@ -177,7 +176,6 @@ export default {
     },
     data() {
         return {
-            tableHeight: window.innerHeight * 0.75,
             currentPage: 1,
             pageSize: 20,
             search: '',

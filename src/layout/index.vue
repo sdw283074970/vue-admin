@@ -42,6 +42,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.$ELEMENT.size = 'mini'
+  },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })

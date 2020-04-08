@@ -148,14 +148,19 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="memo"
+        label="MEMO"
+      />
+      <el-table-column
         prop="operation"
-        label="operation"
-        min-width="25%"
+        label="OPERATION"
+        align="center"
+        width="140"
       >
         <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
-              Operations<i class="el-icon-arrow-down el-icon--right" />
+              Options<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
@@ -271,9 +276,9 @@ export default {
           return
         }
 
-        if (index === 7 || index === 12 || index === 13 || index === 11)
+        if (index === 5 || index === 7 || index === 12 || index === 13 || index === 11 || index === 14)
         {
-          sums[index] = 'N/A'
+          sums[index] = '-'
           return
         }
 
@@ -289,7 +294,7 @@ export default {
           }, 0);
           sums[index] = '$ ' + sums[index].toFixed(2);
         } else {
-          sums[index] = 'N/A';
+          sums[index] = '-';
         }
       });
 

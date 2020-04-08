@@ -17,7 +17,6 @@
       :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
       border
-      height="715"
       style="width: 100%"
       @filter-change="filterChange"
     >
@@ -25,15 +24,19 @@
         prop="userName"
         label="User Name"
         width="240"
+        sortable
       />
       <el-table-column
         prop="email"
         label="E-mail"
+        sortable
         width="240"
       />
       <el-table-column
+        prop="roles"
         label="Roles"
         align="center"
+        sortable
         width="200"
       >
         <template slot-scope="scope">
@@ -41,9 +44,11 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="customerCodes"
         label="Connected Customer"
         align="center"
-        width="200"
+        sortable
+        width="220"
       >
         <template slot-scope="scope">
           <font>{{ scope.row.customerCodes }}</font>
@@ -53,7 +58,8 @@
         prop="latestLogin"
         label="Latest Login"
         align="center"
-        width="120"
+        sortable
+        width="140"
       >
         <template slot-scope="scope">
           <font>{{ transferDate(scope.row.latestLogin) }}</font>
@@ -64,7 +70,7 @@
       >
         <template slot-scope="scope">
           <!-- <template slot-scope="scope"> -->
-          <el-button v-if="checkPermission(['admin'])" disabled="true">Reset Password</el-button>
+          <el-button v-if="checkPermission(['admin'])" disabled>Reset Password</el-button>
           <el-button v-if="checkPermission(['admin'])" type="primary" @click="onChangeClicke(scope.row.id)">Change Authority</el-button>
           <el-button v-if="checkPermission(['admin'])" type="danger" @click="onDeleteClicked(scope.row.id)">Delete User</el-button>
         </template>
@@ -75,7 +81,7 @@
       style="margin-top:10px"
       :current-page="currentPage"
       :page-sizes="[10, 20, 50, 100]"
-      :page-size="20"
+      :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="totalEntries"
       @size-change="handleSizeChange"
@@ -119,8 +125,8 @@
               <el-option label="Customer" value="CanViewAsClientOnly" />
               <el-option label="Guest" value="CanOperateAsT1" />
               <el-option label="Warehouse" value="CanOperateAsT2" />
-              <el-option label="Sales" value="CanOperateAsT3" />
-              <el-option label="Office" value="CanOperateAsT4" />
+              <el-option label="Office" value="CanOperateAsT3" />
+              <el-option label="Sales" value="CanOperateAsT4" />
               <el-option label="Accounting" value="CanOperateAsT5" />
             </el-select>
           </el-form-item>
@@ -161,7 +167,7 @@ export default {
             filteredData: [],
             totalEntries: 0,
             currentPage: 1,
-            pageSize: 20,
+            pageSize: 100,
             deleteVisible: false,
             search: '',
             loading: true,

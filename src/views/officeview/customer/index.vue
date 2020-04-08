@@ -17,7 +17,6 @@
       :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
       border
-      height="715"
       style="width: 100%"
       @filter-change="filterChange"
     >

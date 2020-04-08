@@ -255,4 +255,7 @@ export default {
       font-size: 14px;
       margin-bottom: 20px;
     }
+    /deep/ .el-dropdrown-item {
+      position: fixed
+    }
 </style>

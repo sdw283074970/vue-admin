@@ -21,11 +21,10 @@
       :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
       border
-      :height="tableHeight"
       style="width: 100%"
       @filter-change="onFilterChange"
     >
-      <el-table-column type="expand" fixed>
+      <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="gb-table-expand">
             <el-form-item label="Container #">
@@ -78,13 +77,11 @@
       </el-table-column>
       <el-table-column
         sortable
-        fixed
         prop="id"
         label="Id"
         width="60"
       />
       <el-table-column
-        fixed
         prop="status"
         :column-key="'status'"
         label="Status"
@@ -98,7 +95,6 @@
       <el-table-column
         prop="container"
         label="Container #"
-        fixed
         width="200"
       />
       <el-table-column
@@ -168,7 +164,7 @@
       <el-table-column
         label="Amount"
         align="center"
-        width="110"
+        width="100"
       >
         <template slot-scope="scope">
           <font>{{ '$ ' + scope.row.totalAmount.toFixed(2) }}</font>
@@ -177,7 +173,7 @@
       <el-table-column
         label="Cost"
         align="center"
-        width="110"
+        width="100"
       >
         <template slot-scope="scope">
           <font>{{ '$ ' + scope.row.totalCost.toFixed(2) }}</font>
@@ -186,7 +182,7 @@
       <el-table-column
         label="Net"
         align="center"
-        width="110"
+        width="100"
       >
         <template slot-scope="scope">
           <font>{{ '$ ' + (scope.row.totalAmount - scope.row.totalCost).toFixed(2) }}</font>
@@ -210,14 +206,12 @@
       </el-table-column>
       <el-table-column
         prop="operation"
-        width="110"
-        label="operation"
-        fixed="right"
+        label="Operation"
       >
         <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
-              Operations<i class="el-icon-arrow-down el-icon--right" />
+              Options<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onEfilesClicked(scope.row.container)">eFiles</el-dropdown-item>
@@ -286,7 +280,6 @@ export default {
   },
   data() {
     return {
-      tableHeight: window.innerHeight * 0.75,
       currentPage: 1,
       pageSize: 20,
       search: '',
