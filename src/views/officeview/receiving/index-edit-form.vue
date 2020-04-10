@@ -111,9 +111,9 @@
       </el-form>
     </div>
     <div style="margin-bottom:20px;margin-left:40px">
-      <el-button v-if="!isEdit" type="primary" @click="createHandler">Create</el-button>
-      <el-button v-if="isEdit" type="primary" @click="updateHandler">Update</el-button>
-      <el-button @click="onCancelClicked">Cancel</el-button>
+      <el-button v-if="!isEdit" :loading="localLoading" type="primary" @click="createHandler">Create</el-button>
+      <el-button v-if="isEdit" :loading="localLoading" type="primary" @click="updateHandler">Update</el-button>
+      <el-button :loading="localLoading" @click="onCancelClicked">Cancel</el-button>
     </div>
   </div>
 </template>
@@ -127,7 +127,8 @@ export default {
     shipOrderStatus: String,
     isEdit: Boolean,
     customerCodeOptions: Array,
-    destinationOptions: Array
+    destinationOptions: Array,
+    localLoading: Boolean
   },
   data(){
     return{
@@ -284,6 +285,7 @@ export default {
       createHandler: function(){
         this.$refs['form-required'].validate((valid) => {
             if (valid) {
+                this.localLoading = true
                 this.$emit('onCreateConfirmedClicked');
             } else {
                 console.log('error submit!!');
@@ -294,6 +296,7 @@ export default {
       updateHandler: function(){
         this.$refs['form-required'].validate((valid) => {
             if (valid) {
+                this.localLoading = true
                 this.$emit('onEditConfirmedClicked', this.formData.id);
             } else {
                 console.log('error submit!!');

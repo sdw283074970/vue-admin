@@ -254,6 +254,7 @@
         :is-edit="isEdit"
         :destination-options="destinationOptions"
         :customer-code-options="customerCodeOptions"
+        :local-loading="localLoading"
         @onCreateConfirmedClicked="onCreateConfirmedClicked"
         @onEditConfirmedClicked="onEditConfirmedClicked"
         @onCancelClicked="onCancelClicked"
@@ -431,6 +432,7 @@ export default {
           type: 'success'
         })
         this.editVisible = false
+        this.localLoading = false
         this.filteredData.splice(0, 0, body.data)
       })
     },
@@ -440,6 +442,7 @@ export default {
           message: 'Success!',
           type: 'success'
         })
+        this.localLoading = false
         this.editVisible = false
         const index = this.filteredData.map(o => o.id).indexOf(body.data.id)
         this.filteredData.splice(index, 1, body.data)

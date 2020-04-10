@@ -123,7 +123,7 @@ export function getCustomerStoragePriceTableByCustomerCode(code) {
 
 export function createNewStorageTemp(name, code, unit, currency) {
   return request({
-    url: 'api/fba/chargetemplate/?templateName=' + name + '&customer=' + code + '&timeunit=' + unit + '&currency=' + currency,
+    url: 'api/fba/chargetemplate/?templateName=' + encodeURIComponent(name) + '&customer=' + code + '&timeunit=' + unit + '&currency=' + currency,
     method: 'post'
   })
 }
@@ -137,7 +137,7 @@ export function getStorageTemp(id) {
 
 export function updateStorageTemp(id, name, code, unit, currency) {
   return request({
-    url: 'api/fba/chargetemplate/?storageTempId=' + id + '&templateName=' + name + '&customer=' + code + '&timeunit=' + unit + '&currency=' + currency,
+    url: 'api/fba/chargetemplate/?storageTempId=' + id + '&templateName=' + encodeURIComponent(name) + '&customer=' + code + '&timeunit=' + unit + '&currency=' + currency,
     method: 'put'
   })
 }

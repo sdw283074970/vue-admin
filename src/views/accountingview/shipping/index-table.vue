@@ -136,12 +136,12 @@
         width="100"
       />
       <el-table-column
-        label="Released Date"
+        label="Shipped Date"
         align="center"
         width="120"
       >
         <template slot-scope="scope">
-          <font>{{ transferDate(scope.row.releasedDate) }}</font>
+          <font>{{ transferDate(scope.row.shipDate) }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -245,6 +245,7 @@
         :form-data="formData"
         :is-edit="isEdit"
         :destination-options="destinationOptions"
+        :local-loading="localLoading"
         :customer-code-options="customerCodeOptions"
         @onCreateConfirmedClicked="onCreateConfirmedClicked"
         @onEditConfirmedClicked="onEditConfirmedClicked"
@@ -423,6 +424,7 @@ export default {
           message: 'Success!',
           type: 'success'
         })
+        this.localLoading = false
         this.editVisible = false
         this.filteredData.splice(0, 0, body.data)
       })
@@ -434,6 +436,7 @@ export default {
           type: 'success'
         })
         this.editVisible = false
+        this.localLoading = false
         const index = this.filteredData.map(o => o.id).indexOf(body.data.id)
         this.filteredData.splice(index, 1, body.data)
       })

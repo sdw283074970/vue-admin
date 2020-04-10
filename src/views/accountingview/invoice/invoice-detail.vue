@@ -84,7 +84,7 @@
         width="80"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.discount == 1 ? '-' : ((1 - scope.row.discount) * 100 + '% OFF') }}</font>
+          <font>{{ scope.row.discount == 1 ? '-' : ((1 - scope.row.discount).toFixed(2) * 100 + '% OFF') }}</font>
         </template>
       </el-table-column>
       <el-table-column

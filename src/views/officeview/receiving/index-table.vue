@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
-      <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
+      <el-button :loading="localLoading" type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
+      <el-button :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
       <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"
@@ -267,6 +267,7 @@
         :is-edit="isEdit"
         :destination-options="destinationOptions"
         :customer-code-options="customerCodeOptions"
+        :local-loading="localLoading"
         @onCreateConfirmedClicked="onCreateConfirmedClicked"
         @onEditConfirmedClicked="onEditConfirmedClicked"
         @onCancelClicked="onCancelClicked"
@@ -455,6 +456,7 @@ export default {
           message: 'Success!',
           type: 'success'
         })
+        this.localLoading = false
         this.editVisible = false
         this.filteredData.splice(0, 0, body.data)
       })
@@ -465,6 +467,7 @@ export default {
           message: 'Success!',
           type: 'success'
         })
+        this.localLoading = false
         this.editVisible = false
         const index = this.filteredData.map(o => o.id).indexOf(body.data.id)
         this.filteredData.splice(index, 1, body.data)

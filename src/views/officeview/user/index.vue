@@ -159,6 +159,7 @@
 import { getCustomerDB, createCustomer, updateCustomer } from '@/api/customer'
 import { getAllUsers , registerUser, deleteUser, changeAuthority } from '@/api/user'
 import checkPermission from '@/utils/permission' // 权限判断函数
+import store from '@/store'
 
 export default {
     data() {

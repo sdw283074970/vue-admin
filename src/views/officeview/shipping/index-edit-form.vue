@@ -115,7 +115,8 @@ export default {
     formData: Object,
     isEdit: Boolean,
     customerCodeOptions: Array,
-    destinationOptions: Array
+    destinationOptions: Array,
+    localLoading: Boolean
   },
   data(){
     return{
@@ -137,6 +138,7 @@ export default {
       createHandler: function(){
         this.$refs['form-required'].validate((valid) => {
             if (valid) {
+                this.localLoading = true
                 this.$emit('onCreateConfirmedClicked');
             } else {
                 console.log('error submit!!');
@@ -147,6 +149,7 @@ export default {
       updateHandler: function(){
         this.$refs['form-required'].validate((valid) => {
             if (valid) {
+                this.localLoading = true
                 this.$emit('onEditConfirmedClicked', this.formData.id);
             } else {
                 console.log('error submit!!');

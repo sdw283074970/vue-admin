@@ -4,6 +4,7 @@
     <h3>Invoice Status: {{ shipOrder.invoiceStatus }}</h3>
     <div style="margin-bottom:10px">
       <div>
+        <el-button :disabled="step>2" class="gb-button" type="primary" @click="onPushClicked">Approve And Push</el-button>
         <el-button class="gb-button" type="primary" :disabled="shipOrder.invoiceStatus!='Await'" @click="closeVisible=true">Close Order</el-button>
 
         <el-popover
@@ -97,6 +98,7 @@
 /* eslint-disable vue/require-prop-type-constructor */
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
+import { pushShipOrderStatus } from '@/api/shipping'
 import { CloseOrder, OpenOrder, markOrderShipped } from '@/api/accounting'
 
 export default {
@@ -157,6 +159,11 @@ export default {
     onOpenClicked() {
       this.popVisible2 = false
       OpenOrder(this.shipOrder.shipOrderNumber, 'ShipOrder').then(() => {
+        this.$emit('reloadOrder')
+      })
+    },
+    onPushClicked() {
+      pushShipOrderStatus(this.$route.params.shipOrderId, this.today).then(() => {
         this.$emit('reloadOrder')
       })
     },

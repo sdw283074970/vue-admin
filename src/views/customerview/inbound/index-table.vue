@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus" @click="createHandler">New Inbound Order</el-button>
+      <el-button :loading="localLoading" type="primary" icon="el-icon-plus" @click="createHandler">New Inbound Order</el-button>
       <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input
         v-model="search"
@@ -211,7 +211,8 @@ export default {
     props:{
         filteredData: Array,
         loading: Boolean,
-        totalEntries: Number
+        totalEntries: Number,
+        localLoading: Boolean
     },
     data() {
         return {

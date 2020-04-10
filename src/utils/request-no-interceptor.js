@@ -16,6 +16,7 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
     config.headers['Content-Type'] = 'application/json'
+    config.headers['AppUser'] = store.getters.name
     return config
   },
   error => {
