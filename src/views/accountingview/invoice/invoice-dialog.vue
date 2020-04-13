@@ -48,9 +48,10 @@
             <el-input v-model="service.cost" />
           </el-form-item>
           <el-form-item label="Rate" prop="rate">
-            <el-input v-model="service.rate" @change="onChargingInputChange">
-              <template slot="append">{{ '/' + service.unit }}</template>
-            </el-input>
+            <el-input v-model="service.rate" style="width:80px" @change="onChargingInputChange" />
+            <!-- <template>{{ '/' + service.unit }}</template> -->
+            <font>{{ '/ ' + service.unit }}</font>
+            <!-- </el-input> -->
           </el-form-item>
           <el-form-item label="Quantity" prop="quantity">
             <el-input v-model="service.quantity" @change="onChargingInputChange" />
