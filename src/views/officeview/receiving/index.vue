@@ -149,4 +149,9 @@ export default {
     .input-bar{
       text-align: right
     }
+  .chart-wrapper {
+    background: #fff;
+    padding: 16px 16px 0;
+    margin-bottom: 32px;
+  }
 </style>

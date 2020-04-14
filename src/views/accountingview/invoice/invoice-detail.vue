@@ -27,7 +27,6 @@
       border
     >
       <el-table-column
-        sortable
         prop="id"
         label="Id"
         width="60"
@@ -45,7 +44,7 @@
       <el-table-column
         prop="unit"
         label="UOM"
-        width="120"
+        width="100"
       />
       <el-table-column
         prop="quantity"
@@ -71,7 +70,7 @@
         prop="originalAmount"
         align="center"
         label="ORG AMT"
-        width="100"
+        width="80"
       >
         <template slot-scope="scope">
           <font>{{ '$ ' + scope.row.originalAmount.toFixed(2) }}</font>
@@ -91,7 +90,7 @@
         prop="amount"
         align="center"
         label="FNL AMT"
-        width="100"
+        width="80"
       >
         <template slot-scope="scope">
           <font>{{ '$ ' + scope.row.amount.toFixed(2) }}</font>
@@ -121,7 +120,7 @@
         prop="costConfirm"
         label="COST FONFIRM"
         align="center"
-        width="130"
+        width="115"
       >
         <template slot-scope="scope">
           <el-button style="width:80px" :type="scope.row.costConfirm==true?'success':'info'" @click="onBtnClicked(scope.row.id, 'Confirm')">{{ scope.row.costConfirm==true?'YES':'NO' }}</el-button>
@@ -130,7 +129,7 @@
       <el-table-column
         prop="collectionStatus"
         label="COLLECTION"
-        width="140"
+        width="115"
         align="center"
       >
         <template slot-scope="scope">
@@ -141,7 +140,7 @@
         prop="paymentStatus"
         label="PAYMENT"
         align="center"
-        width="110"
+        width="115"
       >
         <template slot-scope="scope">
           <el-button style="width:80px" :type="scope.row.paymentStatus==true?'success':'info'" @click="onBtnClicked(scope.row.id, 'Payment')">{{ scope.row.paymentStatus==true?'YES':'NO' }}</el-button>
@@ -155,7 +154,7 @@
         prop="operation"
         label="OPERATION"
         align="center"
-        width="140"
+        width="100"
       >
         <template slot-scope="scope">
           <el-dropdown>

@@ -28,3 +28,22 @@ width: 25%;
   margin: 10px;
   margin-top: 0px;
 }
+
+.dashboard-editor-container {
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+  position: relative;
+
+  .github-corner {
+    position: absolute;
+    top: 0px;
+    border: 0;
+    right: 0;
+  }
+
+  .chart-wrapper {
+    background: #fff;
+    padding: 30px;
+    margin-bottom: 32px;
+  }
+}

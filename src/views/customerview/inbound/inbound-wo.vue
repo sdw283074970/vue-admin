@@ -1,17 +1,25 @@
 <template>
-  <div class="gb-maincontainer">
-    <receiving-wo-sum :master-order="masterOrder" :step="step" />
-    <receiving-wo-packinglist :master-order="masterOrder" :step="step" :order-details="orderDetails" @onAddClicked="onAddClicked" />
-    <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" />
-    <inbound-wo-operation
-      :master-order="masterOrder"
-      :order-details="orderDetails"
-      :plt-data="pltData"
-      :ctn-date="ctnData"
-      :plt-inventory-data="pltInventoryData"
-      :ctn-inventory-data="ctnInventoryData"
-      @childOrderDetails="refreshOrderDetails"
-    />
+  <div class="dashboard-editor-container">
+    <div class="chart-wrapper">
+      <receiving-wo-sum :master-order="masterOrder" :step="step" />
+    </div>
+    <div class="chart-wrapper">
+      <receiving-wo-packinglist :master-order="masterOrder" :step="step" :order-details="orderDetails" @onAddClicked="onAddClicked" />
+    </div>
+    <div class="chart-wrapper">
+      <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" />
+    </div>
+    <div class="chart-wrapper">
+      <inbound-wo-operation
+        :master-order="masterOrder"
+        :order-details="orderDetails"
+        :plt-data="pltData"
+        :ctn-date="ctnData"
+        :plt-inventory-data="pltInventoryData"
+        :ctn-inventory-data="ctnInventoryData"
+        @childOrderDetails="refreshOrderDetails"
+      />
+    </div>
   </div>
 </template>
 

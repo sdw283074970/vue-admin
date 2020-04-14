@@ -1,20 +1,28 @@
 <template>
-  <div class="gb-maincontainer">
-    <receiving-wo-sum :master-order="masterOrder" :step="step" />
-    <receiving-wo-control
-      :master-order="masterOrder"
-      :order-details="orderDetails"
-      :plt-data="pltData"
-      :ctn-data="ctnData"
-      :step="step"
-      :plt-inventory-data="pltInventoryData"
-      :ctn-inventory-data="ctnInventoryData"
-      @childOrderDetails="refreshOrderDetails"
-      @refreshPackingList="refreshPackingList"
-      @reloadOrder="reloadOrder"
-    />
-    <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" :step="step" />
-    <receiving-wo-instruction :master-order="masterOrder" :step="step" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
+  <div class="dashboard-editor-container">
+    <div class="chart-wrapper">
+      <receiving-wo-sum :master-order="masterOrder" :step="step" />
+    </div>
+    <div class="chart-wrapper">
+      <receiving-wo-control
+        :master-order="masterOrder"
+        :order-details="orderDetails"
+        :plt-data="pltData"
+        :ctn-data="ctnData"
+        :step="step"
+        :plt-inventory-data="pltInventoryData"
+        :ctn-inventory-data="ctnInventoryData"
+        @childOrderDetails="refreshOrderDetails"
+        @refreshPackingList="refreshPackingList"
+        @reloadOrder="reloadOrder"
+      />
+    </div>
+    <div class="chart-wrapper">
+      <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" :step="step" />
+    </div>
+    <div class="chart-wrapper">
+      <receiving-wo-instruction :master-order="masterOrder" :step="step" :instructions="instructions" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
+    </div>
   </div>
 </template>
 

@@ -1,9 +1,17 @@
 <template>
-  <div class="gb-maincontainer">
-    <shipping-wo-sum :ship-order="shipOrder" :step="step" />
-    <shipping-wo-picking :ship-order="shipOrder" :step="step" :pick-details="pickDetails" @referashPickDetails="referashPickDetails" />
-    <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" @onResetClicked="onResetClicked" @onDeleteClicked="onDeleteClicked" @referashInstructions="referashInstructions" />
-    <shipping-wo-control :ship-order="shipOrder" :step="step" @onPushClicked="onPushClicked" @onCallBackClicked="onCallBackClicked" />
+  <div class="dashboard-editor-container">
+    <div class="chart-wrapper">
+      <shipping-wo-sum :ship-order="shipOrder" :step="step" />
+    </div>
+    <div class="chart-wrapper">
+      <shipping-wo-picking :ship-order="shipOrder" :step="step" :pick-details="pickDetails" @referashPickDetails="referashPickDetails" />
+    </div>
+    <div class="chart-wrapper">
+      <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" @onResetClicked="onResetClicked" @onDeleteClicked="onDeleteClicked" @referashInstructions="referashInstructions" />
+    </div>
+    <div class="chart-wrapper">
+      <shipping-wo-control :ship-order="shipOrder" :step="step" @onPushClicked="onPushClicked" @onCallBackClicked="onCallBackClicked" />
+    </div>
   </div>
 </template>
 
