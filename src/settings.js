@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Grand Channel WMS',
+  title: 'GrandSys',
 
   /**
    * @type {boolean} true | false

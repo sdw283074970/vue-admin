@@ -64,15 +64,15 @@ export default {
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['2 Mar - 8 Mar', '9 Mar - 15 Mar', '16 Mar - 22 Mar', '23 Mar - 29 Mar', '30 Mar - 5 Apr', '6 Apr - 12 Apr', '13 Apr - 19 Apr'],
           boundaryGap: false,
           axisTick: {
             show: false
           }
         },
         grid: {
-          left: 10,
-          right: 10,
+          left: 50,
+          right: 50,
           bottom: 20,
           top: 30,
           containLabel: true
@@ -90,10 +90,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['inbound plts', 'outbound plts']
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: 'inbound plts', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -109,7 +109,7 @@ export default {
           animationEasing: 'cubicInOut'
         },
         {
-          name: 'actual',
+          name: 'outbound plts',
           smooth: true,
           type: 'line',
           itemStyle: {
