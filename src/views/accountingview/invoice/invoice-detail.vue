@@ -2,8 +2,9 @@
   <div>
     <h2>Invoice Detail</h2>
     <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus=='Closed'" :loading="loading" @click="onAddClicked">Add Charging</el-button>
-      <el-button class="gb-button" type="primary" icon="el-icon-download" :disabled="invoiceStatus!='Closed'" :loading="loading" @click="downloadInvoiceHandler">Export Report</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus!='Await'" :loading="loading" @click="onAddClicked">Add Charging</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus=='Closed'" :loading="loading" @click="onAddCostClicked">Add Cost</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-download" :disabled="invoiceStatus=='Await'" :loading="loading" @click="downloadInvoiceHandler">Export Report</el-button>
       <!-- <el-popover
         v-model="popVisible"
         placement="top"
@@ -127,16 +128,6 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="collectionStatus"
-        label="COLLECTION"
-        width="115"
-        align="center"
-      >
-        <template slot-scope="scope">
-          <el-button style="width:80px" :type="scope.row.collectionStatus==true?'success':'info'" @click="onBtnClicked(scope.row.id, 'Collection')">{{ scope.row.collectionStatus==true?'YES':'NO' }}</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column
         prop="paymentStatus"
         label="PAYMENT"
         align="center"
@@ -144,6 +135,16 @@
       >
         <template slot-scope="scope">
           <el-button style="width:80px" :type="scope.row.paymentStatus==true?'success':'info'" @click="onBtnClicked(scope.row.id, 'Payment')">{{ scope.row.paymentStatus==true?'YES':'NO' }}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="collectionStatus"
+        label="COLLECTION"
+        width="115"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-button style="width:80px" :type="scope.row.collectionStatus==true?'success':'info'" @click="onBtnClicked(scope.row.id, 'Collection')">{{ scope.row.collectionStatus==true?'YES':'NO' }}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -163,7 +164,8 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
-              <el-dropdown-item divided :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
+              <!-- <el-dropdown-item :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item> -->
+              <el-dropdown-item divided :disabled="invoiceStatus=='Closed'||(scope.row.chargingType!='Cost'&&invoiceStatus=='Generated')" @click="onAddClicked" @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -181,6 +183,24 @@
         :reference="reference"
         :order-type="orderType"
         :service="service"
+        :invoice-status="invoiceStatus"
+        @reloadOrder="reloadOrder"
+        @closeDialog="closeDialog"
+      />
+    </el-dialog>
+    <el-dialog
+      title="Add Cost"
+      :visible.sync="costVisible"
+      width="800px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <invoice-dialog-cost
+        :is-edit="isEdit"
+        :reference="reference"
+        :order-type="orderType"
+        :service="cost"
+        :invoice-status="invoiceStatus"
         @reloadOrder="reloadOrder"
         @closeDialog="closeDialog"
       />
@@ -201,12 +221,14 @@ export default {
     invoices: Array
   },
   components: {
-    'invoice-dialog': () => import('@/views/accountingview/invoice/invoice-dialog')
+    'invoice-dialog': () => import('@/views/accountingview/invoice/invoice-dialog'),
+    'invoice-dialog-cost': () => import('@/views/accountingview/invoice/invoice-dialog-cost')
   },
   data() {
       return {
         isEdit: false,
         chargingVisible: false,
+        costVisible: false,
         loading: false,
         service: {
             activity: '',
@@ -222,6 +244,20 @@ export default {
             unit: '',
             description: ''
         },
+        cost: {
+            activity: '',
+            amount: 0,
+            chargingType: 'Cost',
+            cost: 0,
+            dateOfCost: '',
+            inoviceType: '',
+            discount: 1,
+            memo: '',
+            quantity: 0,
+            rate: 0,
+            unit: 'N/A',
+            description: ''
+        }
       };
   },
   methods:{
@@ -234,12 +270,17 @@ export default {
       this.chargingVisible = true
       this.isEdit = false
     },
+    onAddCostClicked() {
+      this.costVisible = true
+      this.isEdit = false
+    },
     reloadOrder() {
       this.chargingVisible = false
       this.$emit('reloadOrder')
     },
     closeDialog() {
       this.chargingVisible = false
+      this.costVisible = false
     },
     onUpdateClicked(id) {
       this.chargingVisible = true

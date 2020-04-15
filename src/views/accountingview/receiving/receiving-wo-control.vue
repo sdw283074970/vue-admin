@@ -5,36 +5,52 @@
 
     <div style="margin-bottom:10px">
       <div>
-        <el-button class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Await'" @click="closeVisible=true">Close Order</el-button>
-
+        <el-button class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Await'" @click="closeVisible=true">Generate Invoice</el-button>
+        <!-- <el-button class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Generated'" @click="popVisible3=true">Close Order</el-button> -->
+        <el-popover
+          v-model="popVisible3"
+          placement="top"
+          width="295"
+          style="margin-left:10px"
+        >
+          <p>This order will be uneditable.</p>
+          <p>Are you sure you want to continue?</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="popVisible3 = false">No</el-button>
+            <el-button type="primary" size="mini" @click="onCloseClicked">Yes</el-button>
+          </div>
+          <el-button slot="reference" class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Generated'">Close Order</el-button>
+        </el-popover>
         <el-popover
           v-model="popVisible2"
           placement="top"
           width="295"
+          style="margin-left:10px;margin-right:10px"
         >
-          <p>The invoice status and closing date of this order will be reset.</p>
+          <p>This invoice status will be reset.</p>
           <p>Are you sure you want to continue?</p>
           <div style="text-align: right; margin: 0">
             <el-button size="mini" type="text" @click="popVisible2 = false">No</el-button>
             <el-button type="primary" size="mini" @click="onOpenClicked">Yes</el-button>
           </div>
-          <el-button slot="reference" class="gb-button" type="warning" :disabled="masterOrder.invoiceStatus=='Await'">Re-open Order</el-button>
+          <el-button slot="reference" class="gb-button" type="warning" :disabled="masterOrder.invoiceStatus=='Await'">Reset Invoice Status</el-button>
         </el-popover>
-
-        <el-button :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Set Arrived Date</el-button>
+      </div>
+      <div style="margin-top:10px">
+        <el-button :disabled="step<3" class="gb-button" type="info" @click="arrivedVisible=true">Set Arrived Date</el-button>
         <el-button type="info" class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
       </div>
     </div>
 
     <el-dialog
-      title="Close Order"
+      title="Generate Invoice"
       :visible.sync="closeVisible"
       top="5vh"
       width="350px"
       :lock-scroll="false"
     >
       <div style="text-align:right">
-        <label>Close Date: </label><el-date-picker v-model="closeDate" type="date" placeholder="Select close Date" value-format="yyyy-MM-dd" style="width:180px;" />
+        <label>End Date: </label><el-date-picker v-model="closeDate" type="date" placeholder="Select close Date" value-format="yyyy-MM-dd" style="width:180px;" />
       </div>
       <div style="text-align:right;margin-right:20px">
         <label>Apply min-charge?</label>
@@ -54,13 +70,13 @@
           placement="top"
           width="330"
         >
-          <p>This order will be uneditable after this operation unless re-opren it.</p>
+          <p>All charging details be unaddable after this operation unless reset the invoice status.</p>
           <p>Are you sure you want to continue?</p>
           <div style="text-align: right; margin: 0">
             <el-button size="mini" type="text" @click="popVisible1 = false">No</el-button>
-            <el-button type="primary" size="mini" @click="onCloseClicked">Yes</el-button>
+            <el-button type="primary" size="mini" @click="onGenerateClicked">Yes</el-button>
           </div>
-          <el-button slot="reference" class="gb-button" type="primary">Confirm Close</el-button>
+          <el-button slot="reference" class="gb-button" type="primary">Generate</el-button>
         </el-popover>
       </div>
     </el-dialog>
@@ -92,7 +108,7 @@
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
 import { setInboundDate } from '@/api/receiving'
-import { CloseOrder, OpenOrder } from '@/api/accounting'
+import { generateOrderInvoice, updateOrderInvoiceStatus } from '@/api/accounting'
 
 export default {
   components: {
@@ -114,6 +130,7 @@ export default {
       closeVisible: false,
       popVisible1: false,
       popVisible2: false,
+      popVisible3: false,
       isAppliedMinCharge: false,
       closeDate: '',
       arrivedTime: ''
@@ -123,23 +140,29 @@ export default {
 
   },
   methods: {
-    onCloseClicked() {
+    onGenerateClicked() {
       if (this.closeDate) {
         this.popVisible1 = false
-        CloseOrder(this.masterOrder.container, 'MasterOrder', this.closeDate, this.isAppliedMinCharge).then(() => {
+        generateOrderInvoice(this.masterOrder.container, 'MasterOrder', this.closeDate, this.isAppliedMinCharge).then(() => {
           this.$emit('reloadOrder')
           this.closeVisible = false
         })
       } else {
         this.$message({
-          message: 'Please select a close date',
+          message: 'Please select a end date',
           type: 'error'
         })
       }
     },
+    onCloseClicked() {
+      this.popVisible3 = false
+      updateOrderInvoiceStatus(this.masterOrder.container, 'MasterOrder', 'Closed').then(() => {
+        this.$emit('reloadOrder')
+      })
+    },
     onOpenClicked() {
       this.popVisible2 = false
-      OpenOrder(this.masterOrder.container, 'MasterOrder').then(() => {
+      updateOrderInvoiceStatus(this.masterOrder.container, 'MasterOrder', 'Await').then(() => {
         this.$emit('reloadOrder')
       })
     },

@@ -61,7 +61,7 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ dataA, dataB } = {}) {
       this.chart.setOption({
         xAxis: {
           data: ['2 Mar - 8 Mar', '9 Mar - 15 Mar', '16 Mar - 22 Mar', '23 Mar - 29 Mar', '30 Mar - 5 Apr', '6 Apr - 12 Apr', '13 Apr - 19 Apr'],
@@ -104,7 +104,7 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: expectedData,
+          data: dataA,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
         },
@@ -124,7 +124,7 @@ export default {
               }
             }
           },
-          data: actualData,
+          data: dataB,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]

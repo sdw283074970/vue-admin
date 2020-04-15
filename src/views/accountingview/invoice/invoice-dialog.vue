@@ -7,13 +7,14 @@
       <el-row>
         <el-col :span="12"><div>
           <el-form-item label="Date of Cost" prop="dateOfCost">
-            <el-date-picker v-model="service.dateOfCost" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px;" />
+            <el-date-picker v-model="service.dateOfCost" :disabled="invoiceStatus=='Closed'||(service.chargingType!='Cost'&&invoiceStatus=='Generated')" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px;" />
           </el-form-item>
           <el-form-item label="Charging Type" prop="chargingType">
             <el-select
               v-model="service.chargingType"
               filterable
               placeholder="-- Please Select --"
+              :disabled="invoiceStatus!='Await'"
               @change="onChargingTypeChange"
             >
               <el-option
@@ -28,6 +29,7 @@
             <el-select
               v-model="service.activity"
               filterable
+              :disabled="invoiceStatus!='Await'"
               placeholder="-- Please Select --"
               @change="onChargingNameChange"
             >
@@ -40,7 +42,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="Discount" prop="discount">
-            <el-input v-model="service.discount" @change="onChargingInputChange" />
+            <el-input v-model="service.discount" :disabled="invoiceStatus!='Await'" @change="onChargingInputChange" />
           </el-form-item>
         </div></el-col>
         <el-col :span="12"><div>
@@ -48,16 +50,16 @@
             <el-input v-model="service.cost" />
           </el-form-item>
           <el-form-item label="Rate" prop="rate">
-            <el-input v-model="service.rate" style="width:80px" @change="onChargingInputChange" />
+            <el-input v-model="service.rate" :disabled="invoiceStatus!='Await'" style="width:80px" @change="onChargingInputChange" />
             <!-- <template>{{ '/' + service.unit }}</template> -->
             <font>{{ '/ ' + service.unit }}</font>
             <!-- </el-input> -->
           </el-form-item>
           <el-form-item label="Quantity" prop="quantity">
-            <el-input v-model="service.quantity" @change="onChargingInputChange" />
+            <el-input v-model="service.quantity" :disabled="invoiceStatus!='Await'" @change="onChargingInputChange" />
           </el-form-item>
           <el-form-item label="Amount" prop="amount">
-            <el-input v-model="service.amount" />
+            <el-input v-model="service.amount" :disabled="invoiceStatus!='Await'" />
           </el-form-item>
         </div></el-col>
       </el-row>
@@ -90,7 +92,8 @@ export default {
       customerId: Number,
       isEdit: Boolean,
       orderType: String,
-      service: Object
+      service: Object,
+      invoiceStatus: String
   },
   data(){
     const validatePrice = (rule, value, callback) => {

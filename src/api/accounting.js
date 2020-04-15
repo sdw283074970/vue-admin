@@ -16,16 +16,16 @@ export function updateInvoiceStatus(id, type) {
   })
 }
 
-export function CloseOrder(reference, type, date, isMinCharge) {
+export function generateOrderInvoice(reference, type, date, isMinCharge) {
   return request({
     url: 'api/fba/fbainvoicedetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + type + '&closeDate=' + date + '&isAppliedMinCharge=' + isMinCharge,
     method: 'put'
   })
 }
 
-export function OpenOrder(reference, type) {
+export function updateOrderInvoiceStatus(reference, type, status) {
   return request({
-    url: 'api/fba/fbainvoicedetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + type,
+    url: 'api/fba/fbainvoicedetail/?reference=' + encodeURIComponent(reference) + '&invoiceType=' + type + '&status=' + status,
     method: 'put'
   })
 }
