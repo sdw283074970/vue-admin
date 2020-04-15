@@ -131,40 +131,48 @@
       @current-change="handleCurrentChange"
     />
 
-    <el-dialog title="Edit Customer1" :visible.sync="editVisible" top="5vh" width="900px">
-      <div>
-        <el-form ref="customerForm" :model="form" :rules="rules" style="float:left">
-          <el-form-item label="Customer Name" :label-width="formLabelWidth" prop="name">
-            <el-input v-model="form.name" autocomplete="on" :disabled="isEdit" />
-          </el-form-item>
-          <el-form-item label="Customer Code" :label-width="formLabelWidth" prop="customerCode">
-            <el-input v-model="form.customerCode" autocomplete="on" :disabled="isEdit" />
-          </el-form-item>
-          <el-form-item label="Department" :label-width="formLabelWidth" prop="departmentCode">
-            <el-input v-model="form.departmentCode" autocomplete="on" :disabled="true" />
-          </el-form-item>
-          <el-form-item label="Warning Level(Ctns)" :label-width="formLabelWidth" prop="warningQuantityLevel">
-            <el-input v-model="form.warningQuantityLevel" type="number" autocomplete="on" />
-          </el-form-item>
-          <el-form-item label="Contact Person" :label-width="formLabelWidth" prop="contactPerson">
-            <el-input v-model="form.contactPerson" autocomplete="on" />
-          </el-form-item>
-        </el-form>
-        <el-form ref="customerForm2" :model="form" style="float:right;margin-right:30px">
-          <el-form-item label="Tel." :label-width="formLabelWidth" prop="telNumber">
-            <el-input v-model="form.telNumber" autocomplete="on" />
-          </el-form-item>
-          <el-form-item label="Email" :label-width="formLabelWidth" prop="emailAddress">
-            <el-input v-model="form.emailAddress" autocomplete="on" />
-          </el-form-item>
-          <el-form-item label="Address Line 1" :label-width="formLabelWidth" prop="firstAddressLine">
-            <el-input v-model="form.firstAddressLine" autocomplete="on" />
-          </el-form-item>
-          <el-form-item label="Address Line 2" :label-width="formLabelWidth" prop="secondAddressLine">
-            <el-input v-model="form.secondAddressLine" autocomplete="on" />
-          </el-form-item>
-        </el-form>
-      </div>
+    <el-dialog title="Edit Customer" :visible.sync="editVisible" top="5vh" width="900px">
+      <el-form ref="form-required" :rules="rules" :model="form">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="Department" :label-width="formLabelWidth" prop="departmentCode">
+              <el-input v-model="form.departmentCode" autocomplete="on" :disabled="true" />
+            </el-form-item>
+            <el-form-item label="Customer Name" :label-width="formLabelWidth" prop="name">
+              <el-input v-model="form.name" autocomplete="on" :disabled="isEdit" />
+            </el-form-item>
+            <el-form-item label="Customer Code" :label-width="formLabelWidth" prop="customerCode">
+              <el-input v-model="form.customerCode" autocomplete="on" :disabled="isEdit" />
+            </el-form-item>
+            <el-form-item label="Warning Level(Ctns)" :label-width="formLabelWidth" prop="warningQuantityLevel">
+              <el-input v-model="form.warningQuantityLevel" type="number" autocomplete="on" />
+            </el-form-item>
+            <el-form-item label="Contact Person" :label-width="formLabelWidth" prop="contactPerson">
+              <el-input v-model="form.contactPerson" autocomplete="on" />
+            </el-form-item>
+            <el-form-item label="Inbound Min Charge" :label-width="formLabelWidth" prop="inboundMinCharge">
+              <el-input v-model="form.inboundMinCharge" />
+            </el-form-item>
+            <el-form-item label="Outbound Min Charge" :label-width="formLabelWidth" prop="outboundMinCharge">
+              <el-input v-model="form.outboundMinCharge" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="Tel." :label-width="formLabelWidth" prop="telNumber">
+              <el-input v-model="form.telNumber" autocomplete="on" />
+            </el-form-item>
+            <el-form-item label="Email" :label-width="formLabelWidth" prop="emailAddress">
+              <el-input v-model="form.emailAddress" autocomplete="on" />
+            </el-form-item>
+            <el-form-item label="Address Line 1" :label-width="formLabelWidth" prop="firstAddressLine">
+              <el-input v-model="form.firstAddressLine" autocomplete="on" />
+            </el-form-item>
+            <el-form-item label="Address Line 2" :label-width="formLabelWidth" prop="secondAddressLine">
+              <el-input v-model="form.secondAddressLine" autocomplete="on" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
       <div slot="footer" class="dialog-footer" style="margin-right:40px;margin-bottom:30px">
         <el-button v-if="isEdit" type="primary" @click="onUpdateClicked">Update</el-button>
         <el-button v-if="!isEdit" type="primary" @click="onCreateClicked">Create</el-button>
@@ -236,7 +244,9 @@ export default {
               secondAddressLine: '',
               telNumber: '',
               emailAddress: '',
-              contactPerson: ''
+              contactPerson: '',
+              inboundMinCharge: 0,
+              outboundMinCharge: 0
             },
             rules: {
               name: [
@@ -246,6 +256,12 @@ export default {
                 { required: true, message: 'Please input customer code', trigger: 'change' }
               ],
               warningQuantityLevel: [
+                { required: true, message: 'Please input the warning level', trigger: 'change' }
+              ],
+              inboundMincharge: [
+                { required: true, message: 'Please input the warning level', trigger: 'change' }
+              ],
+              outboundMincharge: [
                 { required: true, message: 'Please input the warning level', trigger: 'change' }
               ]
             }
@@ -284,9 +300,9 @@ export default {
         this.currentPage = val;
       },
       editHandler: function(id, index) {
-        if (this.$refs.customerForm != undefined)
+        if (this.$refs['form-required'] != undefined)
         {
-          this.$refs.customerForm.resetFields()
+          this.$refs['form-required'].resetFields()
         }
         this.editVisible = true
         this.isEdit = true
@@ -299,7 +315,7 @@ export default {
         });        
       },
       onUpdateClicked() {
-        this.$refs['customerForm'].validate((valid) => {
+        this.$refs['form-required'].validate((valid) => {
             if (valid) {
                 updateCustomer(this.form).then(() => {
                   this.loading = true
@@ -313,7 +329,7 @@ export default {
         });
       },
       onCreateClicked() {
-        this.$refs['customerForm'].validate((valid) => {
+        this.$refs['form-required'].validate((valid) => {
             if (valid) {
                 createCustomer(this.form).then(() => {
                   this.editVisible = false
@@ -327,10 +343,10 @@ export default {
         });
       },
       onNewCustomerClicked() {
-        // this.$refs.customerForm.resetFields()
-        if (this.$refs.customerForm != undefined)
+        // this.$refs.form-required.resetFields()
+        if (this.$refs['form-required'] != undefined)
         {
-          this.$refs.customerForm.resetFields()
+          this.$refs['form-required'].resetFields()
         }
         this.form = {
           id : 0,
