@@ -43,8 +43,8 @@
         </el-popover>
       </div>
       <div style="margin-top:10px">
-        <el-button :disabled="step>2" class="gb-button" type="info" @click="onPushClicked">Approve And Push</el-button>
-        <el-button :disabled="step!=6" class="gb-button" type="info" @click="shippedVisible=true">Set Shipped Date</el-button>
+        <el-button :disabled="step>2" class="gb-button" type="primary" @click="onPushClicked">Approve And Push</el-button>
+        <el-button :disabled="step!=6" class="gb-button" type="primary" @click="shippedVisible=true">Set Shipped Date</el-button>
       </div>
     </div>
 

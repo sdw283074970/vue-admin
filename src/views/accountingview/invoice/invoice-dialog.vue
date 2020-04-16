@@ -58,8 +58,11 @@
           <el-form-item label="Quantity" prop="quantity">
             <el-input v-model="service.quantity" :disabled="invoiceStatus!='Await'" @change="onChargingInputChange" />
           </el-form-item>
-          <el-form-item label="Amount" prop="amount">
+          <el-form-item label="Original Amount" prop="amount">
             <el-input v-model="service.amount" :disabled="invoiceStatus!='Await'" />
+          </el-form-item>
+          <el-form-item label="Final Amount" prop="amount">
+            <el-input v-model="service.finalAmount" :disabled="invoiceStatus!='Await'" />
           </el-form-item>
         </div></el-col>
       </el-row>
@@ -189,7 +192,8 @@ export default {
       })
     },
     onChargingInputChange() {
-      this.service.amount = (this.service.rate * this.service.quantity * this.service.discount).toFixed(2)
+      this.service.amount = (this.service.rate * this.service.quantity).toFixed(2)
+      this.service.finalAmount = (this.service.rate * this.service.quantity * this.service.discount).toFixed(2)
     }
   },
   mounted() {

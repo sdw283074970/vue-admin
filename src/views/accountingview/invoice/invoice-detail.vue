@@ -31,6 +31,7 @@
         prop="id"
         label="Id"
         width="60"
+        sortable
       />
       <el-table-column
         prop="activity"
@@ -242,7 +243,8 @@ export default {
             quantity: 0,
             rate: 0,
             unit: '',
-            description: ''
+            description: '',
+            finalAmount: 0
         },
         cost: {
             activity: '',
@@ -269,6 +271,21 @@ export default {
     onAddClicked() {
       this.chargingVisible = true
       this.isEdit = false
+      this.service = {
+        activity: '',
+        amount: 0,
+        chargingType: '',
+        cost: 0,
+        dateOfCost: '',
+        inoviceType: '',
+        discount: 1,
+        memo: '',
+        quantity: 0,
+        rate: 0,
+        unit: '',
+        description: '',
+        finalAmount: 0
+      }
     },
     onAddCostClicked() {
       this.costVisible = true

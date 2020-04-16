@@ -123,6 +123,26 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/quiz',
+    component: Layout,
+    name: 'Quizs',
+    meta: { title: 'Quiz', icon: 'table', role: ['office', 'accounting'] },
+    children: [
+      {
+        path: '/quiz/1',
+        name: 'Quiz 1',
+        component: () => import('@/views/quiz/quiz1'),
+        meta: { title: 'Quiz 1', icon: 'table' }
+      },
+      {
+        path: '/quiz/2',
+        name: 'Quiz 2',
+        component: () => import('@/views/quiz/quiz2'),
+        meta: { title: 'Quiz 2', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/reports',
     component: Layout,
     name: 'Reports',
@@ -260,7 +280,7 @@ export const asyncRoutes = [
     path: '/accounting',
     component: Layout,
     name: 'Accounting Receiving',
-    meta: { title: 'Accounting Terminal', icon: 'table', role: ['accounting'] },
+    meta: { title: 'Accounting Terminal', icon: 'table', role: ['office', 'accounting'] },
     children: [
       {
         path: 'receiving',

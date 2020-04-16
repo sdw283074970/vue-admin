@@ -44,8 +44,8 @@
         </el-popover>
       </div>
       <div style="margin-top:10px">
-        <el-button :disabled="step<3" class="gb-button" type="info" @click="arrivedVisible=true">Set Arrived Date</el-button>
-        <el-button type="info" class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
+        <el-button :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Set Arrived Date</el-button>
+        <el-button type="primary" class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
       </div>
     </div>
 
