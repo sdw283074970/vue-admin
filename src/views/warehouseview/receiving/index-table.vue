@@ -172,6 +172,7 @@
     </el-table>
 
     <el-pagination
+      v-if="!loading"
       style="margin-top:10px"
       :current-page="currentPage"
       :page-sizes="[10, 20, 50, 100]"

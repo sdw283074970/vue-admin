@@ -1,7 +1,14 @@
 <template>
   <div>
-    <h2>Control Panel</h2>
-    <h3>Invoice Status: {{ masterOrder.invoiceStatus }}</h3>
+    <h2>Invoice Status & Control Panel</h2>
+    <div style="margin-bottom:20px;width:600px">
+      <el-steps :active="invoiceStep" finish-status="success">
+        <el-step title="Await" description="Waiting for generating invoice" />
+        <el-step title="Generated" description="Wairting for adding cost" />
+        <el-step title="Closed" description="Finished" />
+      </el-steps>
+      <h3>{{ 'Current invoice status: ' + masterOrder.invoiceStatus }}</h3>
+    </div>
 
     <div style="margin-bottom:10px">
       <div>
@@ -134,6 +141,12 @@ export default {
       isAppliedMinCharge: false,
       closeDate: '',
       arrivedTime: ''
+    }
+  },
+  computed: {
+    invoiceStep() {
+      const s = this.masterOrder.invoiceStatus
+      if (s === 'Await') { return 1 } else if (s === 'Generated') { return 2 } else { return 3 }
     }
   },
   mounted() {

@@ -1,7 +1,14 @@
 <template>
   <div>
-    <h2>Control Panel</h2>
-    <h3>Invoice Status: {{ shipOrder.invoiceStatus }}</h3>
+    <h2>Invoice Status & Control Panel</h2>
+    <div style="margin-bottom:20px;width:600px">
+      <el-steps :active="invoiceStep" finish-status="success">
+        <el-step title="Await" description="Waiting for generating invoice" />
+        <el-step title="Generated" description="Wairting for adding cost" />
+        <el-step title="Closed" description="Finished" />
+      </el-steps>
+      <h3>{{ 'Current invoice status: ' + shipOrder.invoiceStatus }}</h3>
+    </div>
     <div style="margin-bottom:10px">
       <div>
         <el-button class="gb-button" type="primary" :disabled="shipOrder.invoiceStatus!='Await'" @click="closeVisible=true">Generate Invoice</el-button>
@@ -137,9 +144,13 @@ export default {
     }
   },
   computed: {
-    today: function() {
+    today() {
       var date = new Date()
       return date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString()
+    },
+    invoiceStep() {
+      const s = this.shipOrder.invoiceStatus
+      if (s === 'Await') { return 1 } else if (s === 'Generated') { return 2 } else { return 3 }
     }
   },
   watch: {
