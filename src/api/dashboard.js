@@ -9,3 +9,10 @@ export function getDashboard(data) {
     method: 'get'
   })
 }
+
+export function getLinerChart(operation) {
+  return request({
+    url: 'api/fba/chart/?operation=' + operation,
+    method: 'get'
+  })
+}

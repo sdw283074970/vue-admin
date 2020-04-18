@@ -18,6 +18,7 @@
     <el-table
       ref="table"
       :data="orderDetails"
+      :summary-method="getSummaries"
       show-summary
       stripe
       border
@@ -357,6 +358,56 @@ export default {
         message: 'Feature comming soon',
         type: 'warning'
         });
+    },
+    getSummaries(param) {
+      const { columns, data } = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = 'Sum'
+          return
+        }
+        else if (index === 5) {
+          let receivable = data.map(item => Number(item['grossWeight']))
+          let actual = data.map(item => Number(item['actualGrossWeight']))
+          sums[index] = (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr}) : 0) + ' of ' + (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0)
+        }
+        else if (index === 6) {
+          let receivable = data.map(item => Number(item['cbm']))
+          let actual = data.map(item => Number(item['actualCBM']))
+          sums[index] = (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr}) : 0) + ' of ' + (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0)
+        }
+        else if (index === 7) {
+          let receivable = data.map(item => Number(item['quantity']))
+          let actual = data.map(item => Number(item['actualQuantity']))
+          sums[index] = (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr}) : 0) + ' of ' + (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0)
+        }
+        else if (index === 9) {
+          const value = data.map(item => Number(item['labelFileNumbers']))
+          sums[index] = value.length > 0 ? value.reduce((sum, curr) => { return sum + curr}) : 0
+        }
+        else {
+          sums[index] = '-'
+          return
+        }
+
+        // const values = data.map(item => Number(item[column.property]))
+        // if (!values.every(value => isNaN(value))) {
+        //   sums[index] = values.reduce((prev, curr) => {
+        //     const value = Number(curr)
+        //     if (!isNaN(value)) {
+        //       return prev + curr
+        //     } else {
+        //       return prev
+        //     }
+        //   }, 0)
+        //   sums[index] = sums[index]
+        // } else {
+        //   sums[index] = '-'
+        // }
+      })
+
+      return sums
     }
   },
   mounted() {

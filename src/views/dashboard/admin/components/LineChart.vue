@@ -59,12 +59,12 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-      this.setOptions(this.chartData)
+      // this.setOptions(this.chartData)
     },
-    setOptions({ dataA, dataB } = {}) {
+    setOptions({ inboundData, outboundData, xAxisData } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['2 Mar - 8 Mar', '9 Mar - 15 Mar', '16 Mar - 22 Mar', '23 Mar - 29 Mar', '30 Mar - 5 Apr', '6 Apr - 12 Apr', '13 Apr - 19 Apr'],
+          data: xAxisData,
           boundaryGap: false,
           axisTick: {
             show: false
@@ -90,10 +90,10 @@ export default {
           }
         },
         legend: {
-          data: ['inbound plts', 'outbound plts']
+          data: ['inbound', 'outbound']
         },
         series: [{
-          name: 'inbound plts', itemStyle: {
+          name: 'inbound', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -104,12 +104,12 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: dataA,
+          data: inboundData,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
         },
         {
-          name: 'outbound plts',
+          name: 'outbound',
           smooth: true,
           type: 'line',
           itemStyle: {
@@ -124,7 +124,7 @@ export default {
               }
             }
           },
-          data: dataB,
+          data: outboundData,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]

@@ -2,7 +2,7 @@
   <div class="dashboard-editor-container">
     <!-- <github-corner class="github-corner" /> -->
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+    <panel-group :line-chart-data-sum-set="lineChartDataSumSet" @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData" />
@@ -51,24 +51,26 @@ import BarChart from './components/BarChart'
 // import TodoList from './components/TodoList'
 // import BoxCard from './components/BoxCard'
 
-const lineChartData = {
-  newVisitis: {
-    dataA: [100, 120, 161, 134, 105, 160, 165],
-    dataB: [120, 82, 91, 154, 162, 140, 145]
-  },
-  messages: {
-    dataA: [200, 192, 120, 144, 160, 130, 140],
-    dataB: [180, 160, 151, 106, 145, 150, 130]
-  },
-  purchases: {
-    dataA: [80, 100, 121, 104, 105, 90, 100],
-    dataB: [120, 90, 100, 138, 142, 130, 130]
-  },
-  shoppings: {
-    dataA: [130, 140, 141, 142, 145, 150, 160],
-    dataB: [120, 82, 91, 154, 162, 140, 130]
-  }
-}
+import { getLinerChart } from '@/api/dashboard'
+
+// const lineChartData = {
+//   newVisitis: {
+//     dataA: [100, 120, 161, 134, 105, 160, 165],
+//     dataB: [120, 82, 91, 154, 162, 140, 145]
+//   },
+//   messages: {
+//     dataA: [200, 192, 120, 144, 160, 130, 140],
+//     dataB: [180, 160, 151, 106, 145, 150, 130]
+//   },
+//   purchases: {
+//     dataA: [80, 100, 121, 104, 105, 90, 100],
+//     dataB: [120, 90, 100, 138, 142, 130, 130]
+//   },
+//   shoppings: {
+//     dataA: [130, 140, 141, 142, 145, 150, 160],
+//     dataB: [120, 82, 91, 154, 162, 140, 130]
+//   }
+// }
 
 export default {
   name: 'DashboardAdmin',
@@ -85,12 +87,57 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      lineChartData: {},
+      lineChartDataSet: {},
+      lineChartDataSumSet: {
+        inboundPlts: 0,
+        outboundPlts: 0,
+        inboundCtns: 0,
+        outboundCtns: 0,
+        inboundIncomes: 0,
+        outboundIncomes: 0,
+        inboundCosts: 0,
+        outboundCots: 0,
+        inboundProfits: 0,
+        outboundProfits: 0
+      }
     }
+  },
+  mounted() {
+    getLinerChart('GetInboundAndOutboundPltsData').then(body => {
+      this.lineChartData = body.data
+      this.lineChartDataSet.pltsData = body.data
+      this.lineChartDataSumSet.inboundPlts = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
+      this.lineChartDataSumSet.outboundPlts = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
+    })
+
+    getLinerChart('GetInboundAndOutboundCtnsData').then(body => {
+      this.lineChartDataSet.ctnsData = body.data
+      this.lineChartDataSumSet.inboundCtns = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
+      this.lineChartDataSumSet.outboundCtns = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
+    })
+
+    getLinerChart('GetInboundAndOutboundIncomesData').then(body => {
+      this.lineChartDataSet.incomesData = body.data
+      this.lineChartDataSumSet.inboundIncomes = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
+      this.lineChartDataSumSet.outboundIncomes = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
+    })
+
+    getLinerChart('GetInboundAndOutboundCostsData').then(body => {
+      this.lineChartDataSet.costsData = body.data
+      this.lineChartDataSumSet.inboundCosts = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
+      this.lineChartDataSumSet.outboundCosts = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
+    })
+
+    getLinerChart('GetInboundAndOutboundProfitsData').then(body => {
+      this.lineChartDataSet.profitsData = body.data
+      this.lineChartDataSumSet.inboundProfits = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
+      this.lineChartDataSumSet.outboundProfits = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
+    })
   },
   methods: {
     handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
+      this.lineChartData = this.lineChartDataSet[type]
     }
   }
 }

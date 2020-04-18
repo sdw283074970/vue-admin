@@ -305,6 +305,7 @@ export default {
       getChargingInfo(id).then(body => {
         this.service = body.data
         this.service.id = id
+        this.service.finalAmount = body.data.amount * body.data.discount
       })
     },
     onDeleteClicked(id) {
