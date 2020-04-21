@@ -10,9 +10,9 @@ export function getDashboard(data) {
   })
 }
 
-export function getLinerChart(operation) {
+export function getLinerChart(timeUnit, timeCount) {
   return request({
-    url: 'api/fba/chart/?operation=' + operation,
+    url: 'api/fba/chart/?timeUnit=' + timeUnit + '&timeCount=' + timeCount,
     method: 'get'
   })
 }

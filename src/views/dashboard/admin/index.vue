@@ -5,10 +5,15 @@
     <panel-group :line-chart-data-sum-set="lineChartDataSumSet" @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
+      <line-chart :chart-data="lineChartData" :title-suffix="lineChartTitleSuffix" />
+      <div style="margin-bottom:20px;text-align:right">
+        <el-button :loading="loading" @click="onDaysClicked">30 Days</el-button>
+        <el-button :loading="loading" @click="onWeeksClicked">7 Weeks</el-button>
+        <el-button :loading="loading" @click="onMonthsClicked">12 Months</el-button>
+      </div>
     </el-row>
 
-    <el-row :gutter="32">
+    <!-- <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <raddar-chart />
@@ -24,7 +29,7 @@
           <bar-chart />
         </div>
       </el-col>
-    </el-row>
+    </el-row> -->
 
     <!-- <el-row :gutter="8">
       <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
@@ -44,9 +49,9 @@
 // import GithubCorner from '@/components/GithubCorner'
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
-import RaddarChart from './components/RaddarChart'
-import PieChart from './components/PieChart'
-import BarChart from './components/BarChart'
+// import RaddarChart from './components/RaddarChart'
+// import PieChart from './components/PieChart'
+// import BarChart from './components/BarChart'
 // import TransactionTable from './components/TransactionTable'
 // import TodoList from './components/TodoList'
 // import BoxCard from './components/BoxCard'
@@ -76,17 +81,19 @@ export default {
   name: 'DashboardAdmin',
   components: {
     // GithubCorner,
-    PanelGroup,
-    LineChart,
-    RaddarChart,
-    PieChart,
-    BarChart
+    // RaddarChart,
+    // PieChart,
+    // BarChart
     // TransactionTable,
     // TodoList,
-    // BoxCard
+    // BoxCard,
+    PanelGroup,
+    LineChart
   },
   data() {
     return {
+      loading: false,
+      lineChartTitleSuffix: '',
       lineChartData: {},
       lineChartDataSet: {},
       lineChartDataSumSet: {
@@ -104,40 +111,50 @@ export default {
     }
   },
   mounted() {
-    getLinerChart('GetInboundAndOutboundPltsData').then(body => {
-      this.lineChartData = body.data
-      this.lineChartDataSet.pltsData = body.data
-      this.lineChartDataSumSet.inboundPlts = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
-      this.lineChartDataSumSet.outboundPlts = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
-    })
-
-    getLinerChart('GetInboundAndOutboundCtnsData').then(body => {
-      this.lineChartDataSet.ctnsData = body.data
-      this.lineChartDataSumSet.inboundCtns = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
-      this.lineChartDataSumSet.outboundCtns = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
-    })
-
-    getLinerChart('GetInboundAndOutboundIncomesData').then(body => {
-      this.lineChartDataSet.incomesData = body.data
-      this.lineChartDataSumSet.inboundIncomes = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
-      this.lineChartDataSumSet.outboundIncomes = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
-    })
-
-    getLinerChart('GetInboundAndOutboundCostsData').then(body => {
-      this.lineChartDataSet.costsData = body.data
-      this.lineChartDataSumSet.inboundCosts = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
-      this.lineChartDataSumSet.outboundCosts = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
-    })
-
-    getLinerChart('GetInboundAndOutboundProfitsData').then(body => {
-      this.lineChartDataSet.profitsData = body.data
-      this.lineChartDataSumSet.inboundProfits = body.data.inboundData.reduce((sum, current) => { return sum + current }, 0)
-      this.lineChartDataSumSet.outboundProfits = body.data.outboundData.reduce((sum, current) => { return sum + current }, 0)
-    })
+    this.getLineDataByParam('Week', 7)
   },
   methods: {
     handleSetLineChartData(type) {
       this.lineChartData = this.lineChartDataSet[type]
+    },
+    getLineDataByParam(timeUnit, timeCount) {
+      getLinerChart(timeUnit, timeCount).then(body => {
+        this.lineChartData = body.data[0]
+        this.lineChartDataSet.pltsData = body.data[0]
+        this.lineChartDataSumSet.inboundPlts = body.data[0].inboundData.reduce((sum, current) => { return sum + current }, 0)
+        this.lineChartDataSumSet.outboundPlts = body.data[0].outboundData.reduce((sum, current) => { return sum + current }, 0)
+
+        this.lineChartDataSet.ctnsData = body.data[1]
+        this.lineChartDataSumSet.inboundCtns = body.data[1].inboundData.reduce((sum, current) => { return sum + current }, 0)
+        this.lineChartDataSumSet.outboundCtns = body.data[1].outboundData.reduce((sum, current) => { return sum + current }, 0)
+
+        this.lineChartDataSet.incomesData = body.data[2]
+        this.lineChartDataSumSet.inboundIncomes = body.data[2].inboundData.reduce((sum, current) => { return sum + current }, 0)
+        this.lineChartDataSumSet.outboundIncomes = body.data[2].outboundData.reduce((sum, current) => { return sum + current }, 0)
+
+        this.lineChartDataSet.costsData = body.data[3]
+        this.lineChartDataSumSet.inboundCosts = body.data[3].inboundData.reduce((sum, current) => { return sum + current }, 0)
+        this.lineChartDataSumSet.outboundCosts = body.data[3].outboundData.reduce((sum, current) => { return sum + current }, 0)
+
+        this.lineChartDataSet.profitsData = body.data[4]
+        this.lineChartDataSumSet.inboundProfits = body.data[4].inboundData.reduce((sum, current) => { return sum + current }, 0)
+        this.lineChartDataSumSet.outboundProfits = body.data[4].outboundData.reduce((sum, current) => { return sum + current }, 0)
+
+        this.loading = false
+        this.lineChartTitleSuffix = 'in ' + timeCount + ' ' + timeUnit + 's'
+      })
+    },
+    onDaysClicked() {
+      this.loading = true
+      this.getLineDataByParam('Day', 30)
+    },
+    onWeeksClicked() {
+      this.loading = true
+      this.getLineDataByParam('Week', 7)
+    },
+    onMonthsClicked() {
+      this.loading = true
+      this.getLineDataByParam('Month', 12)
     }
   }
 }

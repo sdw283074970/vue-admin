@@ -25,7 +25,7 @@
             <el-button size="mini" type="text" @click="popVisible3 = false">No</el-button>
             <el-button type="primary" size="mini" @click="onCloseClicked">Yes</el-button>
           </div>
-          <el-button slot="reference" class="gb-button" type="primary" :disabled="shipOrder.invoiceStatus!='Generated'">Close Order</el-button>
+          <el-button slot="reference" class="gb-button" :loading="loading" type="primary" :disabled="shipOrder.invoiceStatus!='Generated'">Close Order</el-button>
         </el-popover>
         <el-popover
           v-model="popVisible2"
@@ -43,8 +43,8 @@
         </el-popover>
       </div>
       <div style="margin-top:10px">
-        <el-button :disabled="step>2" class="gb-button" type="primary" @click="onPushClicked">Approve And Push</el-button>
-        <el-button :disabled="step!=6" class="gb-button" type="primary" @click="shippedVisible=true">Set Shipped Date</el-button>
+        <el-button :disabled="step>2" class="gb-button" :loading="loading" type="primary" @click="onPushClicked">Approve And Push</el-button>
+        <el-button :disabled="step!=6" class="gb-button" :loading="loading" type="primary" @click="shippedVisible=true">Set Shipped Date</el-button>
       </div>
     </div>
 
@@ -81,7 +81,7 @@
             <el-button size="mini" type="text" @click="popVisible1 = false">No</el-button>
             <el-button type="primary" size="mini" @click="onGenerateClicked">Yes</el-button>
           </div>
-          <el-button slot="reference" class="gb-button" type="primary">Generate</el-button>
+          <el-button slot="reference" class="gb-button" :loading="loading" type="primary">Generate</el-button>
         </el-popover>
       </div>
 
@@ -111,7 +111,7 @@
             <el-button size="mini" type="text" @click="popVisible3 = false">No, I am going to double check this order</el-button>
             <el-button type="primary" size="mini" @click="onShippedClicked">Yes, I understand and will take all responsibilities</el-button>
           </div>
-          <el-button slot="reference" class="gb-button" type="primary">Confirm Shipping</el-button>
+          <el-button slot="reference" class="gb-button" :loading="loading" type="primary">Confirm Shipping</el-button>
         </el-popover>
       </div>
     </el-dialog>
@@ -140,6 +140,7 @@ export default {
       shippedVisible: false,
       isAppliedMinCharge: false,
       closeDate: '',
+      loading: false,
       shippedDate: ''
     }
   },
@@ -172,19 +173,24 @@ export default {
   },
   methods: {
     onCloseClicked() {
+      this.loading = true
       this.popVisible4 = false
       updateOrderInvoiceStatus(this.shipOrder.shipOrderNumber, 'ShipOrder', 'Closed').then(() => {
+        this.loading = false
         this.$emit('reloadOrder')
       })
     },
     onGenerateClicked() {
+      this.loading = true
       if (this.closeDate) {
         this.popVisible1 = false
+        this.loading = false
         generateOrderInvoice(this.shipOrder.shipOrderNumber, 'ShipOrder', this.closeDate, this.isAppliedMinCharge).then(() => {
           this.$emit('reloadOrder')
           this.closeVisible = false
         })
       } else {
+        this.loading = false
         this.$message({
           message: 'Please select a close date',
           type: 'error'
@@ -193,23 +199,30 @@ export default {
     },
     onOpenClicked() {
       this.popVisible2 = false
+      this.loading = true
       updateOrderInvoiceStatus(this.shipOrder.shipOrderNumber, 'ShipOrder', 'Await').then(() => {
+        this.loading = false
         this.$emit('reloadOrder')
       })
     },
     onPushClicked() {
+      this.loading = true
       pushShipOrderStatus(this.$route.params.shipOrderId, this.today).then(() => {
+        this.loading = false
         this.$emit('reloadOrder')
       })
     },
     onShippedClicked() {
       this.popVisible3 = false
+      this.loading = true
       if (this.shippedDate) {
         markOrderShipped(this.shipOrder.id, this.shippedDate).then(() => {
           this.$emit('reloadOrder')
           this.shippedVisible = false
+          this.loading = false
         })
       } else {
+        this.loading = false
         this.$message({
           message: 'Please select a shipped date',
           type: 'error'

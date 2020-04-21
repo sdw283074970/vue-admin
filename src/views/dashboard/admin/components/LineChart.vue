@@ -29,6 +29,10 @@ export default {
     chartData: {
       type: Object,
       required: true
+    },
+    titleSuffix: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -63,6 +67,23 @@ export default {
     },
     setOptions({ inboundData, outboundData, xAxisData } = {}) {
       this.chart.setOption({
+        title: {
+          text: 'Line Chart ' + this.titleSuffix, // 主标题
+          textStyle: {
+            color: '#0DB9F2', // 颜色
+            fontStyle: 'normal', // 风格
+            fontWeight: 'normal', // 粗细
+            fontFamily: 'Microsoft yahei', // 字体
+            fontSize: 14, // 大小
+            align: 'center' // 水平对齐
+          },
+          // subtext: 'xx副标题', // 副标题
+          subtextStyle: { // 对应样式
+            color: '#F27CDE',
+            fontSize: 14
+          },
+          itemGap: 7
+        },
         xAxis: {
           data: xAxisData,
           boundaryGap: false,
