@@ -112,6 +112,8 @@
       >
         <template slot-scope="scope">
           <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
+          <el-button v-if="scope.row.status=='Inactive'" style="width:80px" @click="activeHandler(scope.row.id, scope.$index)">Active</el-button>
+          <el-button v-if="scope.row.status=='Active'" style="width:80px" @click="activeHandler(scope.row.id, scope.$index)">Deactive</el-button>
           <el-button @click="onLinkToUserClicked(scope.row.id)">Link to User</el-button>
           <el-button @click="onInstructionsClicked(scope.row.id)">Instructions</el-button>
           <el-button @click="onServicesClicked(scope.row.id)">Services</el-button>
@@ -206,7 +208,7 @@
 
 <script>
 /* eslint-disable */
-import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates, getCustomerServices, getCustomerStoragePriceTable } from '@/api/customer'
+import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates, getCustomerServices, getCustomerStoragePriceTable, swithCustomerStatus } from '@/api/customer'
 
 export default {
     data() {
@@ -435,6 +437,11 @@ export default {
             message: 'Success',
             type: 'success'
           })
+        })
+      },
+      activeHandler(id) {
+        swithCustomerStatus(id).then(() => {
+          this.reloadCustomers();
         })
       }
     },

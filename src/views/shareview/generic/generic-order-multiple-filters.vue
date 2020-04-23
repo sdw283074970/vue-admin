@@ -3,6 +3,7 @@
     <el-select
       v-model="status"
       multiple
+      filterable
       collapse-tags
       placeholder="-- Status --"
     >
@@ -17,6 +18,7 @@
       v-model="customerCodes"
       multiple
       collapse-tags
+      filterable
       placeholder="-- Customer Code --"
     >
       <el-option
@@ -29,6 +31,7 @@
     <el-select
       v-model="invoiceStatus"
       multiple
+      filterable
       collapse-tags
       placeholder="-- Invoice Status --"
     >
@@ -41,6 +44,7 @@
     </el-select>
     <el-select
       v-model="sortBy"
+      filterable
       placeholder="-- Sort By --"
     >
       <el-option
@@ -79,6 +83,9 @@ export default {
       invoiceStatusOptions: [{
         label: 'Await',
         value: 'Await'
+      }, {
+        label: 'Generated',
+        value: 'Generated'
       }, {
         label: 'Closed',
         value: 'Closed'

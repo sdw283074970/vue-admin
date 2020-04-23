@@ -12,11 +12,25 @@
       title="Select Released Date"
       :visible.sync="releaseVisible"
       top="5vh"
-      width="380px"
+      width="250px"
       :lock-scroll="false"
     >
-      <el-date-picker v-model="shipOrder.releasedDate" type="date" placeholder="Select Released Date" value-format="yyyy-MM-dd" style="width:200px;" />
-      <el-button type="primary" @click="onConfirmReleasedClicked">Confirm</el-button>
+      <el-date-picker v-model="shipOrder.releasedDate" type="date" placeholder="Select Released Date" value-format="yyyy-MM-dd" style="width:200px" />
+      <div style="text-align:right">
+        <el-popover
+          v-model="popVisible"
+          placement="bottom"
+          width="400"
+          style="margin-left:10px"
+        >
+          <p>Are you sure you have logged all the charging notes?</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="popVisible = false">No, I am going to double check it</el-button>
+            <el-button type="primary" size="mini" @click="onConfirmReleasedClicked">Yes, I will be responsible for this operation</el-button>
+          </div>
+          <el-button slot="reference" type="primary">Confirm</el-button>
+        </el-popover>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -36,7 +50,8 @@ export default {
     return {
       pushVisible: false,
       recallVisible: false,
-      releaseVisible: false
+      releaseVisible: false,
+      popVisible: false
     }
   },
   computed: {
@@ -76,10 +91,17 @@ export default {
       this.$emit('onCallBackClicked')
     },
     onConfirmReleasedClicked() {
-      pushShipOrderStatus(this.$route.params.shipOrderId, this.shipOrder.releasedDate).then(() => {
-        this.$emit('reloadOrder')
-        this.releaseVisible = false
-      })
+      if (this.shipOrder.releasedDate !== '') {
+        pushShipOrderStatus(this.$route.params.shipOrderId, this.shipOrder.releasedDate).then(() => {
+          this.$emit('reloadOrder')
+          this.releaseVisible = false
+        })
+      } else {
+        this.$message({
+          message: 'Please select a release date',
+          type: 'error'
+        })
+      }
     }
   }
 }

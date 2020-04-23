@@ -30,7 +30,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row v-if="checkPermission(['admin', 'office', 'accounting'])" :gutter="40" class="panel-group">
+    <el-row v-if="checkPermission(['admin', 'accounting'])" :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('incomesData')">
           <div class="card-panel-icon-wrapper icon-money">

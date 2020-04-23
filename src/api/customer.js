@@ -183,3 +183,10 @@ export function changePassword(email, old, psw) {
     method: 'put'
   })
 }
+
+export function swithCustomerStatus(id) {
+  return request({
+    url: 'api/customermanagement/?customerId=' + id + '&operation=Switch',
+    method: 'put'
+  })
+}

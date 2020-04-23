@@ -22,7 +22,7 @@
           <p>This order will be uneditable.</p>
           <p>Are you sure you want to continue?</p>
           <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="popVisible3 = false">No</el-button>
+            <el-button size="mini" type="text" @click="popVisible4 = false">No</el-button>
             <el-button type="primary" size="mini" @click="onCloseClicked">Yes</el-button>
           </div>
           <el-button slot="reference" class="gb-button" :loading="loading" type="primary" :disabled="shipOrder.invoiceStatus!='Generated'">Close Order</el-button>

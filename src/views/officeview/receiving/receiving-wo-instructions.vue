@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Instructions & Operations & Charging</h2>
+    <h2>Instructions & Operations & Charging Notes</h2>
     <div style="margin-bottom:10px">
       <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="masterOrder.invoiceStatus=='Closed'" @click="onNewClicked">New</el-button>
       <el-popover
