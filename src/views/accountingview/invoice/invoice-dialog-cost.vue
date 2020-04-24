@@ -9,6 +9,22 @@
           <el-form-item label="Date of Cost" prop="dateOfCost">
             <el-date-picker v-model="service.dateOfCost" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px;" />
           </el-form-item>
+          <el-form-item label="Charging Type" prop="chargingType">
+            <el-select
+              v-model="service.chargingType"
+              filterable
+              placeholder="-- Please Select --"
+              :disabled="true"
+              @change="onChargingTypeChange"
+            >
+              <el-option
+                v-for="item in chargingTypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
           <el-form-item label="Cost Name" prop="activity">
             <el-input v-model="service.activity" />
           </el-form-item>
@@ -31,6 +47,7 @@
     </el-form>
     <div style="text-align:right;margin-right:7%">
       <el-button v-if="!isEdit" type="primary" @click="onAddClicked">Add</el-button>
+      <el-button v-if="isEdit" type="primary" @click="onUpdateClicked">Update</el-button>
       <el-button @click="onCancelClicked">Cancel</el-button>
     </div>
   </div>
@@ -73,6 +90,9 @@ export default {
           dateOfCost: [
             { required: true, message: 'Please select a date', trigger: 'change' }
           ],
+          chargingType: [
+            { required: true, message: 'Please select a type', trigger: 'change' }
+          ],
           activity: [
             { required: true, message: 'Please select an item', trigger: 'change' }
           ],
@@ -99,8 +119,16 @@ export default {
     },
     onUpdateClicked() {      
       this.service.invoiceType = this.orderType
-      updateChargingDetail(this.service.id, this.service).then(() => {
-        this.$emit('reloadOrder')
+      this.$refs['form-required'].validate((valid) => {
+        if (valid)
+        {
+          updateChargingDetail(this.service.id, this.service).then(() => {
+            this.$emit('reloadOrder')
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
       })
     },
     onCancelClicked() {

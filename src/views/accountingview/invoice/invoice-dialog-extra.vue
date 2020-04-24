@@ -14,7 +14,7 @@
               v-model="service.chargingType"
               filterable
               placeholder="-- Please Select --"
-              :disabled="invoiceStatus!='Await'"
+              :disabled="true"
               @change="onChargingTypeChange"
             >
               <el-option
@@ -25,21 +25,8 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="Charging Item" prop="activity">
-            <el-select
-              v-model="service.activity"
-              filterable
-              :disabled="invoiceStatus!='Await'"
-              placeholder="-- Please Select --"
-              @change="onChargingNameChange"
-            >
-              <el-option
-                v-for="item in chargingItemOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+          <el-form-item label="Extra Act Name" prop="activity">
+            <el-input v-model="service.activity" />
           </el-form-item>
           <el-form-item label="Discount" prop="discount">
             <el-input v-model="service.discount" :disabled="invoiceStatus!='Await'" @change="onChargingInputChange" />
@@ -116,10 +103,7 @@ export default {
         pallets: 0,
         cartons: 0,
         skuNumber: 0,
-        chargingTypeOptions: [
-          {value: 'Cost', label: 'Cost'},
-          {value: 'Extra Charging', label: 'Extra Charging'}
-          ],
+        chargingTypeOptions: [],
         chargingItemOptions: [],
         rules: {
           dateOfCost: [
@@ -129,7 +113,7 @@ export default {
             { required: true, message: 'Please select a type', trigger: 'change' }
           ],
           activity: [
-            { required: true, message: 'Please select an item', trigger: 'change' }
+            { required: true, message: 'Please input a name', trigger: 'change' }
           ],
           cost: [
             { required: true, message: 'Please input cost', trigger: 'change' }

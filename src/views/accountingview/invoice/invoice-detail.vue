@@ -2,22 +2,10 @@
   <div>
     <h2>Invoice Detail</h2>
     <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus!='Await'" :loading="loading" @click="onAddClicked">Add Charging</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus!='Await'" :loading="loading" @click="onAddClicked">Regular Charging</el-button>
+      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus!='Await'" :loading="loading" @click="onExtraClicked">Extra Charging</el-button>
       <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus=='Closed'" :loading="loading" @click="onAddCostClicked">Add Cost</el-button>
       <el-button class="gb-button" type="primary" icon="el-icon-download" :disabled="invoiceStatus=='Await'" :loading="loading" @click="downloadInvoiceHandler">Export Report</el-button>
-      <!-- <el-popover
-        v-model="popVisible"
-        placement="top"
-        width="380"
-      >
-        <p>All existed instructions & chargings will be overwritten.</p>
-        <p>Are you sure you want to continue?</p>
-        <div style="text-align: right; margin: 0">
-          <el-button size="mini" type="text" @click="popVisible = false">No</el-button>
-          <el-button type="primary" size="mini" @click="onResetClicked">Yes</el-button>
-        </div>
-        <el-button slot="reference" class="gb-button" type="primary">Reset Instruction</el-button>
-      </el-popover> -->
     </div>
     <el-table
       ref="table-instructions"
@@ -41,7 +29,7 @@
       <el-table-column
         prop="chargingType"
         label="TYPE"
-        width="100"
+        width="110"
       />
       <el-table-column
         prop="unit"
@@ -164,7 +152,7 @@
               Options<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
+              <el-dropdown-item :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onUpdateClicked(scope.row.id, scope.row.chargingType)">Update</el-dropdown-item>
               <!-- <el-dropdown-item :disabled="invoiceStatus=='Closed'" @click="onAddClicked" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item> -->
               <el-dropdown-item divided :disabled="invoiceStatus=='Closed'||(scope.row.chargingType!='Cost'&&invoiceStatus=='Generated')" @click="onAddClicked" @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
             </el-dropdown-menu>
@@ -184,6 +172,23 @@
         :reference="reference"
         :order-type="orderType"
         :service="service"
+        :invoice-status="invoiceStatus"
+        @reloadOrder="reloadOrder"
+        @closeDialog="closeDialog"
+      />
+    </el-dialog>
+    <el-dialog
+      title="Add Extra Charging"
+      :visible.sync="extraVisible"
+      width="800px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <invoice-dialog-extra
+        :is-edit="isEdit"
+        :reference="reference"
+        :order-type="orderType"
+        :service="extra"
         :invoice-status="invoiceStatus"
         @reloadOrder="reloadOrder"
         @closeDialog="closeDialog"
@@ -213,6 +218,7 @@
 /* eslint-disable */
 import { updateInvoiceStatus, getChargingInfo, deleteChargingDetail, generateInvoice } from '@/api/accounting'
 import { downloadFile } from '@/api/receiving'
+import { checkPermission } from '@/utils/permission' // 权限判断函数
 
 export default {
   props: {
@@ -223,6 +229,7 @@ export default {
   },
   components: {
     'invoice-dialog': () => import('@/views/accountingview/invoice/invoice-dialog'),
+    'invoice-dialog-extra': () => import('@/views/accountingview/invoice/invoice-dialog-extra'),
     'invoice-dialog-cost': () => import('@/views/accountingview/invoice/invoice-dialog-cost')
   },
   data() {
@@ -230,6 +237,7 @@ export default {
         isEdit: false,
         chargingVisible: false,
         costVisible: false,
+        extraVisible: false,
         loading: false,
         service: {
             activity: '',
@@ -250,6 +258,20 @@ export default {
             activity: '',
             amount: 0,
             chargingType: 'Cost',
+            cost: 0,
+            dateOfCost: '',
+            inoviceType: '',
+            discount: 1,
+            memo: '',
+            quantity: 0,
+            rate: 0,
+            unit: 'N/A',
+            description: ''
+        },
+        extra: {
+            activity: '',
+            amount: 0,
+            chargingType: 'Extra Charging',
             cost: 0,
             dateOfCost: '',
             inoviceType: '',
@@ -291,6 +313,10 @@ export default {
       this.costVisible = true
       this.isEdit = false
     },
+    onExtraClicked() {
+      this.extraVisible = true
+      this.isEdit = false
+    },
     reloadOrder() {
       this.chargingVisible = false
       this.$emit('reloadOrder')
@@ -298,14 +324,31 @@ export default {
     closeDialog() {
       this.chargingVisible = false
       this.costVisible = false
+      this.extraVisible = false
     },
-    onUpdateClicked(id) {
-      this.chargingVisible = true
+    onUpdateClicked(id, type) {
+
+      if (type == 'Cost')
+        this.costVisible = true
+      else if (type == 'Extra Charging')
+        this.extraVisible = true
+      else
+        this.chargingVisible = true
+
       this.isEdit = true
+
       getChargingInfo(id).then(body => {
         this.service = body.data
         this.service.id = id
         this.service.finalAmount = body.data.amount * body.data.discount
+
+        this.cost = body.data
+        this.cost.id = id
+        this.cost.finalAmount = body.data.amount * body.data.discount
+
+        this.extra = body.data
+        this.extra.id = id
+        this.extra.finalAmount = body.data.amount * body.data.discount
       })
     },
     onDeleteClicked(id) {
