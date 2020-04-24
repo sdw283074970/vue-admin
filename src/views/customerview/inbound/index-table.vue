@@ -270,7 +270,7 @@ export default {
         else if (status == 'Arrived')
             return 'darkcyan';
         else
-            return 'black';
+            return 'blue';
       }
     },
     mounted() {

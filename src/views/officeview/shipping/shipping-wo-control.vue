@@ -23,6 +23,8 @@
           width="400"
           style="margin-left:10px"
         >
+          <h3 style="color:red">Warnning!</h3>
+          <p>This operation is unreversable.</p>
           <p>Are you sure you have logged all the charging notes?</p>
           <div style="text-align: right; margin: 0">
             <el-button size="mini" type="text" @click="popVisible = false">No, I am going to double check it</el-button>

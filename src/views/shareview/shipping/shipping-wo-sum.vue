@@ -6,14 +6,14 @@
     <el-button class="gb-button" :disabled="step<3" :loading="loading" @click="downloadBOLHandler()">Download BOL</el-button>
     <div style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
-        <el-step title="Step1: Start" description="Waiting for picking" />
-        <el-step title="Step2: Picking" description="Waiting for drafting" />
-        <el-step title="Step3: Draft" description="Waiting for pushing" />
-        <el-step title="Step4: Pushed" description="Wairing for processing" />
-        <el-step title="Step5: Processing" description="Waiting for ready" />
-        <el-step title="Step6: Ready" description="Waiting for releasing" />
-        <el-step title="Step7: Released" description="Waiting for confirming" />
-        <el-step title="Step8: Confirmed" description="Order completed" />
+        <el-step title="Start" description="Waiting for picking" />
+        <el-step title="Step1: Picking" description="Waiting for drafting" />
+        <el-step title="Step2: Draft" description="Waiting for pushing" />
+        <el-step title="Step3: Pushed" description="Wairing for processing" />
+        <el-step title="Step4: Processing" description="Waiting for ready" />
+        <el-step title="Step5: Ready" description="Waiting for releasing" />
+        <el-step title="Step6: Released" description="Waiting for confirming" />
+        <el-step title="Confirmed" description="Order completed" />
       </el-steps>
     </div>
     <div>

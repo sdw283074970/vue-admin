@@ -6,15 +6,16 @@
     <el-button class="gb-button" :disabled="step<8" :loading="loading" @click="onDownloadReceiptClicked">Download Receipt</el-button>
     <div style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
-        <el-step title="Step1: Start" description="Waiting for uploading" />
-        <el-step title="Step2: Uploading" description="Waiting for drafting" />
-        <el-step title="Step3: Draft" description="Waiting for pushing" />
-        <el-step title="Step4: Incoming" description="Waiting for arriving" />
-        <el-step title="Step5: Arrived" description="Waiting to start" />
-        <el-step title="Step6: Processing" description="Waiting to finish processing" />
-        <el-step title="Step7: Received" description="Waiting to finish palletizing" />
-        <el-step title="Step8: Registered" description="Waiting to finish allocating" />
-        <el-step title="Step9: Allocated" description="Waiting for shipping" />
+        <el-step title="Start" description="Waiting for uploading" />
+        <el-step title="Step1: Uploading" description="Waiting for drafting" />
+        <el-step title="Step2: Draft" description="Waiting for pushing" />
+        <el-step title="Step3: Incoming" description="Waiting for arriving" />
+        <el-step title="Step4: Arrived" description="Waiting to start" />
+        <el-step title="Step5: Processing" description="Waiting to finish processing" />
+        <el-step title="Step6: Received" description="Waiting to finish palletizing" />
+        <el-step title="Step7: Registered" description="Waiting to finish allocating" />
+        <el-step title="Step8: Allocated" description="Waiting for shipping" />
+        <el-step title="Confirmed" />
         <!-- <el-step title="Step8: Cleared Out"></el-step> -->
       </el-steps>
     </div>

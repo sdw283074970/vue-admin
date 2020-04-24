@@ -6,14 +6,22 @@
         <el-button class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
         <el-button class="gb-button" type="warning" :disabled="step!=3&&step!=4" @click="onRecallClicked">Recall WO</el-button>
         <el-button :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
-        <el-button type="info" class="gb-button" @click="inventoryVisible = true">View Inventory</el-button>
-        <!-- <el-button class="gb-button" disabled>Push Status</el-button>
-        <el-button class="gb-button" disabled>Reverse Status</el-button> -->
-      </div>
-      <div style="margin-top:10px">
-        <!-- <el-button class="gb-button" disabled>Auto Receive</el-button> -->
-        <!-- <el-button class="gb-button" @click="registerVisible = true">Register Plt Info</el-button>
-        <el-button class="gb-button" @click="onAllocateClicked">Allocate Location</el-button> -->
+        <el-popover
+          v-model="popVisible"
+          placement="bottom"
+          width="400"
+          style="margin-left:10px"
+        >
+          <h3 style="color:red">Warnning!</h3>
+          <p>This operation is unreversable.</p>
+          <p>Are you sure you have logged all the charging notes?</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="popVisible = false">No, I am going to double check it</el-button>
+            <el-button type="primary" size="mini" @click="onCompletedClicked">Yes, I will be responsible for this operation</el-button>
+          </div>
+          <el-button slot="reference" class="gb-button" :disabled="step!=8" type="primary">Mark Completed</el-button>
+        </el-popover>
+        <el-button type="info" class="gb-button" style="margin-left:10px" @click="inventoryVisible = true">View Inventory</el-button>
       </div>
     </div>
     <el-dialog
@@ -59,7 +67,7 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
-import { pushMasterOrder, recallMasterOrder, setInboundDate } from '@/api/receiving'
+import { pushMasterOrder, recallMasterOrder, setInboundDate, changeOrderStatus } from '@/api/receiving'
 
 export default {
   components: {
@@ -82,6 +90,7 @@ export default {
       allocateVisible: false,
       inventoryVisible: false,
       arrivedVisible: false,
+      popVisible: false,
       arrivedTime: ''
     }
   },
@@ -127,6 +136,16 @@ export default {
     onAllocateClicked() {
       this.allocateVisible = true
       this.$emit('refreshPackingList')
+    },
+    onCompletedClicked() {
+      changeOrderStatus(this.masterOrder.id, 'Confirmed').then(body => {
+        this.masterOrder.status = 'Confirmed'
+        this.popVisible = false
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+      })
     },
     reloadOrder() {
       this.$emit('reloadOrder')
