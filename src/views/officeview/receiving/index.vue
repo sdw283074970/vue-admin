@@ -1,6 +1,6 @@
 <template>
   <div class="gb-maincontainer">
-    <h1>Receiving Manager</h1>
+    <h1 id="csr-receiving-index">Receiving Manager</h1>
     <receiving-index-table
       :table-data="tableData"
       :loading="loading"

@@ -1,10 +1,12 @@
 <template>
   <div>
     <div class="input-bar">
-      <el-button :loading="localLoading" type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
-      <el-button :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
-      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
+      <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
+      <el-button id="csr-receiving-new-inbound-order" :loading="localLoading" type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
+      <el-button id="csr-receiving-sku-filter" :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
+      <el-button id="csr-receiving-reset-all" :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
+        id="csr-receiving-search"
         v-model="search"
         style="width:250px"
         size="large"
@@ -12,10 +14,11 @@
         :disabled="loading"
       />
     </div>
-    <div class="input-bar">
+    <div id="csr-receiving-advanced-filter" class="input-bar">
       <generic-order-multiple-filters ref="child" :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
     </div>
     <el-table
+      id="csr-receiving-orders"
       ref="table"
       v-loading="loading"
       :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
@@ -116,37 +119,12 @@
         align="center"
         width="100"
       />
-      <!-- <el-table-column
-        prop="customerCode"
-        label="Code"
-        :column-key="'code'"
-        :filters="customerCodeFilters"
-        width="100"
-      /> -->
       <el-table-column
         prop="subCustomer"
         label="Sub-code"
         sortable
         width="120"
       />
-      <!-- <el-table-column
-        label="Ctns"
-        align="center"
-        width="120"
-      >
-        <template slot-scope="scope">
-          <font color="blue">{{ scope.row.actualCtns }}</font> of <font color="red">{{ scope.row.totalCtns }}</font>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Plts"
-        align="center"
-        width="120"
-      >
-        <template slot-scope="scope">
-          <font color="blue">{{ scope.row.actualPlts }}</font> of <font color="red">{{ scope.row.originalPlts }}</font>
-        </template>
-      </el-table-column> -->
       <el-table-column
         label="Org Ctns"
         prop="totalCtns"
@@ -237,6 +215,7 @@
     </el-table>
 
     <el-pagination
+      id="csr-receiving-pagenation"
       v-if="!loading"
       style="margin-top:10px"
       :current-page="currentPage"
@@ -292,6 +271,8 @@
 </template>
 <script>
 /* eslint-disable vue/require-default-prop */
+import Driver from 'driver.js' // import driver.js
+import { indexSteps } from './guide/steps'
 import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, deleteReceivingOrder } from '@/api/receiving'
 
 export default {
@@ -309,6 +290,7 @@ export default {
   },
   data() {
     return {
+      driver: null,
       currentPage: 1,
       deleteVisible: false,
       grandNumber: '',
@@ -406,9 +388,13 @@ export default {
     }
   },
   mounted() {
-
+    this.driver = new Driver()
   },
   methods: {
+    guide() {
+      this.driver.defineSteps(indexSteps)
+      this.driver.start()
+    },
     transferDate: function(date) {
       return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
     },

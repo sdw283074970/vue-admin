@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-select
+      id="generic-filter-status"
       v-model="status"
       multiple
       filterable
@@ -15,6 +16,7 @@
       />
     </el-select>
     <el-select
+      id="generic-filter-customer-code"
       v-model="customerCodes"
       multiple
       collapse-tags
@@ -29,6 +31,7 @@
       />
     </el-select>
     <el-select
+      id="generic-filter-invoice-status"
       v-model="invoiceStatus"
       multiple
       filterable
@@ -43,6 +46,7 @@
       />
     </el-select>
     <el-select
+      id="generic-filter-sort"
       v-model="sortBy"
       filterable
       placeholder="-- Sort By --"
@@ -55,14 +59,15 @@
       />
     </el-select>
     <el-switch
+      id="generic-filter-ordering"
       v-model="isDesc"
       active-color="#13ce66"
       inactive-color="#13ce66"
       active-text="Desc"
       inactive-text="Asce"
     />
-    <el-button type="primary" @click="onFilterClicked">Filter</el-button>
-    <el-button @click="onResetFilterClicked">Reset Filter</el-button>
+    <el-button id="generic-filter-filter" type="primary" @click="onFilterClicked">Filter</el-button>
+    <el-button id="generic-filter-reset" @click="onResetFilterClicked">Reset Filter</el-button>
   </div>
 </template>
 <script>
