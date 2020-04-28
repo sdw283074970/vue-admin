@@ -29,6 +29,8 @@ axios.defaults.baseURL = '/api'
 Vue.use(VueAxios, axios)
 Vue.use(onlyNumber)
 
+import Driver from 'driver.js' // import driver.js
+Vue.prototype.$driver = Driver
 import 'driver.js/dist/driver.min.css' // import driver.js css
 
 // import 'bootstrap/dist/css/bootstrap.min.css'

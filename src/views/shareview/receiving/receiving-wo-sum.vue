@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div id="all-receiving-wo-summary">
     <h1>Receiving Order Detail Page</h1>
     <el-button @click="btnBackClicked">Back</el-button>
-    <el-button class="gb-button" :disabled="step<3" :loading="loading" @click="downloadWOHandler">Download WO</el-button>
-    <el-button class="gb-button" :disabled="step<8" :loading="loading" @click="onDownloadReceiptClicked">Download Receipt</el-button>
-    <div style="margin-top:20px">
+    <el-button id="all-receiving-wo-summary-wo" class="gb-button" :disabled="step<3" :loading="loading" @click="downloadWOHandler">Download WO</el-button>
+    <el-button id="all-receiving-wo-summary-receipt" class="gb-button" :disabled="step<8" :loading="loading" @click="onDownloadReceiptClicked">Download Receipt</el-button>
+    <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
+    <div id="all-receiving-wo-summary-status" style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
         <el-step title="Start" description="Waiting for uploading" />
         <el-step title="Step1: Uploading" description="Waiting for drafting" />
@@ -19,7 +20,7 @@
         <!-- <el-step title="Step8: Cleared Out"></el-step> -->
       </el-steps>
     </div>
-    <div>
+    <div id="all-receiving-wo-summary-board">
       <h2>Summary</h2>
       <el-form label-position="left" inline class="gb-table-expand">
         <el-form-item label="Container #">
@@ -100,6 +101,7 @@
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable handle-callback-err */
 /* eslint-disable vue/require-prop-types */
+import { all_receiving_summary_steps } from '@/guide/steps'
 import { generateReceivingReceipt, generateWO, downloadFile } from '@/api/receiving'
 
 export default {
@@ -110,13 +112,18 @@ export default {
   },
   data() {
     return {
+      driver: null,
       loading: false
     }
   },
   mounted() {
-
+    this.driver = new this.$driver()
   },
   methods: {
+    guide() {
+      this.driver.defineSteps(all_receiving_summary_steps)
+      this.driver.start()
+    },
     transferDate: function(date) {
       return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
     },

@@ -215,8 +215,8 @@
     </el-table>
 
     <el-pagination
-      id="csr-receiving-pagenation"
       v-if="!loading"
+      id="csr-receiving-pagenation"
       style="margin-top:10px"
       :current-page="currentPage"
       :page-sizes="[10, 20, 50, 100]"
@@ -271,8 +271,8 @@
 </template>
 <script>
 /* eslint-disable vue/require-default-prop */
-import Driver from 'driver.js' // import driver.js
-import { indexSteps } from './guide/steps'
+// import Driver from 'driver.js' // import driver.js
+import { csr_receiving_index_steps } from '@/guide/steps'
 import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, deleteReceivingOrder } from '@/api/receiving'
 
 export default {
@@ -388,11 +388,11 @@ export default {
     }
   },
   mounted() {
-    this.driver = new Driver()
+    this.driver = new this.$driver()
   },
   methods: {
     guide() {
-      this.driver.defineSteps(indexSteps)
+      this.driver.defineSteps(csr_receiving_index_steps)
       this.driver.start()
     },
     transferDate: function(date) {

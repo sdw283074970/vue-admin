@@ -1,21 +1,23 @@
 <template>
-  <div>
+  <div id="all-receiving-wo-pl">
     <h2>Packing List</h2>
     <!-- <p>current step: {{ step }}</p>
     <p>current step: {{ (step!==5) }}</p> -->
-    <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus" :disabled="step!=1&&step!=5" @click="onNewClicked">New SKU</el-button>
-      <el-button type="primary" icon="el-icon-upload" :disabled="step!=1&&step!=5" @click="onUploadPackingListClicked">Upload Packing List File</el-button>
-      <el-button type="primary" icon="el-icon-download" @click="onDownloadTemplateClicked">Download Packing List Template</el-button>
-      <el-button @click="clearFilter">Clear All Filters</el-button>
+    <div class="input-bar" style="margin-bottom:10px">
+      <el-button id="all-receiving-wo-sku" type="primary" icon="el-icon-plus" :disabled="step!=1&&step!=5" @click="onNewClicked">New SKU</el-button>
+      <el-button id="all-receiving-wo-uploadpl" type="primary" icon="el-icon-upload" :disabled="step!=1&&step!=5" @click="onUploadPackingListClicked">Upload Packing List File</el-button>
+      <el-button id="all-receiving-wo-template" type="primary" icon="el-icon-download" @click="onDownloadTemplateClicked">Download Packing List Template</el-button>
+      <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
+      <!-- <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input
         v-model="search"
         style="width:250px"
         size="large"
         placeholder="Search..."
-      />
+      /> -->
     </div>
     <el-table
+      id="all-receiving-wo-pltable"
       ref="table"
       :data="orderDetails"
       :summary-method="getSummaries"
@@ -163,6 +165,7 @@
 <script>
 /* eslint-disable */
 import { addNewSKU, getSKUInfo, updateSKUInfo, deleteSKU, adjustSKUQuantity, getUploadLabelAction, getLabelFileList, downloadFile, getUploadPackingListAction } from '@/api/receiving'
+import { all_receiving_wo_pl } from '@/guide/steps'
 
 export default {
   props: {
@@ -172,6 +175,7 @@ export default {
   },
   data() {
       return {
+          driver: null,
           search: '',
           filteredData : [],
           totalEntries: 0,
@@ -216,6 +220,10 @@ export default {
     "generic-labelfiles": () => import('@/views/shareview/generic/generic-labelfiles')
   },
   methods:{
+    guide() {
+      this.driver.defineSteps(all_receiving_wo_pl)
+      this.driver.start()
+    },
     filterHandler(value, row, column) {
       const property = column['property'];
       return row[property] === value;
@@ -411,7 +419,7 @@ export default {
     }
   },
   mounted() {
-
+    this.driver = new this.$driver()
   }
 }
 </script>

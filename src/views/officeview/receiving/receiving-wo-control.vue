@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div id="csr-receiving-wo-control">
     <h2>Control Panel</h2>
     <div style="margin-bottom:10px">
       <div>
-        <el-button class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
-        <el-button class="gb-button" type="warning" :disabled="step!=3&&step!=4" @click="onRecallClicked">Recall WO</el-button>
-        <el-button :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
+        <el-button id="csr-receiving-wo-push" class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
+        <el-button id="csr-receiving-wo-recall" class="gb-button" type="warning" :disabled="step!=3&&step!=4" @click="onRecallClicked">Recall WO</el-button>
+        <el-button id="csr-receiving-wo-arrive" :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
         <el-popover
           v-model="popVisible"
           placement="bottom"
@@ -19,9 +19,10 @@
             <el-button size="mini" type="text" @click="popVisible = false">No, I am going to double check it</el-button>
             <el-button type="primary" size="mini" @click="onCompletedClicked">Yes, I will be responsible for this operation</el-button>
           </div>
-          <el-button slot="reference" class="gb-button" :disabled="step!=8" type="primary">Mark Completed</el-button>
+          <el-button id="csr-receiving-wo-complete" slot="reference" class="gb-button" :disabled="step!=8" type="primary">Mark Completed</el-button>
         </el-popover>
-        <el-button type="info" class="gb-button" style="margin-left:10px" @click="inventoryVisible = true">View Inventory</el-button>
+        <el-button id="all-receiving-wo-summary-inventory" type="info" class="gb-button" style="margin-left:10px" @click="inventoryVisible = true">View Inventory</el-button>
+        <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
       </div>
     </div>
     <el-dialog
@@ -68,6 +69,7 @@
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
 import { pushMasterOrder, recallMasterOrder, setInboundDate, changeOrderStatus } from '@/api/receiving'
+import { csr_receiving_wo_control } from '@/guide/steps'
 
 export default {
   components: {
@@ -86,6 +88,7 @@ export default {
   },
   data() {
     return {
+      driver: null,
       registerVisible: false,
       allocateVisible: false,
       inventoryVisible: false,
@@ -95,7 +98,7 @@ export default {
     }
   },
   mounted() {
-
+    this.driver = new this.$driver()
   },
   methods: {
     onPushClicked() {
@@ -106,6 +109,10 @@ export default {
           type: 'success'
         })
       })
+    },
+    guide() {
+      this.driver.defineSteps(csr_receiving_wo_control)
+      this.driver.start()
     },
     onRecallClicked() {
       recallMasterOrder(this.masterOrder.id).then(() => {
