@@ -257,3 +257,77 @@ const all_receiving_wo_pl = [
 ]
 
 export { all_receiving_wo_pl }
+
+const csr_all_wo_instruction = [
+  {
+    element: '#csr-all-wo-instruction',
+    popover: {
+      title: 'Register notes',
+      description: 'As a CSR, you need to register all operations and charges of this order in this section, and process every feedback from the warehouse. Any missing registration may cause irreparable losses, which may require the responsible person to bear all or part of them.',
+      position: 'bottom'
+    }
+  },
+  {
+    element: '#csr-all-wo-instruction-new',
+    popover: {
+      title: 'Add new notes',
+      description: 'As long as the order has not been closed, this button will always be valid. Clicking this button would open a detailed new dialog.',
+      position: 'bottom'
+    }
+  },
+  {
+    element: '#csr-all-wo-instruction-reset',
+    popover: {
+      title: 'Reset instruction',
+      description: 'This button would be valid only when the status is step 1 or 2. Clicking this button would reset the entire Notes according to the instruction template. You can edit the instruction template in Customer Manager page.',
+      position: 'bottom'
+    }
+  },
+  {
+    element: '#csr-all-wo-instruction-table',
+    popover: {
+      title: 'Table & Details',
+      description: 'You can view, update and process feedback in this table. Note once you update a instruction, the status of this instruction would reset to New.',
+      position: 'top'
+    }
+  }
+]
+
+export { csr_all_wo_instruction }
+
+const all_all_wo_instruction_dialog = [
+  {
+    element: '#all-all-wo-instruction-description',
+    popover: {
+      title: 'Description',
+      description: 'Enter the instructions for the warehouse and the charge notes for the accounting here',
+      position: 'bottom'
+    }
+  },
+  {
+    element: '#all-all-wo-instruction-instruction',
+    popover: {
+      title: 'Instruction',
+      description: 'Instructions refer to instructions from customers. These instructions will be the basis for warehouse operations',
+      position: 'bottom'
+    }
+  },
+  {
+    element: '#all-all-wo-instruction-operation',
+    popover: {
+      title: 'Operation',
+      description: 'Operations refer to instructions from CSR. These instructions will be the basis for warehouse operations',
+      position: 'bottom'
+    }
+  },
+  {
+    element: '#all-all-wo-instruction-charging',
+    popover: {
+      title: 'Charging',
+      description: 'No matter what your role is, when you create a note, you must ensure the correctness of this field.',
+      position: 'top'
+    }
+  }
+]
+
+export { all_all_wo_instruction_dialog }

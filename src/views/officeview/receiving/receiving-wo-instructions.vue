@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h2>Instructions & Operations & Charging Notes</h2>
+  <div id="csr-all-wo-instruction">
+    <h2>Instruction & Operation & Charging Notes</h2>
     <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="masterOrder.invoiceStatus=='Closed'" @click="onNewClicked">New</el-button>
+      <el-button id="csr-all-wo-instruction-new" class="gb-button" type="primary" icon="el-icon-plus" :disabled="masterOrder.invoiceStatus=='Closed'" @click="onNewClicked">New</el-button>
       <el-popover
         v-model="popVisible"
         placement="top"
@@ -14,10 +14,12 @@
           <el-button size="mini" type="text" @click="popVisible = false">No</el-button>
           <el-button type="primary" size="mini" @click="onResetClicked">Yes</el-button>
         </div>
-        <el-button slot="reference" class="gb-button" type="primary" :disabled="step>2||masterOrder.invoiceStatus=='Closed'">Reset Instruction</el-button>
+        <el-button id="csr-all-wo-instruction-reset" slot="reference" class="gb-button" type="primary" :disabled="step>2||masterOrder.invoiceStatus=='Closed'">Reset Instruction</el-button>
       </el-popover>
+      <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
     </div>
     <el-table
+      id="csr-all-wo-instruction-table"
       ref="table-instructions"
       :data="instructions"
       stripe
@@ -127,6 +129,7 @@
 import { getInstructions } from '@/api/receiving'
 import { deleteInstruction } from '@/api/shipping'
 import { changeChargingStatus } from '@/api/accounting'
+import { csr_all_wo_instruction } from '@/guide/steps'
 
 export default {
   props: {
@@ -157,6 +160,10 @@ export default {
     "picking-wo-instructions-dialog": () => import('@/views/officeview/shipping/shipping-wo-instructions-dialog'),
   },
   methods:{
+    guide() {
+      this.driver.defineSteps(csr_all_wo_instruction)
+      this.driver.start()
+    },
     deleteHandler(id){
       deleteInstruction(id).then(() => {
         let index = this.instructions.map(x => x.id).indexOf(id)
@@ -245,6 +252,7 @@ export default {
     }
   },
   mounted() {
+    this.driver = new this.$driver()
       // getInstructions(this.$route.params.masterOrderId).then(body => {
       //     this.instructions = body.data.operationInstructions;
       // })
