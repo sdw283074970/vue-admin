@@ -45,11 +45,11 @@
           <el-form-item label="Quantity" prop="quantity">
             <el-input v-model="service.quantity" :disabled="invoiceStatus!='Await'" @change="onChargingInputChange" />
           </el-form-item>
-          <el-form-item label="Original Amount" prop="amount">
-            <el-input v-model="service.amount" :disabled="invoiceStatus!='Await'" />
+          <el-form-item label="Original Amount" prop="originalAmount">
+            <el-input v-model="service.originalAmount" :disabled="invoiceStatus!='Await'" />
           </el-form-item>
-          <el-form-item label="Final Amount" prop="finalAmount">
-            <el-input v-model="service.finalAmount" :disabled="invoiceStatus!='Await'" />
+          <el-form-item label="Final Amount" prop="amount">
+            <el-input v-model="service.amount" :disabled="invoiceStatus!='Await'" />
           </el-form-item>
         </div></el-col>
       </el-row>
@@ -127,10 +127,10 @@ export default {
           quantity: [
             { validator: validatePrice, trigger: 'change'}
           ],
-          amount: [
+          originalAmount: [
             { validator: validatePrice, trigger: 'change'}
           ],
-          finalAmount: [
+          amount: [
             { validator: validatePrice, trigger: 'change'}
           ],
           discount: [
@@ -191,8 +191,8 @@ export default {
       })
     },
     onChargingInputChange() {
-      this.service.amount = (this.service.rate * this.service.quantity).toFixed(2)
-      this.service.finalAmount = (this.service.rate * this.service.quantity * this.service.discount).toFixed(2)
+      this.service.originalAmount = (this.service.rate * this.service.quantity).toFixed(2)
+      this.service.amount = (this.service.rate * this.service.quantity * this.service.discount).toFixed(2)
     }
   },
   mounted() {

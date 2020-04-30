@@ -242,6 +242,7 @@ export default {
         service: {
             activity: '',
             amount: 0,
+            originalAmount: 0,
             chargingType: '',
             cost: 0,
             dateOfCost: '',
@@ -251,11 +252,11 @@ export default {
             quantity: 0,
             rate: 0,
             unit: '',
-            description: '',
-            finalAmount: 0
+            description: ''
         },
         cost: {
             activity: '',
+            originalAmount: 0,
             amount: 0,
             chargingType: 'Cost',
             cost: 0,
@@ -271,6 +272,7 @@ export default {
         extra: {
             activity: '',
             amount: 0,
+            originalAmount: 0,
             chargingType: 'Extra Charging',
             cost: 0,
             dateOfCost: '',
@@ -295,6 +297,7 @@ export default {
       this.isEdit = false
       this.service = {
         activity: '',
+        originalAmount: 0,
         amount: 0,
         chargingType: '',
         cost: 0,
@@ -305,17 +308,46 @@ export default {
         quantity: 0,
         rate: 0,
         unit: '',
-        description: '',
-        finalAmount: 0
+        description: ''
       }
     },
     onAddCostClicked() {
       this.costVisible = true
       this.isEdit = false
+      this.cost = {
+          activity: '',
+          originalAmount: 0,
+          amount: 0,
+          chargingType: 'Cost',
+          cost: 0,
+          dateOfCost: '',
+          inoviceType: '',
+          discount: 1,
+          memo: '',
+          quantity: 0,
+          rate: 0,
+          unit: 'N/A',
+          description: ''
+      }
     },
     onExtraClicked() {
       this.extraVisible = true
       this.isEdit = false
+      this.extra = {
+          activity: '',
+          amount: 0,
+          originalAmount: 0,
+          chargingType: 'Extra Charging',
+          cost: 0,
+          dateOfCost: '',
+          inoviceType: '',
+          discount: 1,
+          memo: '',
+          quantity: 0,
+          rate: 0,
+          unit: 'N/A',
+          description: ''
+      }
     },
     reloadOrder() {
       this.chargingVisible = false
@@ -340,15 +372,12 @@ export default {
       getChargingInfo(id).then(body => {
         this.service = body.data
         this.service.id = id
-        this.service.finalAmount = body.data.amount * body.data.discount
 
         this.cost = body.data
         this.cost.id = id
-        this.cost.finalAmount = body.data.amount * body.data.discount
 
         this.extra = body.data
         this.extra.id = id
-        this.extra.finalAmount = body.data.amount * body.data.discount
       })
     },
     onDeleteClicked(id) {
