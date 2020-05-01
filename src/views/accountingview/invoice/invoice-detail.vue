@@ -1,13 +1,15 @@
 <template>
-  <div>
+  <div id="acct-all-invoice">
     <h2>Invoice Detail</h2>
     <div style="margin-bottom:10px">
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus!='Await'" :loading="loading" @click="onAddClicked">Regular Charging</el-button>
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus!='Await'" :loading="loading" @click="onExtraClicked">Extra Charging</el-button>
-      <el-button class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus=='Closed'" :loading="loading" @click="onAddCostClicked">Add Cost</el-button>
-      <el-button class="gb-button" type="primary" icon="el-icon-download" :disabled="invoiceStatus=='Await'" :loading="loading" @click="downloadInvoiceHandler">Export Report</el-button>
+      <el-button id="acct-all-invoice-regular" class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus!='Await'" :loading="loading" @click="onAddClicked">Regular Charging</el-button>
+      <el-button id="acct-all-invoice-extra" class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus!='Await'" :loading="loading" @click="onExtraClicked">Extra Charging</el-button>
+      <el-button id="acct-all-invoice-cost" class="gb-button" type="primary" icon="el-icon-plus" :disabled="invoiceStatus=='Closed'" :loading="loading" @click="onAddCostClicked">Add Cost</el-button>
+      <el-button id="acct-all-invoice-report" class="gb-button" type="primary" icon="el-icon-download" :disabled="invoiceStatus=='Await'" :loading="loading" @click="downloadInvoiceHandler">Export Report</el-button>
+      <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
     </div>
     <el-table
+      id="acct-all-invoice-table"
       ref="table-instructions"
       :data="invoices"
       show-summary
@@ -219,6 +221,7 @@
 import { updateInvoiceStatus, getChargingInfo, deleteChargingDetail, generateInvoice } from '@/api/accounting'
 import { downloadFile } from '@/api/receiving'
 import { checkPermission } from '@/utils/permission' // 权限判断函数
+import { acct_all_invoice } from '@/guide/steps'
 
 export default {
   props: {
@@ -235,6 +238,7 @@ export default {
   data() {
       return {
         isEdit: false,
+        driver: null,
         chargingVisible: false,
         costVisible: false,
         extraVisible: false,
@@ -287,6 +291,10 @@ export default {
       };
   },
   methods:{
+    guide() {
+      this.driver.defineSteps(acct_all_invoice)
+      this.driver.start()
+    },
     onBtnClicked(id, type) {
       updateInvoiceStatus(id, type).then(() => {
         this.$emit('reloadOrder')
@@ -445,7 +453,7 @@ export default {
     }
   },
   mounted() {
-
+    this.driver = new this.$driver()
   }
 }
 </script>

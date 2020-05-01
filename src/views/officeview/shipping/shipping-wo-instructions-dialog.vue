@@ -54,7 +54,7 @@
       <el-button v-if="isWarehouse" type="primary" @click="onCommentClicked">Update Comment</el-button>
       <el-button v-if="isResult" type="primary" @click="resultHandler">Send Result</el-button>
       <el-button @click="onCancelClicked">Cancel</el-button>
-      <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
+      <!-- <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button> -->
     </div>
   </div>
 </template>

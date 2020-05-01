@@ -35,7 +35,7 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="gb-table-expand">
+          <el-form label-position="left" label-width="150px" inline class="gb-table-expand">
             <el-form-item label="Order #">
               <span>{{ props.row.shipOrderNumber }}</span>
             </el-form-item>
@@ -56,6 +56,9 @@
             </el-form-item>
             <el-form-item label="Carrier">
               <span>{{ props.row.carrier }}</span>
+            </el-form-item>
+            <el-form-item label="Created Date">
+              <span>{{ transferDate(props.row.createDate) }}</span>
             </el-form-item>
             <el-form-item label="Push Date">
               <span>{{ transferDate(props.row.placeTime) }}</span>
@@ -87,7 +90,22 @@
             <el-form-item label="Created By">
               <span>{{ props.row.createBy }}</span>
             </el-form-item>
-            <el-form-item label="Closed By">
+            <el-form-item label="Push By">
+              <span>{{ props.row.placedBy }}</span>
+            </el-form-item>
+            <el-form-item label="Start Process By">
+              <span>{{ props.row.startBy }}</span>
+            </el-form-item>
+            <el-form-item label="Released By">
+              <span>{{ props.row.releasedBy }}</span>
+            </el-form-item>
+            <el-form-item label="Shipped By">
+              <span>{{ props.row.shippedBy }}</span>
+            </el-form-item>
+            <el-form-item label="Latest Edit By">
+              <span>{{ props.row.editBy }}</span>
+            </el-form-item>
+            <el-form-item label="Confirmed By">
               <span>{{ props.row.confirmedBy }}</span>
             </el-form-item>
           </el-form>

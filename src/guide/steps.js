@@ -331,3 +331,56 @@ const all_all_wo_instruction_dialog = [
 ]
 
 export { all_all_wo_instruction_dialog }
+
+const acct_all_invoice = [
+  {
+    element: '#acct-all-invoice',
+    popover: {
+      title: 'Invoice Section',
+      description: 'If you have the permisson, you can record and export invoice excel file that can sent to customer in this section.',
+      position: 'top'
+    }
+  },
+  {
+    element: '#acct-all-invoice-regular',
+    popover: {
+      title: 'Add regular charge',
+      description: 'Regular charge refers to a chargeable service stored in this system. If you want to add a regular charge for cetain customer, fill the form in the dialoag opened by clicking this button.',
+      position: 'top'
+    }
+  },
+  {
+    element: '#acct-all-invoice-extra',
+    popover: {
+      title: 'Add extra charge',
+      description: 'Extra charge refers to a temporary or one time deal service does not stored in this system. If you want to add a extral charge for cetain customer, fill the form in the dialoag opened by clicking this button.',
+      position: 'top'
+    }
+  },
+  {
+    element: '#acct-all-invoice-cost',
+    popover: {
+      title: 'Charging',
+      description: 'If you want to add an independed cost item that does not belong to any exist operation for certion customer, fill the form in the dialog opened by clicking this button.',
+      position: 'top'
+    }
+  },
+  {
+    element: '#acct-all-invoice-report',
+    popover: {
+      title: 'Export Invoice',
+      description: 'You can export the invoice of this order only by clicking this button.',
+      position: 'top'
+    }
+  },
+  {
+    element: '#acct-all-invoice-table',
+    popover: {
+      title: 'Invoice details',
+      description: 'You can view the invoice details under this order.',
+      position: 'top'
+    }
+  }
+]
+
+export { acct_all_invoice }

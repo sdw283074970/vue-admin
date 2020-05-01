@@ -18,7 +18,7 @@
     </div>
     <div>
       <h2>Summary</h2>
-      <el-form label-position="left" inline class="gb-table-expand">
+      <el-form label-position="left" inline class="gb-table-expand" label-width="220px">
         <el-form-item label="Order #">
           <span>{{ shipOrder.shipOrderNumber }}</span>
         </el-form-item>
@@ -52,6 +52,9 @@
         <el-form-item label="QUick Instruction">
           <span>{{ shipOrder.instruction }}</span>
         </el-form-item>
+        <el-form-item label="Created Date">
+          <span>{{ transferDate(shipOrder.createDate) }}</span>
+        </el-form-item>
         <el-form-item label="Placed Date">
           <span>{{ transferDate(shipOrder.placeTime) }}</span>
         </el-form-item>
@@ -67,8 +70,26 @@
         <el-form-item label="Shipped Date">
           <span>{{ transferDate(shipOrder.shipDate) }}</span>
         </el-form-item>
-        <el-form-item label="Latest End Date">
+        <el-form-item label="Latest Invoice Generated Date">
           <span>{{ transferDate(shipOrder.closeDate) }}</span>
+        </el-form-item>
+        <el-form-item label="Created By">
+          <span>{{ shipOrder.createBy }}</span>
+        </el-form-item>
+        <el-form-item label="Push By">
+          <span>{{ shipOrder.placedBy }}</span>
+        </el-form-item>
+        <el-form-item label="Start Process By">
+          <span>{{ shipOrder.startBy }}</span>
+        </el-form-item>
+        <el-form-item label="Released By">
+          <span>{{ shipOrder.releasedBy }}</span>
+        </el-form-item>
+        <el-form-item label="Shipped By">
+          <span>{{ shipOrder.shippedBy }}</span>
+        </el-form-item>
+        <el-form-item label="Confirmed By">
+          <span>{{ shipOrder.confirmedBy }}</span>
         </el-form-item>
       </el-form>
     </div>
