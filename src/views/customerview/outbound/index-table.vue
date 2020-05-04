@@ -170,71 +170,60 @@
   </div>
 </template>
 <script>
-/* eslint-disable */
 export default {
-    props:{
-        filteredData: Array,
-        loading: Boolean,
-        totalEntries: Intl
+  props: {
+    filteredData: {
+      type: Array,
+      default: null
     },
-    data() {
-        return {
-            currentPage: 1,
-            pageSize: 20,
-            search: '',
-            customerCodeFilter : []
-        };
-    },
-    watch:{
-      search: function(val, oldVal){
-        this.$emit('onSearchChanged', val);
-      }
-    },
-    methods:{
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
-      },
-      filterChange(filters){
-      	console.log(filters);
-      },
-      clearFilter() {
-        this.$refs.table.clearFilter();
-      },
-      handleSizeChange(val) {
-        this.pageSize = val;
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-      },
-      editHandler: function(id) {
-        this.$emit('onEditClicked', id);
-      },
-      createHandler: function(){
-        this.$emit('onCreateClicked');
-      },
-      woHandler: function(id){
-        this.$router.push({path: '/outbound/outbound-wo/' + id});
-      },
-      changeStatusColor: function(status) {
-        if (status == 'New Created' || status == 'Draft')
-            return 'gray';
-        else if (status == 'Picking' || status == 'Processing' || status == 'Pending')
-            return 'red';
-        else if (status == 'New Order' || status == 'Returned' || status == 'New PO' || status == 'Updated')
-            return 'orange';
-        else if (status == 'Ready')
-            return 'green';
-        else if (status == 'Released')
-            return 'brown';
-        else if (status == 'Shipped')
-            return 'blue';
-        else
-            return 'black';
-      },
-    },
-    mounted() {
+    loading: Boolean,
+    totalEntries: Intl
+  },
+  data() {
+    return {
+      currentPage: 1,
+      pageSize: 20,
+      search: '',
+      customerCodeFilter: []
     }
+  },
+  watch: {
+    search: function(val, oldVal) {
+      this.$emit('onSearchChanged', val)
+    }
+  },
+  mounted() {
+  },
+  methods: {
+    filterHandler(value, row, column) {
+      const property = column['property']
+      return row[property] === value
+    },
+    filterChange(filters) {
+      console.log(filters)
+    },
+    clearFilter() {
+      this.$refs.table.clearFilter()
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
+    editHandler: function(id) {
+      this.$emit('onEditClicked', id)
+    },
+    createHandler: function() {
+      this.$emit('onCreateClicked')
+    },
+    woHandler: function(id) {
+      this.$router.push({ path: '/outbound/outbound-wo/' + id })
+    },
+    changeStatusColor: function(status) {
+      if (status === 'New Created' || status === 'Draft') { return 'gray' } else if (status === 'Picking' || status === 'Processing' || status === 'Pending') { return 'red' } else if (status === 'New Order' || status === 'Returned' || status === 'New PO' || status === 'Updated') { return 'orange' } else if (status === 'Ready') { return 'green' } else if (status === 'Released') { return 'brown' } else if (status === 'Shipped') { return 'blue' } else { return 'black' }
+    }
+  }
 }
 </script>
 

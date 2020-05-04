@@ -180,3 +180,40 @@ const invoiceStatus = [{
 }]
 
 export { invoiceStatus }
+
+const outboundOrderStatus = [
+  { value: 'New Created', text: 'New Created' },
+  { value: 'Picking', text: 'Picking' },
+  { value: 'Draft', text: 'Draft' },
+  { value: 'New Order', text: 'New Order' },
+  { value: 'Updated', text: 'Updated' },
+  { value: 'Returned', text: 'Returned' },
+  { value: 'Processing', text: 'Processing' },
+  { value: 'Ready', text: 'Ready' },
+  { value: 'Released', text: 'Released' },
+  { value: 'Shipped', text: 'Shipped' }
+]
+
+export { outboundOrderStatus }
+
+const outboundOrderSortOption = [
+  { text: 'Id', value: 'Id' },
+  { text: 'Status', value: 'Status' },
+  { text: 'Ship Order #', value: 'ShipOrderNumber' },
+  { text: 'Customer Code', value: 'CustomerCode' },
+  { text: 'Container Size', value: 'ContainerSize' },
+  { text: 'Batch #', value: 'BatchNumber' },
+  { text: 'Subcustomer Code', value: 'SubCustomer' },
+  { text: 'Dest', value: 'Destination' },
+  { text: 'ETS', value: 'ETS' },
+  { text: 'Total Ctns', value: 'TotalCtns' },
+  { text: 'Total Plts', value: 'TotalPlts' },
+  { text: 'POD', value: 'PODStatus' },
+  { text: '$ Amount', value: 'TotalAmount' },
+  { text: '$ Cost', value: 'TotalCost' },
+  { text: '$ Net', value: 'Net' },
+  { text: 'Invoice Status', value: 'InvoiceStatus' },
+  { text: 'Close Date', value: 'CloseDate' }
+]
+
+export { outboundOrderSortOption }

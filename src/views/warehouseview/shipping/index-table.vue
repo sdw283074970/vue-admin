@@ -168,149 +168,131 @@
   </div>
 </template>
 <script>
-/* eslint-disable */
+import { outboundOrderStatus } from '@/scripts/dropdown'
+
 export default {
-    props:{
-        tableData: Array,
-        loading: Boolean,
-        customerCodeFilters: Array
+  components: {
+    'generic-order-filter': () => import('@/views/shareview/generic/generic-order-filter')
+  },
+  props: {
+    tableData: {
+      type: Array,
+      default: null
     },
-    data() {
-        return {
-            currentPage: 1,
-            pageSize: 20,
-            search: '',
-            customerCodeFilter : [],
-            filteredData: [],
-            localLoading: false,
-            filterVisible: false,
-            orderType: 'MasterOrder',
-            statusFilters: [
-              { value: 'New Created', text: 'New Created' },
-              { value: 'Draft', text: 'Draft' },
-              { value: 'Incoming', text: 'Incoming' },
-              { value: 'Arrived', text: 'Arrived' },
-              { value: 'Processing', text: 'Processing' },
-              { value: 'Received', text: 'Received' },
-              { value: 'Registered', text: 'Registered' },
-              { value: 'Allocated', text: 'Allocated' }
-            ]
-        };
-    },
-    components: {
-        "generic-order-filter": () => import('@/views/shareview/generic/generic-order-filter')
-    },
-    computed: {
-      totalEntries() {
-        return this.filteredData.length
-      }
-    },
-    watch:{
-      tableData: function(val, oldVal){
-        this.filteredData = val
-      },
-      search: function(val, oldVal){
-        this.filteredData = this.tableData.filter(data => {
-            return Object.keys(data).some(key => {
-              return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
-          })
-        })
-      }
-    },
-    methods:{
-      transferDate: function(date) {
-          return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
-      },
-      clearFilter() {
-        this.$refs.table.clearFilter();
-        this.$emit('onRefreshClicked');
-        // this.localLoading = true;
-        // this.filteredData = this.tableData;
-        // this.localLoading = false;
-
-      },
-      handleSizeChange(val) {
-        this.pageSize = val;
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-      },
-      editHandler: function(id) {
-        this.$emit('onEditClicked', id);
-      },
-      createHandler: function(){
-        this.$emit('onCreateClicked');
-      },
-      woHandler: function(id){
-        this.$router.push({path: '/warehouse-shipping/shipping-wo/' + id});
-      },
-      changeStatusColor: function(status) {
-        if (status == 'New Created')
-            return 'gray';
-        else if (status == 'Picking' || status == 'Processing' || status == 'Pending' || status == 'Draft' || status == 'Updated')
-            return 'red';
-        else if (status == 'Incoming' || status == 'Returned' || status == 'New Order')
-            return 'orange';
-        else if (status == 'Allocated' || status == 'Released')
-            return 'brown';
-        else if (status == 'Received' || status == 'Ready')
-            return 'green';
-        else if (status == 'Registered')
-            return 'purple';
-        else if (status == 'Arrived')
-            return 'darkcyan';
-        else
-            return 'black';
-      },
-      onEfilesClicked(reference) {
-        this.$emit('onEfilesClicked', reference)
-      },
-      onFilterChange(filters) {
-        this.filteredData = this.tableData.filter((row) => {
-          return row.customerCode == filters.code[0]
-        })
-
-        // var arr = [];
-        // this.filteredData.filter(row => {
-        //   if (row.customerCode == filters.code[0])
-        //   {
-        //     arr.push(row);
-        //   }
-        // })
-        // this.filteredData = arr;
-
-        // this.filteredData = this.tableData.filter((row) => {
-        //   return row.status = filters.status[0]
-        // })
-      },
-      onFilterConfirmed(filter) {
-        this.filterVisible = false;
-        this.$emit('onFilterConfirmed', filter);
-      },
-      onNewOrderClicked() {
-        this.filteredData = this.tableData.filter((row) => {
-          return row.status == 'New Order'
-        })
-      },
-      onProcessingClicked() {
-        this.filteredData = this.tableData.filter((row) => {
-          return row.status == 'Processing'|| row.status == 'Pending' || row.status == 'Updated'
-        })
-      },
-      onReadyClicked() {
-        this.filteredData = this.tableData.filter((row) => {
-          return row.status == 'Ready'
-        })
-      },
-      onReleasedClicked() {
-        this.filteredData = this.tableData.filter((row) => {
-          return row.status == 'Released'
-        })
-      }
-    },
-    mounted() {
-
+    loading: Boolean,
+    customerCodeFilters: {
+      type: Array,
+      default: null
     }
+  },
+  data() {
+    return {
+      currentPage: 1,
+      pageSize: 20,
+      search: '',
+      customerCodeFilter: [],
+      filteredData: [],
+      localLoading: false,
+      filterVisible: false,
+      orderType: 'MasterOrder',
+      statusFilters: outboundOrderStatus
+    }
+  },
+  computed: {
+    totalEntries() {
+      return this.filteredData.length
+    }
+  },
+  watch: {
+    tableData: function(val, oldVal) {
+      this.filteredData = val
+    },
+    search: function(val, oldVal) {
+      this.filteredData = this.tableData.filter(data => {
+        return Object.keys(data).some(key => {
+          return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
+        })
+      })
+    }
+  },
+  mounted() {
+
+  },
+  methods: {
+    transferDate: function(date) {
+      return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
+    },
+    clearFilter() {
+      this.$refs.table.clearFilter()
+      this.$emit('onRefreshClicked')
+      // this.localLoading = true;
+      // this.filteredData = this.tableData;
+      // this.localLoading = false;
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
+    editHandler: function(id) {
+      this.$emit('onEditClicked', id)
+    },
+    createHandler: function() {
+      this.$emit('onCreateClicked')
+    },
+    woHandler: function(id) {
+      this.$router.push({ path: '/warehouse-shipping/shipping-wo/' + id })
+    },
+    changeStatusColor: function(status) {
+      if (status === 'New Created') { return 'gray' } else if (status === 'Picking' || status === 'Processing' || status === 'Pending' || status === 'Draft' || status === 'Updated') { return 'red' } else if (status === 'Incoming' || status === 'Returned' || status === 'New Order') { return 'orange' } else if (status === 'Allocated' || status === 'Released') { return 'brown' } else if (status === 'Received' || status === 'Ready') { return 'green' } else if (status === 'Registered') { return 'purple' } else if (status === 'Arrived') { return 'darkcyan' } else { return 'black' }
+    },
+    onEfilesClicked(reference) {
+      this.$emit('onEfilesClicked', reference)
+    },
+    onFilterChange(filters) {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.customerCode === filters.code[0]
+      })
+
+      // var arr = [];
+      // this.filteredData.filter(row => {
+      //   if (row.customerCode == filters.code[0])
+      //   {
+      //     arr.push(row);
+      //   }
+      // })
+      // this.filteredData = arr;
+
+      // this.filteredData = this.tableData.filter((row) => {
+      //   return row.status = filters.status[0]
+      // })
+    },
+    onFilterConfirmed(filter) {
+      this.filterVisible = false
+      this.$emit('onFilterConfirmed', filter)
+    },
+    onNewOrderClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'New Order'
+      })
+    },
+    onProcessingClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Processing' || row.status === 'Pending' || row.status === 'Updated'
+      })
+    },
+    onReadyClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Ready'
+      })
+    },
+    onReleasedClicked() {
+      this.filteredData = this.tableData.filter((row) => {
+        return row.status === 'Released'
+      })
+    }
+  }
 }
 </script>
 

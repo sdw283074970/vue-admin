@@ -108,61 +108,68 @@
 </template>
 
 <script>
-/* eslint-disable */
-
 export default {
   props: {
-    formData: Object,
+    formData: {
+      type: Object,
+      default: null
+    },
     isEdit: Boolean,
-    customerCodeOptions: Array,
-    destinationOptions: Array,
+    customerCodeOptions: {
+      type: Array,
+      default: null
+    },
+    destinationOptions: {
+      type: Array,
+      default: null
+    },
     localLoading: Boolean
   },
-  data(){
-    return{
-        loading: false,
-        rules: {
-          shipOrderNumber: [
-            { required: true, message: 'Please input ship order number', trigger: 'change' }
-          ],
-          customerCode: [
-            { required: true, message: 'Please select customer code', trigger: 'change' }
-          ],
-          ets: [
-            { required: true, message: 'Please select a date', trigger: 'change' }
-          ]
-        }
-    }
-  },
-  methods:{
-      createHandler: function(){
-        this.$refs['form-required'].validate((valid) => {
-            if (valid) {
-                this.localLoading = true
-                this.$emit('onCreateConfirmedClicked');
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
-      },
-      updateHandler: function(){
-        this.$refs['form-required'].validate((valid) => {
-            if (valid) {
-                this.localLoading = true
-                this.$emit('onEditConfirmedClicked', this.formData.id);
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
-      },
-      onCancelClicked: function(){
-          this.$emit('onCancelClicked')
+  data() {
+    return {
+      loading: false,
+      rules: {
+        shipOrderNumber: [
+          { required: true, message: 'Please input ship order number', trigger: 'change' }
+        ],
+        customerCode: [
+          { required: true, message: 'Please select customer code', trigger: 'change' }
+        ],
+        ets: [
+          { required: true, message: 'Please select a date', trigger: 'change' }
+        ]
       }
+    }
   },
   mounted() {
 
+  },
+  methods: {
+    createHandler: function() {
+      this.$refs['form-required'].validate((valid) => {
+        if (valid) {
+          this.localLoading = true
+          this.$emit('onCreateConfirmedClicked')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    updateHandler: function() {
+      this.$refs['form-required'].validate((valid) => {
+        if (valid) {
+          this.localLoading = true
+          this.$emit('onEditConfirmedClicked', this.formData.id)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    onCancelClicked: function() {
+      this.$emit('onCancelClicked')
+    }
   }
 }
 </script>

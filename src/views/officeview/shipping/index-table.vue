@@ -283,8 +283,8 @@
   </div>
 </template>
 <script>
-/* eslint-disable vue/require-default-prop */
 import { getShipOrderInfo, createNewShipOrder, updateShipOrderInfo, deleteShippingOrder } from '@/api/shipping'
+import { outboundOrderStatus, outboundOrderSortOption } from '@/scripts/dropdown'
 
 export default {
   components: {
@@ -293,11 +293,23 @@ export default {
     'shipping-index-edit-form': () => import('@/views/officeview/shipping/index-edit-form')
   },
   props: {
-    tableData: Array,
+    tableData: {
+      type: Array,
+      default: null
+    },
     loading: Boolean,
-    customerCodeFilters: Array,
-    destinationOptions: Array,
-    customerCodeOptions: Array
+    customerCodeFilters: {
+      type: Array,
+      default: null
+    },
+    destinationOptions: {
+      type: Array,
+      default: null
+    },
+    customerCodeOptions: {
+      type: Array,
+      default: null
+    }
   },
   data() {
     return {
@@ -332,37 +344,8 @@ export default {
         purchaseOrderNumber: '',
         instruction: ''
       },
-      statusFilters: [
-        { value: 'New Created', text: 'New Created' },
-        { value: 'Picking', text: 'Picking' },
-        { value: 'Draft', text: 'Draft' },
-        { value: 'New Order', text: 'New Order' },
-        { value: 'Updated', text: 'Updated' },
-        { value: 'Returned', text: 'Returned' },
-        { value: 'Processing', text: 'Processing' },
-        { value: 'Ready', text: 'Ready' },
-        { value: 'Released', text: 'Released' },
-        { value: 'Shipped', text: 'Shipped' }
-      ],
-      sortByOptions: [
-        { text: 'Id', value: 'Id' },
-        { text: 'Status', value: 'Status' },
-        { text: 'Ship Order #', value: 'ShipOrderNumber' },
-        { text: 'Customer Code', value: 'CustomerCode' },
-        { text: 'Container Size', value: 'ContainerSize' },
-        { text: 'Batch #', value: 'BatchNumber' },
-        { text: 'Subcustomer Code', value: 'SubCustomer' },
-        { text: 'Dest', value: 'Destination' },
-        { text: 'ETS', value: 'ETS' },
-        { text: 'Total Ctns', value: 'TotalCtns' },
-        { text: 'Total Plts', value: 'TotalPlts' },
-        { text: 'POD', value: 'PODStatus' },
-        { text: '$ Amount', value: 'TotalAmount' },
-        { text: '$ Cost', value: 'TotalCost' },
-        { text: '$ Net', value: 'Net' },
-        { text: 'Invoice Status', value: 'InvoiceStatus' },
-        { text: 'Close Date', value: 'CloseDate' }
-      ]
+      statusFilters: outboundOrderStatus,
+      sortByOptions: outboundOrderSortOption
     }
   },
   computed: {
