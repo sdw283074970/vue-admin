@@ -110,6 +110,7 @@ export default {
           this.$emit('reloadOrder')
           this.loading = false
           this.releaseVisible = false
+          this.popVisible = false
         })
       } else {
         this.loading = false

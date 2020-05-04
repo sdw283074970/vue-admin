@@ -195,6 +195,8 @@
 </template>
 <script>
 /* eslint-disable */
+import { inboundOrderStatus } from '@/scripts/dropdown'
+
 export default {
     props:{
         tableData: Array,
@@ -211,16 +213,7 @@ export default {
             localLoading: false,
             filterVisible: false,
             orderType: 'MasterOrder',
-            statusFilters: [
-              { value: 'New Created', text: 'New Created' },
-              { value: 'Draft', text: 'Draft' },
-              { value: 'Incoming', text: 'Incoming' },
-              { value: 'Arrived', text: 'Arrived' },
-              { value: 'Processing', text: 'Processing' },
-              { value: 'Received', text: 'Received' },
-              { value: 'Registered', text: 'Registered' },
-              { value: 'Allocated', text: 'Allocated' }
-            ]
+            statusFilters: inboundOrderStatus
         };
     },
     components: {

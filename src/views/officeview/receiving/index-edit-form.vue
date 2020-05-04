@@ -78,13 +78,13 @@
         </el-form-item>
       </el-form>
       <el-form ref="form-optional" :model="formData" label-width="150px" style="float:right;margin-right:30px">
-        <el-form-item label="CARRIER">
+        <el-form-item label="CARRIER" prop="carrier">
           <el-input v-model="formData.carrier" />
         </el-form-item>
         <el-form-item label="SUB-CUSTOMER">
           <el-input v-model="formData.subCustomer" />
         </el-form-item>
-        <el-form-item label="CONTAINER SIZE">
+        <el-form-item label="CONTAINER SIZE" prop="containerSize">
           <el-input v-model="formData.containerSize" />
         </el-form-item>
         <el-form-item label="VESSEL">
@@ -119,197 +119,99 @@
 </template>
 
 <script>
-/* eslint-disable */
+import { inboundTypes, unloadingTypes, storageTypes, palletizings } from '@/scripts/dropdown'
 
 export default {
   props: {
-    formData: Object,
-    shipOrderStatus: String,
+    formData: {
+      type: Object,
+      default: null
+    },
+    shipOrderStatus: {
+      type: String,
+      default: ''
+    },
     isEdit: Boolean,
-    customerCodeOptions: Array,
-    destinationOptions: Array,
+    customerCodeOptions: {
+      type: Array,
+      default: null
+    },
+    destinationOptions: {
+      type: Array,
+      default: null
+    },
     localLoading: Boolean
   },
-  data(){
-    return{
-        loading: false,
-        inboundTypes: [
-            {
-                value: 'FCL',
-                label: 'FCL'
-            },
-            {
-                value: 'LCL',
-                label: 'LCL'
-            },
-            {
-                value: 'LTL',
-                label: 'LTL'
-            },
-            {
-                value: 'FTL',
-                label: 'FTL'
-            },
-            {
-                value: 'LOOSE CTN',
-                label: 'LOOSE CTN'
-            },
-            {
-                value: 'RE-PALLETIZE',
-                label: 'RE-PALLETIZE'
-            },
-            {
-                value: 'OTHER',
-                label: 'OTHER'
-            },
-            {
-                value: 'SEE INSTRUCTION',
-                value: 'SEE INSTRUCTION'
-            },
-            {
-                value: 'NA',
-                label: 'NA'
-            }
+  data() {
+    return {
+      loading: false,
+      inboundTypes: inboundTypes,
+      unloadingTypes: unloadingTypes,
+      storageTypes: storageTypes,
+      palletizings: palletizings,
+      rules: {
+        container: [
+          { required: true, message: 'Please input container number', trigger: 'change' }
         ],
-        unloadingTypes: [
-            {
-                value: 'DROP-OFF',
-                label: 'DROP-OFF'
-            },
-            {
-                value: 'LIVE UNLOAD',
-                label: 'LIVE UNLOAD'
-            },
-            {
-                value: 'OTHER',
-                label: 'OTHER'
-            },
-            {
-                value: 'SEE INSTRUCTION',
-                value: 'SEE INSTRUCTION'
-            },
-            {
-                value: 'NA',
-                label: 'NA'
-            }
+        customerCode: [
+          { required: true, message: 'Please select customer code', trigger: 'change' }
         ],
-        storageTypes: [
-            {
-                value: 'MIX',
-                label: 'MIX'
-            },
-            {
-                value: 'STORAGE',
-                label: 'STORAGE'
-            },
-            {
-                value: 'TRANSIT SHIPMENT',
-                label: 'TRANSIT SHIPMENT'
-            },
-            {
-                value: 'E-COMMERCE',
-                label: 'E-COMMERCE'
-            },
-            {
-                value: 'OTHER',
-                label: 'OTHER'
-            },
-            {
-                value: 'SEE INSTRUCTION',
-                value: 'SEE INSTRUCTION'
-            },
-            {
-                value: 'NA',
-                label: 'NA'
-            }
+        eta: [
+          { required: true, message: 'Please select a date', trigger: 'change' }
         ],
-        palletizings: [
-            {
-                value: 'NORMAL',
-                label: 'NORMAL'
-            },
-            {
-                value: '72',
-                label: '<=72'
-            },
-            {
-                value: '80',
-                label: '<=80'
-            },
-            {
-                value: 'DOUBLE STACK',
-                label: 'DOUBLE STACK'
-            },
-            {
-                value: 'OTHER',
-                label: 'OTHER'
-            },
-            {
-                value: 'SEE INSTRUCTION',
-                value: 'SEE INSTRUCTION'
-            },
-            {
-                value: 'NA',
-                label: 'NA'
-            }
+        originalPlts: [
+          { required: true, message: 'Please input the original Plts', trigger: 'change' }
         ],
-        rules: {
-          container: [
-            { required: true, message: 'Please input container number', trigger: 'change' }
-          ],
-          customerCode: [
-            { required: true, message: 'Please select customer code', trigger: 'change' }
-          ],
-          eta: [
-            { required: true, message: 'Please select a date', trigger: 'change' }
-          ],
-          originalPlts: [
-            { required: true, message: 'Please input the original Plts', trigger: 'change' }
-          ],
-          inboundType: [
-            { required: true, message: 'Please select inbound type', trigger: 'change' }
-          ],
-          unloadingType: [
-            { required: true, message: 'Please select unloading type', trigger: 'change' }
-          ],
-          storageType: [
-            { required: true, message: 'Please select storage type', trigger: 'change' }
-          ],
-          palletizing: [
-            { required: true, message: 'Please select palletizing', trigger: 'change' }
-          ],
-        }
-    }
-  },
-  methods:{
-      createHandler: function(){
-        this.$refs['form-required'].validate((valid) => {
-            if (valid) {
-                this.localLoading = true
-                this.$emit('onCreateConfirmedClicked');
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
-      },
-      updateHandler: function(){
-        this.$refs['form-required'].validate((valid) => {
-            if (valid) {
-                this.localLoading = true
-                this.$emit('onEditConfirmedClicked', this.formData.id);
-            } else {
-                console.log('error submit!!');
-                return false;
-            }
-        });
-      },
-      onCancelClicked: function(){
-          this.$emit('onCancelClicked')
+        inboundType: [
+          { required: true, message: 'Please select inbound type', trigger: 'change' }
+        ],
+        unloadingType: [
+          { required: true, message: 'Please select unloading type', trigger: 'change' }
+        ],
+        storageType: [
+          { required: true, message: 'Please select storage type', trigger: 'change' }
+        ],
+        palletizing: [
+          { required: true, message: 'Please select palletizing', trigger: 'change' }
+        ],
+        carrier: [
+          { required: true, message: 'This filed is required', trigger: 'change' }
+        ],
+        containerSize: [
+          { required: true, message: 'This filed is required', trigger: 'change' }
+        ]
       }
+    }
   },
   mounted() {
 
+  },
+  methods: {
+    createHandler: function() {
+      this.$refs['form-required'].validate((valid) => {
+        if (valid) {
+          this.localLoading = true
+          this.$emit('onCreateConfirmedClicked')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    updateHandler: function() {
+      this.$refs['form-required'].validate((valid) => {
+        if (valid) {
+          this.localLoading = true
+          this.$emit('onEditConfirmedClicked', this.formData.id)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    onCancelClicked: function() {
+      this.$emit('onCancelClicked')
+    }
   }
 }
 </script>

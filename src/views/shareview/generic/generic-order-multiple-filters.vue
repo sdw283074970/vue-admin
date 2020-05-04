@@ -72,6 +72,8 @@
 </template>
 <script>
 /* eslint-disable vue/require-default-prop */
+import { invoiceStauts } from '@/scripts/dropdown'
+
 export default {
   props: {
     customerCodeFilters: Array,
@@ -85,16 +87,7 @@ export default {
       status: [],
       invoiceStatus: [],
       customerCodes: [],
-      invoiceStatusOptions: [{
-        label: 'Await',
-        value: 'Await'
-      }, {
-        label: 'Generated',
-        value: 'Generated'
-      }, {
-        label: 'Closed',
-        value: 'Closed'
-      }]
+      invoiceStatusOptions: invoiceStauts
     }
   },
   methods: {

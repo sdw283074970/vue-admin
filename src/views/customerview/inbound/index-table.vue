@@ -207,74 +207,68 @@
   </div>
 </template>
 <script>
-/* eslint-disable */
+import { inboundOrderStatus, inboundOrderSortOption } from '@/scripts/dropdown'
+
 export default {
-    props:{
-        filteredData: Array,
-        loading: Boolean,
-        totalEntries: Number,
-        localLoading: Boolean
+  props: {
+    filteredData: {
+      type: Array,
+      default: null
     },
-    data() {
-        return {
-            currentPage: 1,
-            pageSize: 20,
-            search: '',
-            customerCodeFilter : []
-        };
+    loading: Boolean,
+    totalEntries: {
+      type: Number,
+      default: Number
     },
-    watch:{
-      search: function(val, oldVal){
-        this.$emit('onSearchChanged', val);
-      }
-    },
-    methods:{
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
-      },
-      filterChange(filters){
-      	console.log(filters);
-      },
-      clearFilter() {
-        this.$refs.table.clearFilter();
-      },
-      handleSizeChange(val) {
-        this.pageSize = val;
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-      },
-      editHandler: function(id) {
-        this.$emit('onEditClicked', id);
-      },
-      createHandler: function(){
-        this.$emit('onCreateClicked');
-      },
-      woHandler: function(id){
-        this.$router.push({path: '/inbound/inbound-wo/' + id});
-      },
-      changeStatusColor: function(status) {
-        if (status == 'New Created')
-            return 'gray';
-        else if (status == 'Picking' || status == 'Processing' || status == 'Pending' || status == 'Draft')
-            return 'red';
-        else if (status == 'Incoming' || status == 'Returned')
-            return 'orange';
-        else if (status == 'Allocated')
-            return 'brown';
-        else if (status == 'Received')
-            return 'green';
-        else if (status == 'Registered')
-            return 'purple';
-        else if (status == 'Arrived')
-            return 'darkcyan';
-        else
-            return 'blue';
-      }
-    },
-    mounted() {
+    localLoading: Boolean
+  },
+  data() {
+    return {
+      currentPage: 1,
+      pageSize: 20,
+      search: '',
+      statusFilters: inboundOrderStatus,
+      sortByOptions: inboundOrderSortOption,
+      customerCodeFilter: []
     }
+  },
+  watch: {
+    search: function(val, oldVal) {
+      this.$emit('onSearchChanged', val)
+    }
+  },
+  mounted() {
+  },
+  methods: {
+    filterHandler(value, row, column) {
+      const property = column['property']
+      return row[property] === value
+    },
+    filterChange(filters) {
+      console.log(filters)
+    },
+    clearFilter() {
+      this.$refs.table.clearFilter()
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
+    editHandler: function(id) {
+      this.$emit('onEditClicked', id)
+    },
+    createHandler: function() {
+      this.$emit('onCreateClicked')
+    },
+    woHandler: function(id) {
+      this.$router.push({ path: '/inbound/inbound-wo/' + id })
+    },
+    changeStatusColor: function(status) {
+      if (status === 'New Created') { return 'gray' } else if (status === 'Picking' || status === 'Processing' || status === 'Pending' || status === 'Draft') { return 'red' } else if (status === 'Incoming' || status === 'Returned') { return 'orange' } else if (status === 'Allocated') { return 'brown' } else if (status === 'Received') { return 'green' } else if (status === 'Registered') { return 'purple' } else if (status === 'Arrived') { return 'darkcyan' } else { return 'blue' }
+    }
+  }
 }
 </script>
 

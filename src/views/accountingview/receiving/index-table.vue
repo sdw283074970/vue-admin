@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="input-bar">
-      <el-button type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
+      <!-- <el-button type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button> -->
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
       <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
@@ -266,6 +266,7 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo } from '@/api/receiving'
+import { inboundOrderStatus, inboundOrderSortOption } from '@/scripts/dropdown'
 
 export default {
   components: {
@@ -317,37 +318,8 @@ export default {
         sealNumber: '',
         instruction: ''
       },
-      statusFilters: [
-        { value: 'New Created', text: 'New Created' },
-        { value: 'Draft', text: 'Draft' },
-        { value: 'Incoming', text: 'Incoming' },
-        { value: 'Arrived', text: 'Arrived' },
-        { value: 'Processing', text: 'Processing' },
-        { value: 'Received', text: 'Received' },
-        { value: 'Registered', text: 'Registered' },
-        { value: 'Allocated', text: 'Allocated' }
-      ],
-      sortByOptions: [
-        { text: 'Id', value: 'Id' },
-        { text: 'Status', value: 'Status' },
-        { text: 'Container #', value: 'Container' },
-        { text: 'Customer Code', value: 'CustomerCode' },
-        { text: 'Container Size', value: 'ContainerSize' },
-        { text: 'Inbound Type', value: 'InboundType' },
-        { text: 'Subcustomer Code', value: 'SubCustomer' },
-        { text: 'Org Ctns', value: 'TotalCtns' },
-        { text: 'Actual Ctns', value: 'ActualCtns' },
-        { text: 'Org Plts', value: 'OriginalPlts' },
-        { text: 'Actual Plts', value: 'ActualPlts' },
-        { text: 'SKU #', value: 'SKUNumber' },
-        { text: 'ETA', value: 'Eta' },
-        { text: 'ATA', value: 'InboundDate' },
-        { text: '$ Amount', value: 'TotalAmount' },
-        { text: '$ Cost', value: 'TotalCost' },
-        { text: '$ Net', value: 'Net' },
-        { text: 'Invoice Status', value: 'InvoiceStatus' },
-        { text: 'Close Date', value: 'CloseDate' }
-      ]
+      statusFilters: inboundOrderStatus,
+      sortByOptions: inboundOrderSortOption
     }
   },
   computed: {

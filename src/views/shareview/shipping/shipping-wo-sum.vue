@@ -80,7 +80,7 @@
           <span>{{ shipOrder.placedBy }}</span>
         </el-form-item>
         <el-form-item label="Start Process By">
-          <span>{{ shipOrder.startBy }}</span>
+          <span>{{ shipOrder.startedBy }}</span>
         </el-form-item>
         <el-form-item label="Released By">
           <span>{{ shipOrder.releasedBy }}</span>

@@ -94,7 +94,7 @@
               <span>{{ props.row.placedBy }}</span>
             </el-form-item>
             <el-form-item label="Start Process By">
-              <span>{{ props.row.startBy }}</span>
+              <span>{{ props.row.startedBy }}</span>
             </el-form-item>
             <el-form-item label="Released By">
               <span>{{ props.row.releasedBy }}</span>
