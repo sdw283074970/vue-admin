@@ -29,55 +29,41 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="ETS" prop="ets">
-        <el-col :span="7">
-          <el-date-picker v-model="formData.ets" type="date" placeholder="Select Date" style="width: 100%;" />
-        </el-col>
-        <el-col class="line" :span="1">-</el-col>
-        <el-col :span="7">
-          <el-input v-model="formData.etsTimeRange" placeholder="Input Time Range" style="width: 100%;" />
-        </el-col>
+        <el-date-picker v-model="formData.ets" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px" />
       </el-form-item>
-      <el-form-item label="Invoice Status">
-        <el-radio-group v-model="formData.invoiceStatus">
-          <el-radio label="Await" disabled />
-          <el-radio label="Closed" disabled />
-        </el-radio-group>
+      <el-form-item label="Ets Time Rnage" prop="etsTimeRange">
+        <el-input v-model="formData.etsTimeRange" placeholder="Input Time Range" style="width:170px" />
+      </el-form-item>
+      <el-form-item label="Destination" prop="destination">
+        <el-select
+          v-model="formData.destination"
+          filterable
+          allow-create
+          default-first-option
+          placeholder="Input key word"
+        >
+          <el-option
+            v-for="item in destinationOptions"
+            :key="item.warehouseCode"
+            :label="item.warehouseCode"
+            :value="item.warehouseCode"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Carrier" prop="carrier">
+        <el-input v-model="formData.carrier" />
+      </el-form-item>
+      <el-form-item label="Quick Instruction">
+        <el-input v-model="formData.instruction" />
       </el-form-item>
     </el-form>
     <div>
       <el-form ref="form" :model="formData" label-width="150px" style="float:left">
-        <el-form-item label="POD Status">
-          <el-switch
-            v-model="formData.podStatus"
-            style="margin-left:10px"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            active-text="Back"
-            disabled
-            inactive-text="Not Back"
-          />
-        </el-form-item>
-        <el-form-item label="Destination">
-          <el-select
-            v-model="formData.destination"
-            filterable
-            allow-create
-            default-first-option
-            placeholder="Input key word"
-          >
-            <el-option
-              v-for="item in destinationOptions"
-              :key="item.warehouseCode"
-              :label="item.warehouseCode"
-              :value="item.warehouseCode"
-            />
-          </el-select>
+        <el-form-item label="Sub-customer">
+          <el-input v-model="formData.subCustomer" />
         </el-form-item>
         <el-form-item label="Pick Reference">
           <el-input v-model="formData.pickReference" />
-        </el-form-item>
-        <el-form-item label="Carrier">
-          <el-input v-model="formData.carrier" />
         </el-form-item>
         <el-form-item label="Batch #">
           <el-input v-model="formData.batchNumber" />
@@ -90,14 +76,8 @@
         <el-form-item label="Pick #">
           <el-input v-model="formData.pickNumber" />
         </el-form-item>
-        <el-form-item label="Sub-customer">
-          <el-input v-model="formData.subCustomer" />
-        </el-form-item>
         <el-form-item label="PO #">
           <el-input v-model="formData.purchaseOrderNumber" />
-        </el-form-item>
-        <el-form-item label="Quick Instruction">
-          <el-input v-model="formData.instruction" />
         </el-form-item>
       </el-form>
     </div>
@@ -110,6 +90,8 @@
 </template>
 
 <script>
+import { outboundOrderCreateRules } from '@/scripts/rules'
+
 export default {
   props: {
     formData: {
@@ -133,17 +115,7 @@ export default {
   data() {
     return {
       loading: false,
-      rules: {
-        shipOrderNumber: [
-          { required: true, message: 'Please input ship order number', trigger: 'change' }
-        ],
-        customerCode: [
-          { required: true, message: 'Please select customer code', trigger: 'change' }
-        ],
-        ets: [
-          { required: true, message: 'Please select a date', trigger: 'change' }
-        ]
-      }
+      rules: outboundOrderCreateRules
     }
   },
   mounted() {

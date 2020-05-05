@@ -32,3 +32,26 @@ const inboundOrderCreateRules = {
 }
 
 export { inboundOrderCreateRules }
+
+const outboundOrderCreateRules = {
+  shipOrderNumber: [
+    { required: true, message: 'Please input ship order number', trigger: 'change' }
+  ],
+  customerCode: [
+    { required: true, message: 'Please select customer code', trigger: 'change' }
+  ],
+  ets: [
+    { required: true, message: 'Please select a date', trigger: 'change' }
+  ],
+  etsTimeRange: [
+    { required: true, message: 'Please specify the truck arrival time range', trigger: 'change' }
+  ],
+  destination: [
+    { required: true, message: 'Please specify the arrival destination', trigger: 'change' }
+  ],
+  carrier: [
+    { required: true, message: 'Please specify the carrier', trigger: 'change' }
+  ]
+}
+
+export { outboundOrderCreateRules }
