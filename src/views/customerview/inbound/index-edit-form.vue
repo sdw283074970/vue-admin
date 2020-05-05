@@ -70,22 +70,22 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="CARRIER" prop="carrier">
+          <el-input v-model="formData.carrier" />
+        </el-form-item>
+        <el-form-item label="CONTAINER SIZE" prop="containerSize">
+          <el-input v-model="formData.containerSize" />
+        </el-form-item>
+      </el-form>
+      <el-form ref="form-optional" :model="formData" :rules="rules" label-width="150px" style="float:right;margin-right:30px">
+        <el-form-item label="SUB-CUSTOMER">
+          <el-input v-model="formData.subCustomer" />
+        </el-form-item>
         <el-form-item label="PLACE OF RECEIPT">
           <el-input v-model="formData.placeOfReceipt" />
         </el-form-item>
         <el-form-item label="PORT OF LOADING">
           <el-input v-model="formData.portOfLoading" />
-        </el-form-item>
-      </el-form>
-      <el-form ref="form-optional" :model="formData" label-width="150px" style="float:right;margin-right:30px">
-        <el-form-item label="CARRIER">
-          <el-input v-model="formData.carrier" />
-        </el-form-item>
-        <el-form-item label="SUB-CUSTOMER">
-          <el-input v-model="formData.subCustomer" />
-        </el-form-item>
-        <el-form-item label="CONTAINER SIZE">
-          <el-input v-model="formData.containerSize" />
         </el-form-item>
         <el-form-item label="VESSEL">
           <el-input v-model="formData.vessel" />
@@ -120,6 +120,7 @@
 
 <script>
 import { inboundTypes, unloadingTypes, storageTypes, palletizings } from '@/scripts/dropdown'
+import { inboundOrderCreateRules } from '@/scripts/rules'
 
 export default {
   props: {
@@ -149,38 +150,7 @@ export default {
       unloadingTypes: unloadingTypes,
       storageTypes: storageTypes,
       palletizings: palletizings,
-      rules: {
-        container: [
-          { required: true, message: 'Please input container number', trigger: 'change' }
-        ],
-        customerCode: [
-          { required: true, message: 'Please select customer code', trigger: 'change' }
-        ],
-        eta: [
-          { required: true, message: 'Please select a date', trigger: 'change' }
-        ],
-        originalPlts: [
-          { required: true, message: 'Please input the original Plts', trigger: 'change' }
-        ],
-        inboundType: [
-          { required: true, message: 'Please select inbound type', trigger: 'change' }
-        ],
-        unloadingType: [
-          { required: true, message: 'Please select unloading type', trigger: 'change' }
-        ],
-        storageType: [
-          { required: true, message: 'Please select storage type', trigger: 'change' }
-        ],
-        palletizing: [
-          { required: true, message: 'Please select palletizing', trigger: 'change' }
-        ],
-        carrier: [
-          { required: true, message: 'This filed is required', trigger: 'change' }
-        ],
-        containerSize: [
-          { required: true, message: 'This filed is required', trigger: 'change' }
-        ]
-      }
+      rules: inboundOrderCreateRules
     }
   },
   mounted() {
