@@ -22,18 +22,19 @@
     >
       <el-table-column
         sortable
-        fixed=""
         prop="id"
         label="Id"
         width="60"
       />
       <el-table-column
+        prop="name"
+        label="Customer Name"
+        width="180"
+      />
+      <el-table-column
         prop="customerCode"
-        fixed
-        label="Code"
-        :column-key="'code'"
-        :filters="customerCodeFilter"
-        width="120"
+        label="Customer Code"
+        width="130"
       />
       <el-table-column
         prop="processingCtns"
@@ -115,9 +116,16 @@
           <el-button v-if="scope.row.status=='Inactive'" style="width:80px" @click="activeHandler(scope.row.id, scope.$index)">Active</el-button>
           <el-button v-if="scope.row.status=='Active'" style="width:80px" @click="activeHandler(scope.row.id, scope.$index)">Deactive</el-button>
           <el-button @click="onLinkToUserClicked(scope.row.id)">Link to User</el-button>
-          <el-button @click="onInstructionsClicked(scope.row.id)">Instructions</el-button>
-          <el-button @click="onServicesClicked(scope.row.id)">Services</el-button>
-          <el-button @click="onStorageClicked(scope.row.id, scope.row.customerCode)">Storage</el-button>
+          <el-dropdown style="margin-left:10px">
+            <el-button>
+              More<i class="el-icon-arrow-down el-icon--right" />
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click="onInstructionsClicked(scope.row.id)">Instructions</el-dropdown-item>
+              <el-dropdown-item @click="onServicesClicked(scope.row.id)">Services</el-dropdown-item>
+              <el-dropdown-item @click="onStorageClicked(scope.row.id, scope.row.customerCode)">Storage</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>

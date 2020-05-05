@@ -72,7 +72,7 @@
 </template>
 <script>
 /* eslint-disable vue/require-default-prop */
-import { invoiceStauts } from '@/scripts/dropdown'
+import { invoiceStatus } from '@/scripts/dropdown'
 
 export default {
   props: {
@@ -87,7 +87,7 @@ export default {
       status: [],
       invoiceStatus: [],
       customerCodes: [],
-      invoiceStatusOptions: invoiceStauts
+      invoiceStatusOptions: invoiceStatus
     }
   },
   methods: {

@@ -168,16 +168,17 @@ const inboundOrderSortOption = [
 
 export { inboundOrderSortOption }
 
-const invoiceStatus = [{
-  label: 'Await',
-  value: 'Await'
-}, {
-  label: 'Generated',
-  value: 'Generated'
-}, {
-  label: 'Closed',
-  value: 'Closed'
-}]
+const invoiceStatus = [
+  {
+    label: 'Await',
+    value: 'Await'
+  }, {
+    label: 'Generated',
+    value: 'Generated'
+  }, {
+    label: 'Closed',
+    value: 'Closed'
+  }]
 
 export { invoiceStatus }
 
