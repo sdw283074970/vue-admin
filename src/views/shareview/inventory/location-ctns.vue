@@ -146,7 +146,7 @@ export default {
     },
     methods:{
       onSearchChanged(search) {
-          this.currentPage = 1;
+        this.currentPage = 1;
         this.localTableData = this.fbaCtnInventories.filter(data => {
             return Object.keys(data).some(key => {
               return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
