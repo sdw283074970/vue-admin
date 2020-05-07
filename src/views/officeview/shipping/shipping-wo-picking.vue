@@ -120,47 +120,59 @@
       />
       <el-table-column
         prop="warehouseCode"
+        align="center"
         label="Whse Code"
         width="100"
       />
       <el-table-column
         prop="pickableCtns"
         label="Pickable Ctns"
-        width="120"
+        align="center"
+        width="100"
       />
       <el-table-column
         prop="actualQuantity"
         label="Pick Ctns"
-        width="100"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="pltsFromInventory"
         label="Pick Plts"
-        width="100"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="newPlts"
         label="Built Plts"
-        width="100"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="actualPlts"
+        align="center"
         label="Ttl Plts"
-        width="100"
+        width="80"
+      />
+      <el-table-column
+        prop="size"
+        label="Plt Size"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="location"
         label="Location"
       />
       <el-table-column
-        prop="operation"
-        label="operation"
-        width="130"
+        prop="options"
+        label="Options"
+        width="80"
       >
         <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
-              Operations<i class="el-icon-arrow-down el-icon--right" />
+              More<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :disabled="step>7" @click.native="onAdjustClicked(scope.row.id)">Adjust</el-dropdown-item>

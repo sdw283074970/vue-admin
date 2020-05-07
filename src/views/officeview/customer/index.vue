@@ -121,9 +121,9 @@
               More<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click="onInstructionsClicked(scope.row.id)">Instructions</el-dropdown-item>
-              <el-dropdown-item @click="onServicesClicked(scope.row.id)">Services</el-dropdown-item>
-              <el-dropdown-item @click="onStorageClicked(scope.row.id, scope.row.customerCode)">Storage</el-dropdown-item>
+              <el-dropdown-item @click.native="onInstructionsClicked(scope.row.id)">Instructions</el-dropdown-item>
+              <el-dropdown-item @click.native="onServicesClicked(scope.row.id)">Services</el-dropdown-item>
+              <el-dropdown-item @click.native="onStorageClicked(scope.row.id, scope.row.customerCode)">Storage</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>

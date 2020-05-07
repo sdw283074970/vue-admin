@@ -44,7 +44,7 @@
             <el-table-column
               prop="subCustomer"
               label="Sub-customer"
-              width="100"
+              width="110"
             />
             <el-table-column
               prop="warehouseCode"
@@ -79,7 +79,7 @@
               prop="pickingCtns"
               align="center"
               label="Processing Ctns"
-              width="100"
+              width="90"
             />
             <el-table-column
               prop="holdQuantity"
@@ -119,19 +119,25 @@
         prop="subCustomer"
         align="center"
         label="Sub-customer"
-        width="120"
+        width="110"
+      />
+      <el-table-column
+        prop="palletSize"
+        align="center"
+        label="Plt Size"
+        width="100"
       />
       <el-table-column
         prop="actualPlts"
         align="center"
         label="Org Plts"
-        width="120"
+        width="100"
       />
       <el-table-column
         align="center"
         prop="pickingPlts"
         label="Processing Plts"
-        width="150"
+        width="90"
       />
       <el-table-column
         prop="availablePlts"

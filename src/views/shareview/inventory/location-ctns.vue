@@ -41,7 +41,7 @@
       <el-table-column
         prop="subCustomer"
         label="Sub-customer"
-        width="100"
+        width="110"
       />
       <el-table-column
         prop="amzRefId"
@@ -81,7 +81,7 @@
         prop="pickingCtns"
         align="center"
         label="Processing Ctns"
-        width="100"
+        width="90"
       />
       <el-table-column
         prop="holdQuantity"
