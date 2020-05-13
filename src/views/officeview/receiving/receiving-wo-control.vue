@@ -6,6 +6,7 @@
         <el-button id="csr-receiving-wo-push" class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
         <el-button id="csr-receiving-wo-recall" class="gb-button" type="warning" :disabled="step!=3&&step!=4" @click="onRecallClicked">Recall WO</el-button>
         <el-button id="csr-receiving-wo-arrive" :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
+        <el-button class="gb-button" :disabled="step!=4||masterOrder.storageType!='E-COMMERCE'" type="primary" @click="onAutoReceiveClicked">Auto Receive</el-button>
         <el-popover
           v-model="popVisible"
           placement="bottom"
@@ -19,7 +20,7 @@
             <el-button size="mini" type="text" @click="popVisible = false">No, I am going to double check it</el-button>
             <el-button type="primary" size="mini" @click="onCompletedClicked">Yes, I will be responsible for this operation</el-button>
           </div>
-          <el-button id="csr-receiving-wo-complete" slot="reference" class="gb-button" :disabled="step!=8" type="primary">Mark Completed</el-button>
+          <el-button id="csr-receiving-wo-complete" slot="reference" class="gb-button" :disabled="step!=8&&(step!=4||masterOrder.storageType!='E-COMMERCE')" type="primary">Mark Completed</el-button>
         </el-popover>
         <el-button id="all-receiving-wo-summary-inventory" type="info" class="gb-button" style="margin-left:10px" @click="inventoryVisible = true">View Inventory</el-button>
         <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
@@ -68,7 +69,7 @@
 <script>
 /* eslint-disable vue/require-prop-types */
 /* eslint-disable vue/require-default-prop */
-import { pushMasterOrder, recallMasterOrder, setInboundDate, changeOrderStatus } from '@/api/receiving'
+import { pushMasterOrder, recallMasterOrder, setInboundDate, changeOrderStatus, autoReceive } from '@/api/receiving'
 import { csr_receiving_wo_control } from '@/guide/steps'
 
 export default {
@@ -148,6 +149,15 @@ export default {
       changeOrderStatus(this.masterOrder.id, 'Confirmed').then(body => {
         this.masterOrder.status = 'Confirmed'
         this.popVisible = false
+        this.$message({
+          message: 'Success!',
+          type: 'success'
+        })
+      })
+    },
+    onAutoReceiveClicked() {
+      autoReceive(this.masterOrder.id).then(body => {
+        this.$emit('refreshPackingList')
         this.$message({
           message: 'Success!',
           type: 'success'

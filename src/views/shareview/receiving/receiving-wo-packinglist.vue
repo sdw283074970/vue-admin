@@ -101,7 +101,7 @@
               Operations<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :disabled="masterOrder.status!='Processing'&&masterOrder.status!='Pending'&&masterOrder.status!='Updated'" @click.native="onAdjustClicked(scope.row.id)">Adjust</el-dropdown-item>
+              <el-dropdown-item :disabled="masterOrder.status!='Processing'&&masterOrder.status!='Pending'&&masterOrder.status!='Updated'&&masterOrder.storageType!='E-COMMERCE'" @click.native="onAdjustClicked(scope.row.id)">Adjust</el-dropdown-item>
               <el-dropdown-item :disabled="masterOrder.status!='New Created'" @click.native="onEditClicked(scope.row.id)">Edit SKU Info</el-dropdown-item>
               <el-dropdown-item @click.native="onUploadClicked(scope.row.id)">Upload Label Files</el-dropdown-item>
               <el-dropdown-item @click.native="onDownloadClicked(scope.row.id)">Download Label Files</el-dropdown-item>
