@@ -99,50 +99,67 @@
         prop="container"
         label="Container #"
         sortable=""
-        min-width="60%"
+        width="200"
       />
       <el-table-column
         prop="shipmentId"
         sortable=""
         label="Shipment Id/SKU"
-        min-width="60%"
+        width="200"
       />
       <el-table-column
         prop="amzRefId"
         sortable=""
         label="Amz Ref Id"
-        min-width="60%"
+        width="200"
       />
       <el-table-column
         prop="palletSize"
         label="Pallet Size"
-        min-width="30%"
+        align="center"
+        width="90"
       />
       <el-table-column
         prop="warehouseCode"
         label="Whse Code"
-        min-width="35%"
+        align="center"
+        width="90"
       />
       <el-table-column
         prop="originalTotalCtns"
         label="Org Ctns"
-        min-width="30%"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="currentAvailableCtns"
         label="Ava Ctns"
-        min-width="30%"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="actualPlts"
+        align="center"
         label="Org Plts"
-        min-width="30%"
+        width="80"
       />
       <el-table-column
         prop="availablePlts"
         label="Ava Plts"
-        min-width="30%"
+        align="center"
+        width="80"
       />
+      <el-table-column
+        prop="inboundDate"
+        label="Inbound Date"
+        sortable
+        width="130"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span>{{ transferDate(scope.row.inboundDate) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="location"
         label="Location"
@@ -180,6 +197,9 @@ export default {
 
   },
   methods: {
+    transferDate: function(date) {
+      return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
+    },
     onPickAllCtnsClicked(pltId, ctnId) {
       this.pltsInventory.find(function(i) {
         if (i.id === pltId) {

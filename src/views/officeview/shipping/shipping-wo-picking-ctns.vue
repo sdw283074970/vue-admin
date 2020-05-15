@@ -40,33 +40,50 @@
       <el-table-column
         prop="warehouseCode"
         label="Whse Code"
+        align="center"
         width="100"
       />
       <el-table-column
         prop="grossWeightPerCtn"
         label="G.W./Ctn"
-        width="100"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="cbmPerCtn"
         label="CBM/Plt"
-        width="100"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="actualQuantity"
         label="Org Ctns"
-        width="100"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="availableCtns"
         label="Ava Ctns"
-        width="100"
+        align="center"
+        width="80"
       />
       <el-table-column
         prop="location"
         label="Location"
-        width="100"
+        align="center"
+        width="80"
       />
+      <el-table-column
+        prop="inboundDate"
+        label="Inbound Date"
+        sortable
+        width="130"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span>{{ transferDate(scope.row.inboundDate) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="operation"
         label="operation"
@@ -103,6 +120,9 @@ export default {
 
   },
   methods: {
+    transferDate: function(date) {
+      return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
+    },
     onFillAllClicked() {
       this.ctnsInventory.forEach(function(i) {
         i.selectedCtns = i.availableCtns

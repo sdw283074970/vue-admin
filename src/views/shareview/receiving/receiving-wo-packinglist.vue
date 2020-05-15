@@ -378,21 +378,21 @@ export default {
         else if (index === 5) {
           let receivable = data.map(item => Number(item['grossWeight']))
           let actual = data.map(item => Number(item['actualGrossWeight']))
-          sums[index] = (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0) + ' of ' + (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr}) : 0)
+          sums[index] = (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0).toFixed(2) + ' of ' + (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr }) : 0).toFixed(2)
         }
         else if (index === 6) {
           let receivable = data.map(item => Number(item['cbm']))
           let actual = data.map(item => Number(item['actualCBM']))
-          sums[index] = (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0) + ' of ' + (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr}) : 0)
+          sums[index] = (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0).toFixed(2) + ' of ' + (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr }) : 0).toFixed(2)
         }
         else if (index === 7) {
           let receivable = data.map(item => Number(item['quantity']))
           let actual = data.map(item => Number(item['actualQuantity']))
-          sums[index] = (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0) + ' of ' + (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr}) : 0)
+          sums[index] = (actual.length > 0 ? actual.reduce((sum, curr) => { return sum + curr}) : 0) + ' of ' + (receivable.length > 0 ? receivable.reduce((sum, curr) => { return sum + curr }) : 0)
         }
         else if (index === 9) {
           const value = data.map(item => Number(item['labelFileNumbers']))
-          sums[index] = value.length > 0 ? value.reduce((sum, curr) => { return sum + curr}) : 0
+          sums[index] = value.length > 0 ? value.reduce((sum, curr) => { return sum + curr }) : 0
         }
         else {
           sums[index] = '-'
