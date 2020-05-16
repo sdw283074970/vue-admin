@@ -218,3 +218,18 @@ const outboundOrderSortOption = [
 ]
 
 export { outboundOrderSortOption }
+
+const frieghtCharge = [
+  {
+    label: 'Prepaid',
+    value: 'Prepaid'
+  }, {
+    label: 'Collect',
+    value: 'Collect'
+  }, {
+    label: '3rd Party',
+    value: '3rd Party'
+  }
+]
+
+export { frieghtCharge }

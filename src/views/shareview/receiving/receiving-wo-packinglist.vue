@@ -60,7 +60,7 @@
         width="100"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.actualGrossWeight }} of {{ scope.row.grossWeight }}</font>
+          <font>{{ scope.row.actualGrossWeight.toFixed(2) }} of {{ scope.row.grossWeight.toFixed(2) }}</font>
         </template>
       </el-table-column>
       <el-table-column
@@ -69,7 +69,7 @@
         width="100"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.actualCBM }} of {{ scope.row.cbm }}</font>
+          <font>{{ scope.row.actualCBM.toFixed(2) }} of {{ scope.row.cbm.toFixed(2) }}</font>
         </template>
       </el-table-column>
       <el-table-column

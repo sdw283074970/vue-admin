@@ -93,6 +93,30 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-dialog
+      title="Select Freight Charge"
+      :visible.sync="bolVisible"
+      top="5vh"
+      width="350px"
+      :lock-scroll="false"
+    >
+      <el-form ref="form-required" :rules="rules" :model="formData" label-width="130px">
+        <el-form-item label="Freight Charge" prop="freightCharge">
+          <el-select v-model="formData.freightCharge" placeholder="-- Please Select --">
+            <el-option
+              v-for="item in freightCharge"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Operator" prop="operator">
+          <el-input v-model="formData.operator" disabled />
+        </el-form-item>
+      </el-form>
+      <el-button :loading="loading" type="primary" @click="onDownloadClicked">Download</el-button>
+    </el-dialog>
   </div>
 </template>
 
@@ -102,6 +126,8 @@
 /* eslint-disable vue/require-default-prop */
 import { generateWO, generateBOL } from '@/api/shipping'
 import { downloadFile } from '@/api/receiving'
+import { frieghtCharge } from '@/scripts/dropdown'
+import store from '@/store'
 
 export default {
   props: {
@@ -110,7 +136,18 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      bolVisible: false,
+      freightCharge: frieghtCharge,
+      formData: {
+        freightCharge: '',
+        operator: store.getters.name
+      },
+      rules: {
+        freightCharge: [
+          { required: true, message: 'Please select freight charge', trigger: 'change' }
+        ]
+      }
     }
   },
   mounted() {
@@ -137,16 +174,29 @@ export default {
       })
     },
     downloadBOLHandler() {
-      this.loading = true
-      generateBOL(this.shipOrder.id).then(body => {
-        this.$message({
-          message: 'Downloading...',
-          type: 'success'
-        })
-        downloadFile(body.data, 'BOL')
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
+      this.bolVisible = true
+      this.formData.freightCharge = null
+    },
+    onDownloadClicked() {
+      this.$refs['form-required'].validate((valid) => {
+        if (valid) {
+          this.loading = true
+          generateBOL(this.shipOrder.id, this.formData.freightCharge, this.formData.operator).then(body => {
+            this.$message({
+              message: 'Downloading...',
+              type: 'success'
+            })
+            downloadFile(body.data, 'BOL')
+            this.loading = false
+            this.bolVisible = false
+          }).catch(error => {
+            this.loading = false
+            this.bolVisible = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
     }
   }

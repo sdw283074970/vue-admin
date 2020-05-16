@@ -253,9 +253,9 @@ export function generateWO(id) {
   })
 }
 
-export function generateBOL(id) {
+export function generateBOL(id, freightCharge, operator) {
   return request({
-    url: '/api/fba/fbashipOrder/?shipOrderId=' + id + '&operation=BOL',
+    url: '/api/fba/fbashipOrder/?shipOrderId=' + id + '&freightCharge=' + freightCharge + '&operatorName=' + operator,
     method: 'get'
   })
 }
