@@ -3,10 +3,10 @@
     <h2>Control Panel</h2>
     <div style="margin-bottom:10px">
       <div>
-        <el-button id="csr-receiving-wo-push" class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
-        <el-button id="csr-receiving-wo-recall" class="gb-button" type="warning" :disabled="step!=3&&step!=4" @click="onRecallClicked">Recall WO</el-button>
-        <el-button id="csr-receiving-wo-arrive" :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
-        <el-button class="gb-button" :disabled="step!=4||masterOrder.storageType!='E-COMMERCE'" type="primary" @click="onAutoReceiveClicked">Auto Receive</el-button>
+        <el-button id="csr-receiving-wo-push" :loading="loading" class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
+        <el-button id="csr-receiving-wo-recall" :loading="loading" class="gb-button" type="warning" :disabled="step!=3&&step!=4" @click="onRecallClicked">Recall WO</el-button>
+        <el-button id="csr-receiving-wo-arrive" :loading="loading" :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
+        <el-button class="gb-button" :loading="loading" :disabled="step!=4||masterOrder.storageType!='E-COMMERCE'" type="primary" @click="onAutoReceiveClicked">Auto Receive</el-button>
         <el-popover
           v-model="popVisible"
           placement="bottom"
@@ -63,6 +63,33 @@
     >
       <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" @reloadOrder="reloadOrder" />
     </el-dialog>
+
+    <el-dialog
+      title="Select Push Date"
+      :visible.sync="pushVisible"
+      top="5vh"
+      width="250px"
+      :lock-scroll="false"
+    >
+      <el-date-picker v-model="placeTime" type="date" placeholder="Select Push Date" value-format="yyyy-MM-dd" style="width:200px" />
+      <div style="text-align:right">
+        <el-popover
+          v-model="popVisible2"
+          placement="bottom"
+          width="400"
+          style="margin-left:10px"
+        >
+          <h3 style="color:red">Warnning!</h3>
+          <p>This push date is very crucial to inventory.</p>
+          <p>Are you sure the date above is correct?</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="popVisible2 = false">No, I am going to double check it</el-button>
+            <el-button type="primary" size="mini" @click="onConfirmPushClicked">Yes, I will be responsible for this operation</el-button>
+          </div>
+          <el-button slot="reference" type="primary">Confirm</el-button>
+        </el-popover>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -95,7 +122,11 @@ export default {
       inventoryVisible: false,
       arrivedVisible: false,
       popVisible: false,
-      arrivedTime: ''
+      popVisible2: false,
+      pushVisible: false,
+      loading: false,
+      arrivedTime: '',
+      placeTime: ''
     }
   },
   mounted() {
@@ -103,13 +134,29 @@ export default {
   },
   methods: {
     onPushClicked() {
-      pushMasterOrder(this.masterOrder.id).then(() => {
-        this.masterOrder.status = 'Incoming'
-        this.$message({
-          message: 'Push success',
-          type: 'success'
+      this.placeTime = ''
+      this.pushVisible = true
+    },
+    onConfirmPushClicked() {
+      this.loading = true
+      if (this.placeTime !== '') {
+        pushMasterOrder(this.masterOrder.id, this.placeTime).then(() => {
+          this.masterOrder.status = 'Incoming'
+          this.popVisible2 = false
+          this.pushVisible = false
+          this.masterOrder.pushTime = this.placeTime
+          this.$message({
+            message: 'Push success',
+            type: 'success'
+          })
         })
-      })
+      } else {
+        this.$message({
+          message: 'Push Date cannot be empty.',
+          type: 'error'
+        })
+      }
+      this.loading = false
     },
     guide() {
       this.driver.defineSteps(csr_receiving_wo_control)

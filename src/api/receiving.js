@@ -222,9 +222,9 @@ export function resetInstructions(masterOrderId) {
   })
 }
 
-export function pushMasterOrder(id) {
+export function pushMasterOrder(id, date) {
   return request({
-    url: '/api/fbamasterorder/?masterOrderId=' + id + '&operation=Push',
+    url: '/api/fbamasterorder/?masterOrderId=' + id + '&operationDate=' + date + '&operation=Push',
     method: 'put'
   })
 }
