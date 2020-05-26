@@ -43,6 +43,7 @@
 /* eslint-disable */
 
 import { createNewService, updateService  } from '@/api/customer'
+import { chargingUnits, chargingTypes } from '@/scripts/dropdown'
 
 export default {
   props: {
@@ -52,31 +53,8 @@ export default {
   },
   data(){
     return{
-        chargingTypes: [
-          {label: 'Receiving', value: 'Receiving'},
-          {label: 'Operation', value: 'Operation'},
-          {label: 'Storage', value: 'Storage'},
-          {label: 'Shipping', value: 'Shipping'},
-          {label: 'Other', value: 'Other'}
-        ],
-        units: [
-          {label: 'CBM', value: 'CBM'},
-          {label: 'CONTAINER', value: 'CONTAINER'},
-          {label: 'CTNS', value: 'CTNS'},
-          {label: 'WAITING HOUR', value: 'WH'},
-          {label: 'WORK HOUR', value: 'HR'},
-          {label: 'LABEL', value: 'LABEL'},
-          {label: 'PC', value: 'PC'},
-          {label: 'PLT', value: 'PLT'},
-          {label: 'PO', value: 'PO'},
-          {label: 'ORDER', value: 'ORDER'},
-          {label: 'OTHER', value: 'OTHER'},
-          {label: 'SET', value: 'SET'},
-          {label: 'SHIPMENT', value: 'SHIPMENT'},
-          {label: 'SKU', value: 'SKU'},
-          {label: 'STORAGE', value: 'STORAGE'},
-          {label: 'TRAILER', value: 'TRAILER'}
-        ],
+        chargingTypes: chargingTypes,
+        units: chargingUnits,
         rules: {
           name: [
             { required: true, message: 'Please input name', trigger: 'change' }

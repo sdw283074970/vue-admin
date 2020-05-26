@@ -233,3 +233,36 @@ const frieghtCharge = [
 ]
 
 export { frieghtCharge }
+
+const chargingUnits = [
+  { label: 'CBM', value: 'CBM' },
+  { label: 'CONTAINER', value: 'CONTAINER' },
+  { label: 'CTNS', value: 'CTNS' },
+  { label: 'DAY', value: 'DAY' },
+  { label: 'WAITING HOUR', value: 'WH' },
+  { label: 'WORK HOUR', value: 'HR' },
+  { label: 'LABEL', value: 'LABEL' },
+  { label: 'PC', value: 'PC' },
+  { label: 'PLT', value: 'PLT' },
+  { label: 'PO', value: 'PO' },
+  { label: 'ORDER', value: 'ORDER' },
+  { label: 'OTHER', value: 'OTHER' },
+  { label: 'SET', value: 'SET' },
+  { label: 'SHIPMENT', value: 'SHIPMENT' },
+  { label: 'SKU', value: 'SKU' },
+  { label: 'STORAGE', value: 'STORAGE' },
+  { label: 'TRAILER', value: 'TRAILER' }
+]
+
+export { chargingUnits }
+
+const chargingTypes = [
+  { label: 'Receiving', value: 'Receiving' },
+  { label: 'Operation', value: 'Operation' },
+  { label: 'Storage', value: 'Storage' },
+  { label: 'Shipping', value: 'Shipping' },
+  { label: 'Other', value: 'Other' }
+]
+
+export { chargingTypes }
+

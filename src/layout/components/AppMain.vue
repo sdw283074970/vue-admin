@@ -2,10 +2,11 @@
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
       <!-- <keep-alive :include="cachedViews"> -->
-      <keep-alive :exclude="['accounting-receiving-index', 'accounting-shipping-index']">
+      <!-- <keep-alive :exclude="['accounting-receiving-index', 'accounting-shipping-index']">
         <router-view :key="key" />
-      </keep-alive>
+      </keep-alive> -->
       <!-- <router-view v-if="!$route.meta.keepAlive" :key="key" /> -->
+      <router-view :key="key" />
     </transition>
   </section>
 </template>
