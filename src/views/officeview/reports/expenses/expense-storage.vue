@@ -2,8 +2,8 @@
   <div class="gb-maincontainer" style="text-align:right">
     <div>
       <el-form ref="form-required" :rules="rules" :model="queryData">
-        <el-row type="flex" class="row-bg" :gutter="10">
-          <el-col :span="5">
+        <el-row type="flex" class="row-bg" :gutter="12">
+          <el-col :span="6">
             <el-form-item label="CustomerCode" prop="customerCode">
               <el-select
                 v-model="queryData.customerCode"
@@ -21,25 +21,25 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row type="flex" class="row-bg" :gutter="5">
-          <el-col :span="5">
+        <el-row type="flex" class="row-bg" :gutter="12">
+          <el-col :span="6">
             <el-form-item label="Start Date" prop="startDate">
               <el-date-picker v-model="queryData.startDate" type="date" placeholder="Select Date" style="width:170px;" value-format="yyyy-MM-dd" />
             </el-form-item>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="6">
             <el-form-item label="End Date" prop="closeDate">
               <el-date-picker v-model="queryData.closeDate" type="date" placeholder="Select Date" style="width:170px;" value-format="yyyy-MM-dd" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row type="flex" class="row-bg" :gutter="5">
-          <el-col :span="5">
+        <el-row type="flex" class="row-bg" :gutter="12">
+          <el-col :span="6">
             <el-form-item label="P1 Discount" prop="p1Discount">
               <el-input v-model="queryData.p1Discount" />
             </el-form-item>
           </el-col>
-          <el-col :span="5">
+          <el-col :span="6">
             <el-form-item label="P2 Discount" prop="p2Discount">
               <el-input v-model="queryData.p2Discount" />
             </el-form-item>

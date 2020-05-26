@@ -1,27 +1,14 @@
 <template>
-  <div class="gb-maincontainer">
+  <div class="dashboard-editor-container">
     <h1>Expenses Reports</h1>
-    <el-collapse v-model="activeNames">
-      <el-collapse-item title="Export Operation Expenses Report" name="1">
-        <expense-operation :customer-code-options="customerCodeOptions" />
-      </el-collapse-item>
-      <el-collapse-item title="Export Storage Expenses Report" name="2">
-        <expense-storage :customer-code-options="customerCodeOptions" />
-      </el-collapse-item>
-      <el-collapse-item title="Comming Soon" name="3" />
-      <el-collapse-item title="Comming Soon" name="4" />
-      <el-collapse-item title="Comming Soon" name="5" />
-      <el-collapse-item title="Comming Soon" name="6" />
-      <el-collapse-item title="Comming Soon" name="7" />
-      <el-collapse-item title="Comming Soon" name="8" />
-      <el-collapse-item title="Comming Soon" name="9" />
-      <el-collapse-item title="Comming Soon" name="10" />
-      <el-collapse-item title="Comming Soon" name="11" />
-      <el-collapse-item title="Comming Soon" name="12" />
-      <el-collapse-item title="Comming Soon" name="13" />
-      <el-collapse-item title="Comming Soon" name="14" />
-      <el-collapse-item title="Comming Soon" name="15" />
-    </el-collapse>
+    <div class="chart-wrapper">
+      <h2>Operation Charges Report</h2>
+      <expense-operation :customer-code-options="customerCodeOptions" />
+    </div>
+    <div class="chart-wrapper">
+      <h2>Storage Charges Report</h2>
+      <expense-storage :customer-code-options="customerCodeOptions" />
+    </div>
   </div>
 </template>
 
