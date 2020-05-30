@@ -6,8 +6,8 @@
         <el-form-item label="Customer Code">
           <span>{{ inventoryResults.customer }}</span>
         </el-form-item>
-        <el-form-item label="End Date">
-          <span>{{ transferDate(inventoryResults.closeDate) }}</span>
+        <el-form-item label="Date Range">
+          <span>{{ transferDate(inventoryResults.startDate) + ' ~ ' + transferDate(inventoryResults.closeDate) }}</span>
         </el-form-item>
         <el-form-item label="Ava In-plt Ctns">
           <span>{{ inventoryResults.totalInPalletCtns }}</span>

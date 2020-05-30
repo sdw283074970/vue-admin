@@ -16,3 +16,10 @@ export function getLinerChart(timeUnit, timeCount) {
     method: 'get'
   })
 }
+
+export function getInboundAndOutboundSchedule(startDate, endDate, isAdvaceOrderOnly) {
+  return request({
+    url: 'api/fba/fbashiporder/?fromDate=' + startDate + '&toDate=' + endDate + '&isAdvaceOrderOnly=' + isAdvaceOrderOnly,
+    method: 'get'
+  })
+}

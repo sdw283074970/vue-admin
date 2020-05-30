@@ -1,7 +1,7 @@
 <template>
-    <div class="dashboard-container">
-        <h1>Inventory Page</h1>
-    </div>
+  <div class="dashboard-container">
+    <h1>Inventory Page</h1>
+  </div>
 </template>
 
 <script>

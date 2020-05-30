@@ -4,9 +4,9 @@ import request from '@/utils/request-no-interceptor'
 
 // const baseURL = config.baseURL
 
-export function getInventoryByDate(code, date) {
+export function getInventoryByDate(code, startDate, endDate) {
   return request({
-    url: 'api/fba/fbainventoryindex/?customerCode=' + code + '&closeDate=' + date,
+    url: 'api/fba/fbainventoryindex/?customerCode=' + code + '&startDate=' + startDate + '&closeDate=' + endDate,
     method: 'get'
   })
 }
@@ -25,9 +25,9 @@ export function getPltHistories(id) {
   })
 }
 
-export function downloadInventoryReport(code, date) {
+export function downloadInventoryReport(code, startDate, endDate) {
   return request({
-    url: 'api/fba/FBAInventoryIndex/?customerCode=' + code + '&closeDate=' + date + '&operation=DownloadFile',
+    url: 'api/fba/FBAInventoryIndex/?customerCode=' + code + '&startDate=' + startDate + '&closeDate=' + endDate + '&operation=DownloadFile',
     method: 'get'
   })
 }

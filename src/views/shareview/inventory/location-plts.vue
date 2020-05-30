@@ -122,6 +122,16 @@
         width="110"
       />
       <el-table-column
+        prop="inboundDate"
+        align="center"
+        label="Inbound Date"
+        width="110"
+      >
+        <template slot-scope="scope">
+          <font>{{ transferDate(scope.row.inboundDate) }}</font>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="palletSize"
         align="center"
         label="Plt Size"
@@ -166,7 +176,7 @@
       <el-table-column
         align="center"
         label="Ava Ctns In-plts"
-        width="140"
+        width="120"
       >
         <template slot-scope="scope">
           <font>{{ obj_sum(scope.row.inPalletCtnInventories, "residualQuantity").residualQuantity }}</font>
@@ -175,7 +185,7 @@
       <el-table-column
         align="center"
         label="Hold Ctns In-plts"
-        width="140"
+        width="120"
       >
         <template slot-scope="scope">
           <font>{{ obj_sum(scope.row.inPalletCtnInventories, "holdQuantity").holdQuantity }}</font>
@@ -210,76 +220,81 @@
   </div>
 </template>
 <script>
-/* eslint-disable */
 
 export default {
-    props: {
-        fbaPltInventories: Array,
-        isCtnView: Boolean
+  props: {
+    fbaPltInventories: {
+      type: Array,
+      default: null
     },
-    data(){
-        return {
-            tableHight: window.innerHeight * 0.6,
-            currentPage: 1,
-            pageSize: 20,
-            search: '',
-            totalEntries: 0,
-            localTableData: []
-        }
+    isCtnView: Boolean
+  },
+  data() {
+    return {
+      tableHight: window.innerHeight * 0.6,
+      currentPage: 1,
+      pageSize: 20,
+      search: '',
+      totalEntries: 0,
+      localTableData: []
+    }
+  },
+  watch: {
+    search: function(val, oldVal) {
+      this.onSearchChanged(val)
     },
-    watch:{
-        search: function(val, oldVal){
-            this.onSearchChanged(val);
-        },
-        fbaPltInventories: function(val, oldVal){
-            this.localTableData = this.fbaPltInventories;
-            this.totalEntries = this.localTableData.length;
-        }
-    },
-    methods:{
-      onSearchChanged(search) {
-        this.currentPage = 1;
-        this.localTableData = this.fbaPltInventories.filter(data => {
-            return Object.keys(data).some(key => {
-              return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
-          })
-        })
-        this.totalEntries = this.localTableData.length;
-      },
-      handleSizeChange(val) {
-        this.pageSize = val;
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-      },
-      onCtnHistoryClicked(id) {
-        this.$emit('onCtnHistoryClicked', id);
-      },
-      onPltHistoryClicked(id) {
-        this.$emit('onPltHistoryClicked', id);
-      },
-      obj_sum(arr, ...param) {
-        var temp = {};
-        arr.forEach(function(item, index) {
-            for(var k in item) {
-                if(param.indexOf(k) >= 0) {
-                    if((typeof item[k]) == 'string'){
-                        item[k] = item[k]*1
-                    }
-                    if(temp[k]) {
-                        temp[k] += item[k];
-                    } else {
-                        temp[k] = item[k];
-                    }
-                }
-            }
-        });
-        return temp;
-      }
-    },
-    mounted() {
+    fbaPltInventories: function(val, oldVal) {
+      this.localTableData = this.fbaPltInventories
+      this.totalEntries = this.localTableData.length
+    }
+  },
+  mounted() {
 
+  },
+  methods: {
+    transferDate: function(date) {
+      return date === undefined ? '' : (date.substring(0, 4) === 1900 ? '-' : date.substring(0, 10))
     },
+    onSearchChanged(search) {
+      this.currentPage = 1
+      this.localTableData = this.fbaPltInventories.filter(data => {
+        return Object.keys(data).some(key => {
+          return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
+        })
+      })
+      this.totalEntries = this.localTableData.length
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
+    onCtnHistoryClicked(id) {
+      this.$emit('onCtnHistoryClicked', id)
+    },
+    onPltHistoryClicked(id) {
+      this.$emit('onPltHistoryClicked', id)
+    },
+    obj_sum(arr, ...param) {
+      var temp = {}
+      arr.forEach(function(item, index) {
+        for (var k in item) {
+          if (param.indexOf(k) >= 0) {
+            if ((typeof item[k]) === 'string') {
+              item[k] = item[k] * 1
+            }
+            if (temp[k]) {
+              temp[k] += item[k]
+            } else {
+              temp[k] = item[k]
+            }
+          }
+        }
+      })
+      return temp
+    }
+  }
 }
 </script>
 

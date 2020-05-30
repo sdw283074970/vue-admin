@@ -60,7 +60,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <font>{{ scope.row.fee + ' ' + storageTemp.currency + '/' + storageTemp.chargePeriod }}</font>
+          <font>{{ scope.row.fee.toFixed(2) + ' ' + storageTemp.currency + '/' + storageTemp.chargePeriod }}</font>
         </template>
       </el-table-column>
       <el-table-column
