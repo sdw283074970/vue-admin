@@ -37,6 +37,7 @@
       <el-table-column
         prop="uploadDate"
         label="Upload Date"
+        align="center"
         width="110"
       >
         <template
@@ -48,9 +49,21 @@
       <el-table-column
         prop="status"
         label="Status"
-        width="110"
+        width="70"
         align="center"
       />
+      <el-table-column
+        prop="sendDate"
+        label="Send Date"
+        align="center"
+        width="110"
+      >
+        <template
+          slot-scope="scope"
+        >
+          <font>{{ transferDate(scope.row.sendDate) }}</font>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="operation"
         label="operation"
@@ -63,7 +76,8 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onDownloadClicked(scope.row.rootPath, scope.row.fileName)">Download</el-dropdown-item>
-              <el-dropdown-item :disabled="scope.row.status!=='Valid'" @click.native="onDiscardClicked(scope.row.id)">Discard</el-dropdown-item>
+              <el-dropdown-item @click.native="onSendClicked(scope.row.id)">Send to customer</el-dropdown-item>
+              <el-dropdown-item divided :disabled="scope.row.status!=='Valid'" @click.native="onDiscardClicked(scope.row.id)">Discard</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -73,58 +87,75 @@
 </template>
 
 <script>
-/* eslint-disable */
 import config from '@/scripts/global'
-import { downloadFile, deleteLabelFile as deleteReceivingLabelFile, discardFile, downloadEfile } from '@/api/receiving'
-import { deleteLabelFile as deleteShippingLabelFile } from '@/api/shipping'
+import { downloadFile, discardFile, sendFile } from '@/api/receiving'
 
 const baseURL = config.baseURL
 
 export default {
   props: {
-    reference: String,
-    orderType: String,
-    efiles: Array
+    reference: { type: String, default: '' },
+    orderType: { type: String, default: '' },
+    efiles: { type: Array, default: null }
   },
   computed: {
-      uploadAction: function() {
-          return baseURL + 'api/fba/FBAEfolder/?reference=' + encodeURIComponent(this.reference) + '&orderType=' + this.orderType + '&fileName=File&version=V1'
-      }
-  },
-  methods:{
-    onDownloadClicked(path, fileName) {
-        downloadFile(path + fileName, 'E-file')
-    },
-    onDiscardClicked(id) {
-        discardFile(id).then(() => {
-            this.efiles.find(x => x.id === id).status = 'Invalid'
-            this.$message({
-              message: 'Discard Success',
-              type: 'success'
-            });
-        })
-    },
-    onUploadSuccess(response, file, fileList) {
-        // alert('success!')
-        // alert(JSON.stringify(response))
-        this.efiles.push({
-            id: response.id,
-            customizedFileName: response.customizedFileName,
-            fileName: response.fileName,
-            uploadDate: response.uploadDate,
-            status: 'Valid',
-            rootPath: '',
-            discardBy: '',
-            uploadBy: ''
-        });
-        // alert(JSON.stringify(this.efiles))
-    },
-    transferDate: function(date){
-        return date.substring(0,10);
+    uploadAction: function() {
+      return baseURL + 'api/fba/FBAEfolder/?reference=' + encodeURIComponent(this.reference) + '&orderType=' + this.orderType + '&fileName=File&version=V1'
     }
   },
   mounted() {
 
+  },
+  methods: {
+    onDownloadClicked(path, fileName) {
+      downloadFile(path + fileName, 'E-file')
+    },
+    onDiscardClicked(id) {
+      discardFile(id).then(() => {
+        this.efiles.find(x => x.id === id).status = 'Invalid'
+        this.$message({
+          message: 'Discard Success',
+          type: 'success'
+        })
+      })
+    },
+    onUploadSuccess(response, file, fileList) {
+      // alert('success!')
+      // alert(JSON.stringify(response))
+      // this.efiles.push({
+      //   id: response.id,
+      //   customizedFileName: response.customizedFileName,
+      //   fileName: response.fileName,
+      //   uploadDate: response.uploadDate,
+      //   status: 'Valid',
+      //   rootPath: '',
+      //   discardBy: '',
+      //   uploadBy: ''
+      // })
+      // alert(JSON.stringify(this.efiles))
+      this.$emit('reloadEFiles', this.reference)
+    },
+    transferDate(date) {
+      return date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10)
+    },
+    onSendClicked(id) {
+      const fullscreenLoading = this.$loading({
+        lock: false,
+        text: 'Sending...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      sendFile(id).then(() => {
+        this.$message({
+          message: 'Send Success',
+          type: 'success'
+        })
+        this.$emit('reloadEFiles', this.reference)
+        fullscreenLoading.close()
+      }).catch(e => {
+        fullscreenLoading.close()
+      })
+    }
   }
 }
 </script>

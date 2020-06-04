@@ -25,6 +25,7 @@
           :efiles="efiles"
           :reference="reference"
           :order-type="orderType"
+          @reloadEFiles="onEfilesClicked"
         />
       </el-dialog>
     </div>

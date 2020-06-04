@@ -366,3 +366,9 @@ export function deleteReceivingOrder(grandNumber) {
   })
 }
 
+export function sendFile(id) {
+  return request({
+    url: '/api/fba/fbaefolder/?fileId=' + id,
+    method: 'post'
+  })
+}
