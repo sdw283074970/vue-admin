@@ -467,6 +467,7 @@ export default {
       this.editVisible = false
     },
     onFilterFinish(filter) {
+      this.currentPage = 1
       this.$emit('onFilterFinish', filter)
     },
     onDeleteClicked(id) {
@@ -476,6 +477,7 @@ export default {
     onDeleteConfirmed() {
       deleteShippingOrder(this.shipOrderId).then(() => {
         this.deleteVisible = false
+        this.currentPage = 1
         this.$emit('onFilterFinish', this.filter)
       })
     }

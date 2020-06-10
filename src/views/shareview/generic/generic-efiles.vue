@@ -76,7 +76,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onDownloadClicked(scope.row.rootPath, scope.row.fileName)">Download</el-dropdown-item>
-              <el-dropdown-item @click.native="onSendClicked(scope.row.id)">Send to customer</el-dropdown-item>
+              <el-dropdown-item :disabled="scope.row.status!=='Valid'" @click.native="onSendClicked(scope.row.id)">Send to customer</el-dropdown-item>
               <el-dropdown-item divided :disabled="scope.row.status!=='Valid'" @click.native="onDiscardClicked(scope.row.id)">Discard</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

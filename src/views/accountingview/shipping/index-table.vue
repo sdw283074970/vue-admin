@@ -418,6 +418,7 @@ export default {
       this.editVisible = false
     },
     onFilterFinish(filter) {
+      this.currentPage = 1
       this.$emit('onFilterFinish', filter)
     }
   }

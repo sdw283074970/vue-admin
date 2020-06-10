@@ -465,6 +465,7 @@ export default {
       }
     },
     onFilterFinish(filter) {
+      this.currentPage = 1
       this.$emit('onFilterFinish', filter)
     },
     onDeleteClicked(number) {
@@ -474,6 +475,7 @@ export default {
     onDeleteConfirmed() {
       deleteReceivingOrder(this.grandNumber).then(() => {
         this.deleteVisible = false
+        this.currentPage = 1
         this.$emit('onFilterFinish', this.filter)
       })
     }
