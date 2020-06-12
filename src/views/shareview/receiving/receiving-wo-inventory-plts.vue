@@ -6,7 +6,7 @@
       :data="pltInventoryData"
       stripe
       border
-      :height="tableHight"
+      :max-height="tableHight"
       style="width: 100%"
     >
       <el-table-column

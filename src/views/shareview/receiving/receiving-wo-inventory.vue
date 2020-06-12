@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1>Inventory</h1>
-    <h2>Container: {{ masterOrder.container }}</h2>
-    <h2>Customer: {{ masterOrder.customerCode }}</h2>
+    <h2>Inventory</h2>
+    <h3>Container: {{ masterOrder.container }}</h3>
+    <h3>Customer: {{ masterOrder.customerCode }}</h3>
     <div style="margin-bottom:10px">
       <el-switch
         v-model="pltVisible"

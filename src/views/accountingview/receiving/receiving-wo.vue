@@ -21,6 +21,9 @@
       <receiving-wo-packinglist :master-order="masterOrder" :order-details="orderDetails" :step="step" />
     </div>
     <div class="chart-wrapper">
+      <receiving-inventory :master-order="masterOrder" :plt-inventory-data="pltInventoryData" :ctn-inventory-data="ctnInventoryData" @reloadOrder="reloadOrder" />
+    </div>
+    <div class="chart-wrapper">
       <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" :step="step" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
     </div>
     <div class="chart-wrapper">
@@ -38,6 +41,7 @@ export default {
     'receiving-wo-sum': () => import('@/views/shareview/receiving/receiving-wo-sum'),
     'receiving-wo-control': () => import('@/views/accountingview/receiving/receiving-wo-control'),
     'receiving-wo-packinglist': () => import('@/views/shareview/receiving/receiving-wo-packinglist'),
+    'receiving-inventory': () => import('@/views/shareview/receiving/receiving-wo-inventory'),
     'receiving-wo-instruction': () => import('@/views/officeview/receiving/receiving-wo-instructions'),
     'invoice-detail': () => import('@/views/accountingview/invoice/invoice-detail')
   },
