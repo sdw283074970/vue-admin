@@ -50,3 +50,28 @@ export function validateNumber(num) {
     }
   }
 }
+
+export function correctNumber(model, name, max, min) {
+  if (!model[name]) {
+    model[name] = 0
+  }
+
+  if (model[name] === '-') {
+    model[name] = '-'
+  }
+
+  let arg_max = ''
+  let arg_min = ''
+
+  arg_max = parseFloat(max)
+  arg_min = parseFloat(min)
+
+  if (model[name] > arg_max) {
+    model[name] = arg_max
+  }
+  if (model[name] < arg_min) {
+    model[name] = arg_min
+  }
+
+  model[name] = parseFloat(model[name]).toFixed(0) // 默认保留至整数
+}

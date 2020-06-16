@@ -74,14 +74,17 @@
               label="operation"
             >
               <template slot-scope="scope">
-                <el-input v-model="scope.row.selectedCtns" v-only-number="{max:scope.row.availableCtns,min:0,precision:0}" />
+                <!-- <el-input v-model="scope.row.selectedCtns" v-only-number="{max:scope.row.availableCtns,min:0,precision:0}" @keyup="correct(scope.row.selectedCtns, scope.row.availableCtns, 0, 0)" /> -->
+                <el-input v-model.number="scope.row.selectedCtns" @keyup.native="correct(scope.row, 'selectedCtns', scope.row.availableCtns, 0)" />
                 <el-button @click="onPickAllCtnsClicked(props.row.id, scope.row.id)">All</el-button>
               </template>
             </el-table-column>
           </el-table>
           <div style="text-align:right;margin-top:10px">
-            <label>Number of Plts from Inventory: </label><el-input v-model.number="props.row.selectedPlts" v-only-number="{max:props.row.availablePlts,min:0,precision:0}" />
-            <label>Number of new Plts: </label><el-input v-model.number="props.row.newPlts" v-only-number="{max:9999,min:0,precision:0}" />
+            <!-- <label>Number of Plts from Inventory: </label><el-input v-model.number="props.row.selectedPlts" v-only-number="{max:props.row.availablePlts,min:0,precision:0}" /> -->
+            <label>Number of Plts from Inventory: </label><el-input v-model.number="props.row.selectedPlts" @keyup.native="correct(props.row, 'selectedPlts', props.row.availablePlts, 0)" />
+            <!-- <label>Number of new Plts: </label><el-input v-model.number="props.row.newPlts" v-only-number="{max:9999,min:0,precision:0}" /> -->
+            <label>Number of new Plts: </label><el-input v-model.number="props.row.newPlts" @keyup.native="correct(props.row, 'newPlts', 999999, 0)" />
           </div>
           <div style="margin-top:10px;text-align: right;">
             <el-button @click="onPickAllClicked(props.row.id)">Pick All</el-button>
@@ -178,6 +181,7 @@
 
 <script>
 import { getPltsInventory, pickCtnsInPlts } from '@/api/shipping'
+import { correctNumber } from '@/scripts/validator'
 
 export default {
   data() {
@@ -245,6 +249,9 @@ export default {
         })
         this.$emit('referashPickDetails')
       })
+    },
+    correct(model, name, max, min) {
+      correctNumber(model, name, max, min)
     },
     searchHandler() {
       this.loading = true

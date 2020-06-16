@@ -139,6 +139,7 @@
         class="upload-demo"
         drag
         :on-success="uploadSuccessHandler"
+        :on-error="uploadErorrHandler"
         :action="uploadAction"
         :multiple="false"
       >
@@ -335,6 +336,12 @@ export default {
       getLabelFileList(id).then(body => {
         this.labelFiles = body.data;
       });
+    },
+    uploadErorrHandler(response, file, fileList) {
+      this.$message({
+          message: 'Upload failed',
+          type: 'error'
+      })
     },
     uploadSuccessHandler(response, file, fileList) {
       // let index = this.orderDetails.map(x => x.id).indexOf(response.orderDetailId);

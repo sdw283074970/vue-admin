@@ -103,6 +103,7 @@
 
 <script>
 import { getCtnsInventory, confirmPickCtns } from '@/api/shipping'
+import { correctNumber } from '@/scripts/validator'
 
 export default {
   data() {
@@ -151,6 +152,9 @@ export default {
         })
         this.loading = false
       })
+    },
+    correct(model, name, max, min) {
+      correctNumber(model, name, max, min)
     },
     onConfirmPickClicked() {
       var obj = []
