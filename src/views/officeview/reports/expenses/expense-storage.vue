@@ -119,7 +119,7 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <font>{{ scope.row.fee + ' ' + props.row.currency + '/' + props.row.timeUnit }}</font>
+                  <font>{{ scope.row.fee.toFixed(2) + ' ' + props.row.currency + '/' + props.row.timeUnit }}</font>
                 </template>
               </el-table-column>
             </el-table>

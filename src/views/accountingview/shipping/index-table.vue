@@ -136,9 +136,18 @@
         width="100"
       />
       <el-table-column
+        label="Release Date"
+        align="center"
+        width="100"
+      >
+        <template slot-scope="scope">
+          <font>{{ transferDate(scope.row.releasedDate) }}</font>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="Shipped Date"
         align="center"
-        width="120"
+        width="100"
       >
         <template slot-scope="scope">
           <font>{{ transferDate(scope.row.shipDate) }}</font>
@@ -184,7 +193,7 @@
         prop="invoiceStatus"
         align="center"
         label="Invoice Status"
-        width="80"
+        width="70"
       />
       <el-table-column
         prop="closeDate"
@@ -199,6 +208,7 @@
       <el-table-column
         prop="operation"
         label="Operations"
+        width="90"
       >
         <template slot-scope="scope">
           <el-dropdown>

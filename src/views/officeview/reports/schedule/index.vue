@@ -3,7 +3,7 @@
     <h1>Schedules</h1>
     <div class="chart-wrapper">
       <h2>Inbound & Outbound Schedule Log</h2>
-      <schedule-inbound-outbound />
+      <schedule-inbound-outbound :customer-code-options="customerCodeOptions" />
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@
 // import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 // import { generateInvoiceByCustomerCode } from '@/api/accounting'
 // import store from '@/store'
+import { getCustomerCodes } from '@/api/shipping'
 
 // const customerCode = store.getters.customerCode;
 
@@ -31,6 +32,11 @@ export default {
   watch: {
   },
   mounted() {
+    getCustomerCodes().then(
+      body => {
+        this.customerCodeOptions = body.data
+      }
+    )
   },
   methods: {
   }

@@ -58,66 +58,68 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { downloadFile } from '@/api/receiving'
 import { generateInvoiceByCustomerCode } from '@/api/accounting'
 
 export default {
-    props: {
-        customerCodeOptions: Array
-    },
-    data() {
-        return {
-            queryData: {
-                customerCode: '',
-                startDate: '',
-                closeDate: '',
-                ifShowUnclosed: false
-            },
-            rules: {
-                customerCode: [
-                    { required: true, message: 'Customer cdoe required', trigger: 'change' }
-                ],
-                startDate: [
-                    { required: true, message: 'Please select end date', trigger: 'change' }
-                ],
-                closeDate: [
-                    { required: true, message: 'Please select end date', trigger: 'change' }
-                ]
-            },
-            loading: false
-        };
-    },
-    computed: {
-    },
-    watch:{
-    },
-    methods:{
-        onDownloadInvoiceClicked() {
-            this.$refs['form-required'].validate((valid) => {
-                if (valid) {
-                    const fullscreenLoading = this.$loading({
-                        lock: false,
-                        text: 'Downloading',
-                        spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.7)'
-                    });
-                    generateInvoiceByCustomerCode(this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.ifShowUnclosed).then(body => {
-                        fullscreenLoading.close()
-                        downloadFile(body.data, "Operation Expense Report");
-                    }).catch(e => {
-                        fullscreenLoading.close()
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        }
-    },
-    mounted() {
-
+  props: {
+    customerCodeOptions: {
+      type: Array,
+      default: null
     }
+  },
+  data() {
+    return {
+      queryData: {
+        customerCode: '',
+        startDate: '',
+        closeDate: '',
+        ifShowUnclosed: false
+      },
+      rules: {
+        customerCode: [
+          { required: true, message: 'Customer cdoe required', trigger: 'change' }
+        ],
+        startDate: [
+          { required: true, message: 'Please select end date', trigger: 'change' }
+        ],
+        closeDate: [
+          { required: true, message: 'Please select end date', trigger: 'change' }
+        ]
+      },
+      loading: false
+    }
+  },
+  computed: {
+  },
+  watch: {
+  },
+  mounted() {
+
+  },
+  methods: {
+    onDownloadInvoiceClicked() {
+      this.$refs['form-required'].validate((valid) => {
+        if (valid) {
+          const fullscreenLoading = this.$loading({
+            lock: false,
+            text: 'Downloading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+          generateInvoiceByCustomerCode(this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.ifShowUnclosed).then(body => {
+            fullscreenLoading.close()
+            downloadFile(body.data, 'Operation Expense Report')
+          }).catch(e => {
+            fullscreenLoading.close()
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
+  }
 }
 </script>
 

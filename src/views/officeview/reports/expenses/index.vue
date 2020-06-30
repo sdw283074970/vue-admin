@@ -22,29 +22,29 @@ import store from '@/store'
 // const customerCode = store.getters.customerCode;
 
 export default {
-    data() {
-        return {
-            activeNames: [],
-            customerCodeOptions: []
-        };
-    },
-    components: {
-      'expense-operation': () => import('@/views/officeview/reports/expenses/expense-operation'),
-      'expense-storage': () => import('@/views/officeview/reports/expenses/expense-storage')
-    },
-    computed: {
-    },
-    watch:{
-    },
-    methods:{
-    },
-    mounted() {
-      getCustomerCodes().then(
-        body => {
-          this.customerCodeOptions = body.data
-        }
-      )
+  components: {
+    'expense-operation': () => import('@/views/officeview/reports/expenses/expense-operation'),
+    'expense-storage': () => import('@/views/officeview/reports/expenses/expense-storage')
+  },
+  data() {
+    return {
+      activeNames: [],
+      customerCodeOptions: []
     }
+  },
+  computed: {
+  },
+  watch: {
+  },
+  mounted() {
+    getCustomerCodes().then(
+      body => {
+        this.customerCodeOptions = body.data
+      }
+    )
+  },
+  methods: {
+  }
 }
 </script>
 
