@@ -98,10 +98,10 @@
             <el-select v-model="form.role" placeholder="-- Select Role --">
               <el-option label="Administrator" value="Admin" />
               <el-option label="Customer" value="Client" />
-              <el-option label="Guest" value="T1" />
+              <el-option label="Trainee" value="T1" />
               <el-option label="Warehouse" value="T2" />
-              <el-option label="Sales" value="T3" />
-              <el-option label="Office" value="T4" />
+              <el-option label="Office" value="T3" />
+              <el-option label="Sales" value="T4" />
               <el-option label="Accounting" value="T5" />
             </el-select>
           </el-form-item>
@@ -123,7 +123,7 @@
             <el-select v-model="form.role" placeholder="-- Select Role --">
               <el-option label="Administrator" value="CanDeleteEverything" />
               <el-option label="Customer" value="CanViewAsClientOnly" />
-              <el-option label="Guest" value="CanOperateAsT1" />
+              <el-option label="Trainee" value="CanOperateAsT1" />
               <el-option label="Warehouse" value="CanOperateAsT2" />
               <el-option label="Office" value="CanOperateAsT3" />
               <el-option label="Sales" value="CanOperateAsT4" />

@@ -99,26 +99,26 @@ export const asyncRoutes = [
   {
     path: '/user',
     component: Layout,
-    meta: { title: 'User', icon: 'user', role: ['office', 'accounting'] },
+    meta: { title: 'User', icon: 'user', role: ['office', 'trainee', 'accounting'] },
     children: [
       {
         path: 'index',
         name: 'User',
         component: () => import('@/views/officeview/user/index'),
-        meta: { title: 'User', icon: 'user', role: ['office', 'accounting'] }
+        meta: { title: 'User', icon: 'user', role: ['office', 'trainee', 'accounting'] }
       }
     ]
   },
   {
     path: '/customer',
     component: Layout,
-    meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'TBD'] },
+    meta: { title: 'Customer', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD'] },
     children: [
       {
         path: 'index',
         name: 'Customer',
         component: () => import('@/views/officeview/customer/index'),
-        meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'TBD'] }
+        meta: { title: 'Customer', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD'] }
       }
     ]
   },
@@ -126,7 +126,7 @@ export const asyncRoutes = [
     path: '/quiz',
     component: Layout,
     name: 'Quizs',
-    meta: { title: 'Quiz', icon: 'table', role: ['office', 'accounting'] },
+    meta: { title: 'Quiz', icon: 'table', role: ['office', 'trainee', 'accounting'] },
     children: [
       {
         path: '/quiz/1',
@@ -146,7 +146,7 @@ export const asyncRoutes = [
     path: '/reports',
     component: Layout,
     name: 'Reports',
-    meta: { title: 'Reports', icon: 'table', role: ['office', 'accounting', 'TBD'] },
+    meta: { title: 'Reports', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] },
     children: [
       {
         path: '/reports/inventory/index',
@@ -218,7 +218,7 @@ export const asyncRoutes = [
     path: '/csr',
     component: Layout,
     name: 'CSR Terminal',
-    meta: { title: 'CSR Terminal', icon: 'table', role: ['office', 'accounting', 'admin'] },
+    meta: { title: 'CSR Terminal', icon: 'table', role: ['office', 'trainee', 'accounting', 'admin'] },
     children: [
       {
         path: 'receiving',
@@ -252,7 +252,7 @@ export const asyncRoutes = [
     path: '/warehouse',
     component: Layout,
     name: 'Warehouse Terminal',
-    meta: { title: 'Warehouse Terminal', icon: 'table', role: ['office', 'accounting', 'warehouse'] },
+    meta: { title: 'Warehouse Terminal', icon: 'table', role: ['office', 'trainee', 'accounting', 'warehouse'] },
     children: [
       {
         path: 'inbound',
@@ -286,7 +286,7 @@ export const asyncRoutes = [
     path: '/accounting',
     component: Layout,
     name: 'Accounting Receiving',
-    meta: { title: 'Accounting Terminal', icon: 'table', role: ['office', 'accounting'] },
+    meta: { title: 'Accounting Terminal', icon: 'table', role: ['office', 'trainee', 'accounting'] },
     children: [
       {
         path: 'receiving',
@@ -326,7 +326,7 @@ export const asyncRoutes = [
   //   path: '/receiving',
   //   component: Layout,
   //   name: 'Receiving',
-  //   meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'accounting'] },
+  //   meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'trainee', 'accounting'] },
   //   children: [
   //     {
   //       path: 'index',
@@ -347,7 +347,7 @@ export const asyncRoutes = [
   //   path: '/shipping',
   //   component: Layout,
   //   name: 'shipping',
-  //   meta: { title: 'Shipping Orders', icon: 'table', role: ['office', 'accounting', 'TBD'] },
+  //   meta: { title: 'Shipping Orders', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] },
   //   children: [
   //     {
   //       path: 'index',
@@ -368,7 +368,7 @@ export const asyncRoutes = [
   //   path: '/accounting',
   //   component: Layout,
   //   name: 'Accounting',
-  //   meta: { title: 'Accounting', icon: 'table', role: ['office', 'accounting', 'TBD'] },
+  //   meta: { title: 'Accounting', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] },
   //   children: [
   //     {
   //       path: '/accounting/storage/index',
@@ -381,13 +381,13 @@ export const asyncRoutes = [
   // {
   //   path: '/addressbook',
   //   component: Layout,
-  //   meta: { title: 'Address Book', icon: 'table', role: ['office', 'accounting', 'TBD'] },
+  //   meta: { title: 'Address Book', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] },
   //   children: [
   //     {
   //       path: 'index',
   //       name: 'AddressBook',
   //       component: () => import('@/views/shareview/addressbook/index'),
-  //       meta: { title: 'Address Book', icon: 'table', role: ['office', 'accounting', 'TBD'] }
+  //       meta: { title: 'Address Book', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] }
   //     }
   //   ]
   // },
@@ -437,7 +437,7 @@ export const asyncRoutes = [
   //   path: '/MyInventory',
   //   component: Layout,
   //   name: 'My Inventory',
-  //   meta: { title: 'My Inventory', icon: 'table', role: ['office', 'customer'] },
+  //   meta: { title: 'My Inventory', icon: 'table', role: ['office', 'trainee', 'customer'] },
   //   children: [
   //     {
   //       path: 'location',
@@ -457,7 +457,7 @@ export const asyncRoutes = [
   //   path: '/warehouse-receiving',
   //   component: Layout,
   //   name: 'Warehouse Receiving',
-  //   meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'accounting', 'TBD', 'warehouse'] },
+  //   meta: { title: 'Receiving Orders', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD', 'warehouse'] },
   //   children: [
   //     {
   //       path: 'index',
@@ -478,7 +478,7 @@ export const asyncRoutes = [
   //   path: '/warehouse-shipping',
   //   component: Layout,
   //   name: 'Warehouse Shipping',
-  //   meta: { title: 'Shipping Orders', icon: 'table', role: ['office', 'accounting', 'TBD', 'warehouse'] },
+  //   meta: { title: 'Shipping Orders', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD', 'warehouse'] },
   //   children: [
   //     {
   //       path: 'index',

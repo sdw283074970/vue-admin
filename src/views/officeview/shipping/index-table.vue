@@ -222,7 +222,7 @@
               <el-dropdown-item @click.native="onEfilesClicked(scope.row.shipOrderNumber)">eFiles</el-dropdown-item>
               <el-dropdown-item @click.native="editHandler(scope.row.id)">Edit</el-dropdown-item>
               <el-dropdown-item @click.native="woHandler(scope.row.id)">Details</el-dropdown-item>
-              <el-dropdown-item divided @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
+              <el-dropdown-item divided :disabled="!canDelete(scope.row.status)" @click.native="onDeleteClicked(scope.row.id)">Delete</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -377,6 +377,9 @@ export default {
   mounted() {
   },
   methods: {
+    canDelete(status) {
+      return this.$store.getters.roles.indexOf('trainee') < 0 && status !== 'Shipped' && status !== 'Confirmed'
+    },
     transferDate: function(date) {
       return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
     },

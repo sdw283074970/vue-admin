@@ -207,7 +207,7 @@
               <el-dropdown-item @click.native="onEfilesClicked(scope.row.container)">eFiles</el-dropdown-item>
               <el-dropdown-item @click.native="editHandler(scope.row.id, scope.$index)">Edit</el-dropdown-item>
               <el-dropdown-item @click.native="woHandler(scope.row.id)">Details</el-dropdown-item>
-              <el-dropdown-item divided @click.native="onDeleteClicked(scope.row.grandNumber)">Delete</el-dropdown-item>
+              <el-dropdown-item divided :disabled="!canDelete(scope.row.status)" @click.native="onDeleteClicked(scope.row.grandNumber)">Delete</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -272,6 +272,7 @@
 <script>
 /* eslint-disable vue/require-default-prop */
 // import Driver from 'driver.js' // import driver.js
+// import store from '@/store'
 import { csr_receiving_index_steps } from '@/guide/steps'
 import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, deleteReceivingOrder } from '@/api/receiving'
 import { inboundOrderStatus, inboundOrderSortOption } from '@/scripts/dropdown'
@@ -363,6 +364,9 @@ export default {
     this.driver = new this.$driver()
   },
   methods: {
+    canDelete(status) {
+      return this.$store.getters.roles.indexOf('trainee') < 0 && status !== 'Shipped' && status !== 'Confirmed'
+    },
     guide() {
       this.driver.defineSteps(csr_receiving_index_steps)
       this.driver.start()
