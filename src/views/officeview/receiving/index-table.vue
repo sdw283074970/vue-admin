@@ -54,6 +54,9 @@
             <el-form-item label="Container Size">
               <span>{{ props.row.containerSize }}</span>
             </el-form-item>
+            <el-form-item label="Create Date">
+              <span>{{ props.row.createDate.substring(0, 4)==1900?'-':props.row.createDate.substring(0, 10) }}</span>
+            </el-form-item>
             <el-form-item label="Push Date">
               <span>{{ props.row.pushTime.substring(0, 4)==1900?'-':props.row.pushTime.substring(0, 10) }}</span>
             </el-form-item>
@@ -117,12 +120,19 @@
         prop="customerCode"
         label="Customer Code"
         align="center"
-        width="100"
+        width="80"
       />
       <el-table-column
         prop="subCustomer"
         label="Sub-code"
+        align="center"
         sortable
+        width="120"
+      />
+      <el-table-column
+        prop="carrier"
+        align="center"
+        label="Carrier Info"
         width="120"
       />
       <el-table-column
@@ -181,13 +191,13 @@
         prop="invoiceStatus"
         align="center"
         label="Invoice Status"
-        width="80"
+        width="70"
       />
       <el-table-column
         prop="closeDate"
         label="Close Date"
         align="center"
-        width="100"
+        width="90"
       >
         <template slot-scope="scope">
           <font>{{ transferDate(scope.row.closeDate) }}</font>
@@ -201,7 +211,7 @@
         <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
-              Operations<i class="el-icon-arrow-down el-icon--right" />
+              More<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onEfilesClicked(scope.row.container)">eFiles</el-dropdown-item>

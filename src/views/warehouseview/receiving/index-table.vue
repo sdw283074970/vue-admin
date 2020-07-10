@@ -110,6 +110,12 @@
         width="120"
       />
       <el-table-column
+        prop="carrier"
+        align="center"
+        label="Carrier Info"
+        width="120"
+      />
+      <el-table-column
         label="Org Ctns"
         prop="originalCtns"
         align="center"

@@ -71,10 +71,13 @@
         <el-form-item label="Quick Instruction">
           <span>{{ masterOrder.instruction }}</span>
         </el-form-item>
+        <el-form-item label="Create Date">
+          <span>{{ transferDate(masterOrder.createDate) }}</span>
+        </el-form-item>
         <el-form-item label="ETA">
           <span>{{ masterOrder.eta }}</span>
         </el-form-item>
-        <el-form-item label="Place Date">
+        <el-form-item label="Push Date">
           <span>{{ transferDate(masterOrder.pushTime) }}</span>
         </el-form-item>
         <el-form-item label="Inbound Date">

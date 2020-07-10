@@ -86,7 +86,7 @@
         :column-key="'status'"
         label="Status"
         align="center"
-        width="120"
+        width="100"
       >
         <template slot-scope="scope">
           <font :color="changeStatusColor(scope.row.status)">{{ scope.row.status }}</font>
@@ -95,13 +95,13 @@
       <el-table-column
         prop="container"
         label="Container #"
-        width="200"
+        width="160"
       />
       <el-table-column
         prop="customerCode"
         label="Customer Code"
         align="center"
-        width="100"
+        width="80"
       />
       <el-table-column
         prop="subCustomer"
@@ -113,17 +113,23 @@
         prop="containerSize"
         label="Container Size"
         align="center"
-        width="90"
+        width="80"
       />
       <el-table-column
         prop="inboundType"
         label="Inbound Type"
         align="center"
+        width="70"
+      />
+      <el-table-column
+        prop="carrier"
+        align="center"
+        label="Carrier Info"
         width="120"
       />
       <el-table-column
         prop="inboundDate"
-        label="ATA"
+        label="Inbound Date(ATA)"
         align="center"
         width="100"
       >
@@ -135,25 +141,25 @@
         label="Org Ctns"
         prop="totalCtns"
         align="center"
-        width="100"
+        width="90"
       />
       <el-table-column
         label="Actual Ctns"
         prop="actualCtns"
         align="center"
-        width="100"
+        width="90"
       />
       <el-table-column
         label="Org Plts"
         prop="originalPlts"
         align="center"
-        width="80"
+        width="90"
       />
       <el-table-column
         label="Actual Plts"
         prop="actualPlts"
         align="center"
-        width="100"
+        width="90"
       />
       <el-table-column
         prop="skuNumber"
@@ -192,7 +198,7 @@
         prop="invoiceStatus"
         align="center"
         label="Invoice Status"
-        width="80"
+        width="70"
       />
       <el-table-column
         prop="closeDate"
@@ -211,7 +217,7 @@
         <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
-              Options<i class="el-icon-arrow-down el-icon--right" />
+              More<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onEfilesClicked(scope.row.container)">eFiles</el-dropdown-item>

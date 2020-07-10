@@ -78,10 +78,21 @@
       />
       <el-table-column
         prop="customerCode"
-        label="Code"
-        :column-key="'code'"
-        :filters="customerCodeFilters"
+        label="Customer Code"
+        align="center"
+        width="120"
+      />
+      <el-table-column
+        label="Batch #"
+        prop="batchNumber"
+        align="center"
         width="100"
+      />
+      <el-table-column
+        prop="carrier"
+        align="center"
+        label="Carrier Info"
+        width="120"
       />
       <!-- <el-table-column
         prop="subCustomer"
@@ -98,12 +109,6 @@
       <el-table-column
         label="PLTS"
         prop="totalPlts"
-        align="center"
-        width="100"
-      />
-      <el-table-column
-        label="Batch #"
-        prop="batchNumber"
         align="center"
         width="100"
       />

@@ -79,13 +79,14 @@
       <el-table-column
         prop="id"
         label="Id"
-        width="80"
+        align="center"
+        width="70"
       />
       <el-table-column
         prop="status"
         label="Status"
         align="center"
-        width="110"
+        width="100"
       >
         <template slot-scope="scope">
           <font :color="changeStatusColor(scope.row.status)">{{ scope.row.status }}</font>
@@ -105,11 +106,9 @@
       />
       <el-table-column
         prop="customerCode"
-        label="Code"
+        label="Customer Code"
         align="center"
-        :column-key="'code'"
-        :filters="customerCodeFilters"
-        width="100"
+        width="80"
       />
       <el-table-column
         prop="subCustomer"
@@ -121,6 +120,12 @@
         prop="destination"
         label="Dest"
         sortable
+        width="120"
+      />
+      <el-table-column
+        prop="carrier"
+        align="center"
+        label="Carrier Info"
         width="120"
       />
       <el-table-column
@@ -213,7 +218,7 @@
         <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
-              Options<i class="el-icon-arrow-down el-icon--right" />
+              More<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onEfilesClicked(scope.row.shipOrderNumber)">eFiles</el-dropdown-item>

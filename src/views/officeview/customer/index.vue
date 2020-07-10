@@ -150,7 +150,7 @@
               <el-input v-model="form.departmentCode" autocomplete="on" :disabled="true" />
             </el-form-item>
             <el-form-item label="Customer Name" :label-width="formLabelWidth" prop="name">
-              <el-input v-model="form.name" autocomplete="on" :disabled="isEdit" />
+              <el-input v-model="form.name" autocomplete="on" />
             </el-form-item>
             <el-form-item label="Customer Code" :label-width="formLabelWidth" prop="customerCode">
               <el-input v-model="form.customerCode" autocomplete="on" :disabled="isEdit" />

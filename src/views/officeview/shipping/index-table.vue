@@ -139,18 +139,20 @@
       <el-table-column
         prop="batchNumber"
         label="Batch #"
+        align="center"
         sortable
-        min-width="20%"
+        width="120"
       />
       <el-table-column
         prop="customerCode"
         label="Customer Code"
         align="center"
-        width="100"
+        width="80"
       />
       <el-table-column
         prop="subCustomer"
         label="Sub-code"
+        align="center"
         sortable
         width="120"
       />
@@ -161,10 +163,17 @@
         min-width="20%"
       />
       <el-table-column
+        prop="carrier"
+        align="center"
+        label="Carrier Info"
+        width="120"
+      />
+      <el-table-column
         prop="ets"
         label="ETS"
+        align="center"
         sortable
-        min-width="20%"
+        width="90"
       >
         <template slot-scope="scope">
           <font>{{ transferDate(scope.row.ets) }}</font>
@@ -174,13 +183,13 @@
         prop="totalCtns"
         label="Total Ctns"
         align="center"
-        min-width="20%"
+        width="80"
       />
       <el-table-column
         prop="totalPlts"
         label="Total Plts"
         align="center"
-        min-width="20%"
+        width="80"
       />
       <el-table-column
         label="POD"
@@ -195,13 +204,13 @@
         prop="invoiceStatus"
         align="center"
         label="Invoice Status"
-        width="80"
+        width="70"
       />
       <el-table-column
         prop="closeDate"
         label="Close Date"
         align="center"
-        width="100"
+        width="90"
       >
         <template slot-scope="scope">
           <font>{{ transferDate(scope.row.closeDate) }}</font>
@@ -216,7 +225,7 @@
         <template slot-scope="scope">
           <el-dropdown>
             <span class="el-dropdown-link">
-              Operations<i class="el-icon-arrow-down el-icon--right" />
+              More<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="onEfilesClicked(scope.row.shipOrderNumber)">eFiles</el-dropdown-item>

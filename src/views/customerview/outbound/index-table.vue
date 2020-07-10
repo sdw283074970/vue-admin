@@ -98,12 +98,6 @@
         min-width="40%"
       />
       <el-table-column
-        prop="batchNumber"
-        label="Batch #"
-        sortable
-        min-width="20%"
-      />
-      <el-table-column
         prop="customerCode"
         label="Code"
         sortable
