@@ -12,7 +12,7 @@
 
     <div style="margin-bottom:10px">
       <div>
-        <el-button class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Await'" @click="closeVisible=true">Generate Invoice</el-button>
+        <el-button class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Await'" @click="onGenerateInvoiceClicked">Generate Invoice</el-button>
         <!-- <el-button class="gb-button" type="primary" :disabled="masterOrder.invoiceStatus!='Generated'" @click="popVisible3=true">Close Order</el-button> -->
         <el-popover
           v-model="popVisible3"
@@ -153,6 +153,10 @@ export default {
 
   },
   methods: {
+    onGenerateInvoiceClicked() {
+      this.closeVisible = true
+      this.closeDate = this.masterOrder.closeDate.toString().substring(0, 4) === '1900' ? '' : this.masterOrder.closeDate
+    },
     onGenerateClicked() {
       if (this.closeDate) {
         this.popVisible1 = false

@@ -11,7 +11,7 @@
     </div>
     <div style="margin-bottom:10px">
       <div>
-        <el-button class="gb-button" type="primary" :disabled="shipOrder.invoiceStatus!='Await'" @click="closeVisible=true">Generate Invoice</el-button>
+        <el-button class="gb-button" type="primary" :disabled="shipOrder.invoiceStatus!='Await'" @click="onGenerateInvoiceClicked">Generate Invoice</el-button>
         <!-- <el-button class="gb-button" type="primary" :disabled="shipOrder.invoiceStatus!='Generated'" @click="closeVisible=true">Close Order</el-button> -->
         <el-popover
           v-model="popVisible4"
@@ -179,6 +179,10 @@ export default {
         this.loading = false
         this.$emit('reloadOrder')
       })
+    },
+    onGenerateInvoiceClicked() {
+      this.closeVisible = true
+      this.closeDate = this.shipOrder.closeDate.toString().substring(0, 4) === '1900' ? '' : this.shipOrder.closeDate
     },
     onGenerateClicked() {
       this.loading = true
