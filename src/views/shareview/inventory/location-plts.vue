@@ -113,7 +113,17 @@
       <el-table-column
         prop="container"
         label="Container"
-        width="200"
+        width="150"
+      />
+      <el-table-column
+        prop="shipmentId"
+        label="Shipment Id"
+        width="150"
+      />
+      <el-table-column
+        prop="amzRefId"
+        label="Amz Ref. Id"
+        width="150"
       />
       <el-table-column
         prop="subCustomer"
@@ -135,13 +145,13 @@
         prop="palletSize"
         align="center"
         label="Plt Size"
-        width="100"
+        width="70"
       />
       <el-table-column
         prop="actualPlts"
         align="center"
         label="Org Plts"
-        width="100"
+        width="70"
       />
       <el-table-column
         align="center"
@@ -153,12 +163,12 @@
         prop="availablePlts"
         align="center"
         label="Ava Plts"
-        width="120"
+        width="80"
       />
       <el-table-column
         align="center"
-        label="Org Ctns In-plts"
-        width="140"
+        label="Org In-plt Ctns"
+        width="80"
       >
         <template slot-scope="scope">
           <font>{{ obj_sum(scope.row.inPalletCtnInventories, "originalQuantity").originalQuantity }}</font>
@@ -166,8 +176,8 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="Porcessing Ctns In-plts"
-        width="135"
+        label="Porcessing In-plt Ctns"
+        width="90"
       >
         <template slot-scope="scope">
           <font>{{ obj_sum(scope.row.inPalletCtnInventories, "pickingCtns").pickingCtns }}</font>
@@ -175,8 +185,8 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="Ava Ctns In-plts"
-        width="120"
+        label="Ava In-plt Ctns"
+        width="80"
       >
         <template slot-scope="scope">
           <font>{{ obj_sum(scope.row.inPalletCtnInventories, "residualQuantity").residualQuantity }}</font>
@@ -184,8 +194,8 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="Hold Ctns In-plts"
-        width="120"
+        label="Hold In-plt Ctns"
+        width="90"
       >
         <template slot-scope="scope">
           <font>{{ obj_sum(scope.row.inPalletCtnInventories, "holdQuantity").holdQuantity }}</font>

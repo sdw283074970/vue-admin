@@ -23,3 +23,10 @@ export function getInboundAndOutboundSchedule(startDate, endDate, isAdvaceOrderO
     method: 'get'
   })
 }
+
+export function getTransitShipmentReminder() {
+  return request({
+    url: 'api/fba/fbadashboard/?operation=GetTransitReminder',
+    method: 'get'
+  })
+}
