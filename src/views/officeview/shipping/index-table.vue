@@ -9,19 +9,19 @@
       <el-button :loading="localLoading" type="primary" @click="onShippedClicked">Shipped</el-button>
     </div> -->
     <div class="input-bar">
+      <generic-order-multiple-filters ref="child" :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
+    </div>
+    <div class="input-bar">
       <el-button :loading="localLoading" type="primary" icon="el-icon-plus" @click="createHandler">New SO</el-button>
       <el-button :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
       <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"
         style="width:250px"
-        size="large"
+        size="small"
         :disabled="loading"
-        placeholder="Search..."
+        placeholder="Search in results..."
       />
-    </div>
-    <div class="input-bar">
-      <generic-order-multiple-filters ref="child" :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
     </div>
     <el-table
       ref="table"
@@ -294,6 +294,7 @@
 <script>
 import { getShipOrderInfo, createNewShipOrder, updateShipOrderInfo, deleteShippingOrder } from '@/api/shipping'
 import { outboundOrderStatus, outboundOrderSortOption } from '@/scripts/dropdown'
+import { eventBus } from '@/main'
 
 export default {
   components: {
@@ -383,6 +384,11 @@ export default {
       })
     }
   },
+  created() {
+    eventBus.$on('cleanFilter', () => {
+      this.search = ''
+    })
+  },
   mounted() {
   },
   methods: {
@@ -394,6 +400,8 @@ export default {
     },
     clearFilter() {
       this.$refs.table.clearFilter()
+      this.search = ''
+      eventBus.$emit('onClearFilterClicked')
       this.$emit('onRefreshClicked')
     },
     handleSizeChange(val) {

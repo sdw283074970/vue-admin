@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="input-bar">
+      <generic-order-multiple-filters :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
+    </div>
+    <div class="input-bar">
       <!-- <el-button type="primary" icon="el-icon-plus" @click="createHandler">New SO</el-button> -->
       <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
       <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"
         style="width:250px"
-        size="large"
+        size="small"
         :disabled="loading"
-        placeholder="Search..."
+        placeholder="Search in results..."
       />
-    </div>
-    <div class="input-bar">
-      <generic-order-multiple-filters :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
     </div>
     <el-table
       ref="table"
@@ -274,6 +274,7 @@
 /* eslint-disable vue/require-default-prop */
 import { getShipOrderInfo, createNewShipOrder, updateShipOrderInfo } from '@/api/shipping'
 import { outboundOrderStatus, outboundOrderSortOption } from '@/scripts/dropdown'
+import { eventBus } from '@/main'
 
 export default {
   components: {
@@ -342,12 +343,19 @@ export default {
   },
   mounted() {
   },
+  created() {
+    eventBus.$on('cleanFilter', () => {
+      this.search = ''
+    })
+  },
   methods: {
     transferDate: function(date) {
       return date === undefined ? '' : (date.substring(0, 4) === '1900' ? '-' : date.substring(0, 10))
     },
     clearFilter() {
       this.$refs.table.clearFilter()
+      this.search = ''
+      eventBus.$emit('onClearFilterClicked')
       this.$emit('onRefreshClicked')
     },
     handleSizeChange(val) {

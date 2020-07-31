@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div id="csr-receiving-advanced-filter" class="input-bar">
+      <generic-order-multiple-filters ref="child" :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
+    </div>
     <div class="input-bar">
       <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
       <el-button id="csr-receiving-new-inbound-order" :loading="localLoading" type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
@@ -9,13 +12,10 @@
         id="csr-receiving-search"
         v-model="search"
         style="width:250px"
-        size="large"
-        placeholder="Search..."
+        size="small"
+        placeholder="Search in results..."
         :disabled="loading"
       />
-    </div>
-    <div id="csr-receiving-advanced-filter" class="input-bar">
-      <generic-order-multiple-filters ref="child" :status-filters="statusFilters" :sort-by-options="sortByOptions" :customer-code-filters="customerCodeFilters" @onFilterFinish="onFilterFinish" />
     </div>
     <el-table
       id="csr-receiving-orders"
@@ -286,6 +286,7 @@
 import { csr_receiving_index_steps } from '@/guide/steps'
 import { createNewrReceivingOrder, getReceivingOrderInfo, updateReceivingOrderInfo, deleteReceivingOrder } from '@/api/receiving'
 import { inboundOrderStatus, inboundOrderSortOption } from '@/scripts/dropdown'
+import { eventBus } from '@/main'
 
 export default {
   components: {
@@ -373,6 +374,11 @@ export default {
   mounted() {
     this.driver = new this.$driver()
   },
+  created() {
+    eventBus.$on('cleanFilter', () => {
+      this.search = ''
+    })
+  },
   methods: {
     canDelete(status) {
       return this.$store.getters.roles.indexOf('trainee') < 0 && status !== 'Shipped' && status !== 'Confirmed'
@@ -386,7 +392,9 @@ export default {
     },
     clearFilter() {
       this.$refs.table.clearFilter()
+      this.search = ''
       this.$emit('onRefreshClicked')
+      eventBus.$emit('onClearFilterClicked')
       // this.localLoading = true;
       // this.filteredData = this.tableData;
       // this.localLoading = false;

@@ -67,12 +67,13 @@
       inactive-text="Asce"
     />
     <el-button id="generic-filter-filter" type="primary" @click="onFilterClicked">Filter</el-button>
-    <el-button id="generic-filter-reset" @click="onResetFilterClicked">Reset Filter</el-button>
+    <el-button id="generic-filter-reset" @click="onResetFilterClicked">Clean Filter</el-button>
   </div>
 </template>
 <script>
 /* eslint-disable vue/require-default-prop */
 import { invoiceStatus } from '@/scripts/dropdown'
+import { eventBus } from '@/main'
 
 export default {
   props: {
@@ -90,6 +91,11 @@ export default {
       invoiceStatusOptions: invoiceStatus
     }
   },
+  created() {
+    eventBus.$on('onClearFilterClicked', () => {
+      this.onResetFilterClicked()
+    })
+  },
   methods: {
     onFilterClicked() {
       var filter = {
@@ -106,7 +112,9 @@ export default {
       this.status = []
       this.customerCodes = []
       this.invoiceStatus = []
-      this.sortBy = ''
+      this.isDesc = true
+      this.sortBy = 'Id'
+      eventBus.$emit('cleanFilter')
     }
   }
 }

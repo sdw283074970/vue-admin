@@ -57,6 +57,8 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+export const eventBus = new Vue()
+
 new Vue({
   el: '#app',
   router,
