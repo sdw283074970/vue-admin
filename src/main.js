@@ -22,6 +22,10 @@ import VueAxios from 'vue-axios'
 import onlyNumber from '@/scripts'
 // import permission from '@/directive/permission/index.js'
 
+import Directives from './scripts/validateNumberIndex'
+Vue.use(Directives)
+Vue.config.productionTip = false
+
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 axios.defaults.baseURL = '/api'

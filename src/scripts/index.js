@@ -16,4 +16,5 @@ if (window.Vue) {
 }
 
 onlyNumber.install = install
+
 export default onlyNumber

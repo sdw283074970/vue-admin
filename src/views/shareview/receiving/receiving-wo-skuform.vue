@@ -16,21 +16,21 @@
             <el-input v-model="formData.howToDeliver" :disabled="isAdjust" />
           </el-form-item>
           <el-form-item label="Actual CBM" prop="actualCBM">
-            <el-input v-model.number="formData.actualCBM" :disabled="!isAdjust" />
+            <el-input v-model="formData.actualCBM" v-positive="'float'" :disabled="!isAdjust" />
           </el-form-item>
           <el-form-item label="Actual G.W." prop="actualGrossWeight">
-            <el-input v-model.number="formData.actualGrossWeight" :disabled="!isAdjust" />
+            <el-input v-model="formData.actualGrossWeight" v-positive="'float'" :disabled="!isAdjust" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="GW(KG)" prop="grossWeight">
-            <el-input v-model.number="formData.grossWeight" :disabled="isAdjust" />
+            <el-input v-model="formData.grossWeight" v-positive="'float'" :disabled="isAdjust" />
           </el-form-item>
           <el-form-item label="CBM" prop="cbm">
-            <el-input v-model.number="formData.cbm" :disabled="isAdjust" />
+            <el-input v-model="formData.cbm" v-positive="'float'" :disabled="isAdjust" />
           </el-form-item>
           <el-form-item label="Quantity" prop="quantity">
-            <el-input v-model.number="formData.quantity" :disabled="isAdjust||step>1" />
+            <el-input v-model="formData.quantity" :disabled="isAdjust||step>1" />
           </el-form-item>
           <el-form-item label="Barcode">
             <el-input v-model="formData.barcode" />
@@ -81,23 +81,23 @@ export default {
           ],
           grossWeight: [
             { required: true, message: 'Please input the gross weight or 0', trigger: 'change' },
-            { type: 'number', message: 'Field must be number', trigger: 'change' }
+            // { type: 'number', message: 'Field must be number', trigger: 'change' }
           ],
           cbm: [
             { required: true, message: 'Please input CBM or 0', trigger: 'change' },
-            { type: 'number', message: 'Field must be number', trigger: 'change' }
+            // { type: 'decimal', message: 'Field must be number', trigger: 'change' }
           ],
           quantity: [
             { required: true, message: 'Please input the quantity', trigger: 'change' },
-            { type: 'number', message: 'Field must be number', trigger: 'change' }
+            // { type: 'number', message: 'Field must be number', trigger: 'change' }
           ],
           actualCBM: [
             { required: true, message: 'Please input the actual received CBM', trigger: 'change' },
-            { type: 'number', message: 'Field must be number', trigger: 'change' }
+            // { type: 'number', message: 'Field must be number', trigger: 'change' }
           ],
           actualGrossWeight: [
             { required: true, message: 'Please input the actual received gross weight', trigger: 'change' },
-            { type: 'number', message: 'Field must be number', trigger: 'change' }
+            // { type: 'number', message: 'Field must be number', trigger: 'change' }
           ],
           actualQuantity: [
             { required: true, message: 'Please input the actual received quantity', trigger: 'change' },

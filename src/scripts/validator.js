@@ -41,7 +41,6 @@ const validateAcquaintance = (rule, value, callback) => {
 export default { validateTo, validatePrice, validateQuantity, validateAcquaintance }
 
 export function validateNumber(num) {
-  alert(num)
   return (rule, value, callback) => {
     if (value < num) {
       callback(new Error('Cannot be smaller than FROM value'))
