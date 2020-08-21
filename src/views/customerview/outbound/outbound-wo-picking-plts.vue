@@ -215,7 +215,7 @@ export default {
       var arr = []
       plt.fbaCartonLocations.forEach(function(i) {
         if (i.selectedCtns !== 0) {
-          var obj = { 'id': i.id, 'quantity': i.selectedCtns }
+          var obj = { 'id': i.id, 'pickQuantity': i.selectedCtns }
           arr.push(obj)
         }
       })

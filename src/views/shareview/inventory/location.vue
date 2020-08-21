@@ -49,8 +49,8 @@
       active-text="Ctn View"
       inactive-text="Plt View"
     />
-    <location-ctns :is-ctn-view="isCtnView" :fba-ctn-inventories="inventoryResults.fbaCtnInventories" @onCtnHistoryClicked="onCtnHistoryClicked" />
-    <location-plts :is-ctn-view="isCtnView" :fba-plt-inventories="inventoryResults.fbaPalletGroupInventories" @onPltHistoryClicked="onPltHistoryClicked" @onCtnHistoryClicked="onCtnHistoryClicked" />
+    <location-ctns ref="childCtns" :is-ctn-view="isCtnView" :fba-ctn-inventories="inventoryResults.fbaCtnInventories" @onCtnHistoryClicked="onCtnHistoryClicked" @reloadOrder="reloadOrder" />
+    <location-plts ref="childPlts" :is-ctn-view="isCtnView" :fba-plt-inventories="inventoryResults.fbaPalletGroupInventories" @onPltHistoryClicked="onPltHistoryClicked" @onCtnHistoryClicked="onCtnHistoryClicked" @reloadOrder="reloadOrder" />
     <el-dialog
       title="Ctn Outbound History"
       :visible.sync="ctnHistoryVisible"
@@ -137,15 +137,37 @@ export default {
     )
   },
   methods: {
+    reloadOrder() {
+      this.onQueryClicked()
+    },
     onQueryClicked() {
       this.$refs['form-required'].validate((valid) => {
         if (valid) {
           this.loading = true
+          const fullscreenLoading = this.$loading({
+            lock: false,
+            text: 'Processing...',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
           getInventoryByDate(this.queryData.customerCode, this.queryData.dateRange[0], this.queryData.dateRange[1]).then(body => {
             this.inventoryResults = body.data[0]
+            fullscreenLoading.close()
             this.loading = false
+            this.$message({
+              message: 'Success',
+              type: 'success'
+            })
+            this.$refs.childCtns.doSearch()
+            this.$refs.childPlts.doSearch()
           }).catch(e => {
+            alert(e)
             this.loading = false
+            fullscreenLoading.close()
+            this.$message({
+              message: 'Failed',
+              type: 'warning'
+            })
           })
         } else {
           console.log('error submit!!')

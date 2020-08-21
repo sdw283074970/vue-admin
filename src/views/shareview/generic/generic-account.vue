@@ -1,47 +1,84 @@
 <template>
   <div class="gb-maincontainer" style="text-align:right">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>Change Password</span>
-      </div>
-      <div>
-        <el-form ref="form-required" :rules="rules" :model="passwords">
-          <el-row>
-            <el-col>
-              <el-form-item label="Old Password" prop="oldPassword">
-                <el-input v-model="passwords.oldPassword" :type="passwordType" />
-                <!-- <span class="show-pwd" @click="showPwd">
-                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                </span> -->
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="New Password" prop="newPassword">
-                <el-input v-model="passwords.newPassword" :type="passwordType" @input="onNewPasswordChange" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="Confirm Password" prop="confirmPassword">
-                <el-input v-model="passwords.confirmPassword" :type="passwordType" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-        <div>
-          <el-button type="primary" @click="onConfirmClicked">Confirm</el-button>
+    <div>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>App Key&Secret</span>
         </div>
-      </div>
-    </el-card>
+        <div>
+          <el-form ref="form-app-key" :model="appInfo">
+            <el-row>
+              <el-col>
+                <el-form-item label="App Key">
+                  <el-input v-model="appInfo.appKey" class="width:200px" disabled />
+                  <span
+                    v-clipboard:copy="appInfo.appKey"
+                    v-clipboard:success="onCopy"
+                    v-clipboard:error="onError"
+                    title="Click and Copy"
+                  ><el-button>Copy</el-button></span>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="Secret">
+                  <el-input v-model="appInfo.secret" disabled />
+                  <span
+                    v-clipboard:copy="appInfo.secret"
+                    v-clipboard:success="onCopy"
+                    v-clipboard:error="onError"
+                    title="Click and Copy"
+                  ><el-button>Copy</el-button></span>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+      </el-card>
+    </div>
+    <div>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>Change Password</span>
+        </div>
+        <div>
+          <el-form ref="form-required" :rules="rules" :model="passwords">
+            <el-row>
+              <el-col>
+                <el-form-item label="Old Password" prop="oldPassword">
+                  <el-input v-model="passwords.oldPassword" :type="passwordType" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="New Password" prop="newPassword">
+                  <el-input v-model="passwords.newPassword" :type="passwordType" @input="onNewPasswordChange" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="Confirm Password" prop="confirmPassword">
+                  <el-input v-model="passwords.confirmPassword" :type="passwordType" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          <div>
+            <el-button type="primary" @click="onConfirmClicked">Confirm</el-button>
+          </div>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import { changePassword } from '@/api/customer'
+import { getAppKeyInfo } from '@/api/customer'
 import store from '@/store'
 
 export default {
@@ -72,6 +109,10 @@ export default {
         return {
             email: store.getters.name,
             passwordType: 'password',
+            appInfo: {
+              appKey: '',
+              secret: ''
+            },
             passwords: {
                 oldPassword: '',
                 newPassword: '',
@@ -99,6 +140,17 @@ export default {
     watch:{
     },
     methods:{
+      // 复制成功
+      onCopy() {
+          this.$message.success("Copy success")
+      },
+      // 复制失败
+      onError() {
+              this.$message({
+                message: 'Copy failed',
+                type: 'warning'
+              });
+      },
       showPwd() {
         if (this.passwordType === 'password') {
           this.passwordType = ''
@@ -132,17 +184,19 @@ export default {
         })
       }
     },
-
     mounted() {
-
+      getAppKeyInfo(this.$store.getters.name).then(body => {
+        this.appInfo.appKey = body.data.appKey
+        this.appInfo.secret = body.data.secretKey
+      })
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .input-bar{
-      text-align: right
-    }
+  .input-bar{
+    text-align: right
+  }
   .text {
     font-size: 14px;
   }
@@ -162,5 +216,9 @@ export default {
 
   .box-card {
     width: 480px;
+  }
+
+  .el-input {
+    width: 250px;
   }
 </style>

@@ -190,3 +190,10 @@ export function swithCustomerStatus(id) {
     method: 'put'
   })
 }
+
+export function getAppKeyInfo(email) {
+  return request({
+    url: 'api/customermanagement/?email=' + email,
+    method: 'get'
+  })
+}

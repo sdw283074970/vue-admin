@@ -162,7 +162,7 @@ export default {
         if (x.selectedCtns > 0 && x.selectedCtns <= x.availableCtns) {
           obj.push({
             id: x.id,
-            quantity: x.selectedCtns
+            pickQuantity: x.selectedCtns
           })
         }
       })

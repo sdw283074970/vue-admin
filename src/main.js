@@ -33,6 +33,10 @@ axios.defaults.baseURL = '/api'
 Vue.use(VueAxios, axios)
 Vue.use(onlyNumber)
 
+// 点击复制到剪切板
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
+
 import Driver from 'driver.js' // import driver.js
 Vue.prototype.$driver = Driver
 import 'driver.js/dist/driver.min.css' // import driver.js css

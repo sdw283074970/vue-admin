@@ -213,7 +213,17 @@
         width="110"
       >
         <template slot-scope="scope">
-          <el-button @click="onPltHistoryClicked(scope.row.pltId)">History</el-button>
+          <!-- <el-button @click="onPltHistoryClicked(scope.row.pltId)">History</el-button> -->
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              More<i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item :disabled="scope.row.availablePlts==0" @click.native="onUpdatePltsClicked(scope.row.pltId, scope.row.location)">Update</el-dropdown-item>
+              <el-dropdown-item @click.native="onPltHistoryClicked(scope.row.id)">History</el-dropdown-item>
+              <!-- <el-dropdown-item :disabled="scope.row.actualPlts!==scope.row.availablePlts" @click.native="onRelocateClicked(scope.row.id)">Re-allocate</el-dropdown-item> -->
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -227,9 +237,44 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <el-dialog
+      title="Update Pallet"
+      :visible.sync="updatePltsVisible"
+      width="400px"
+      top="8vh"
+      :lock-scroll="false"
+      append-to-body
+    >
+      <el-form ref="form-required-plt" :rules="rules" :model="formData" label-width="150px">
+        <el-col>
+          <el-form-item label="Location" prop="location">
+            <el-input v-model="formData.location" />
+          </el-form-item>
+        </el-col></el-form>
+      <div style="text-align:center">
+        <el-button type="primary" @click="onUpdatePltsConfirmClicked">Update</el-button>
+        <el-button @click="updatePltsVisible=false">Cancel</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
+const validateAcquaintance = (rule, value, callback) => {
+  if (!value && value !== 0) {
+    callback(new Error('Please enter valid hold ctns quanity'))
+  }
+  value = Number(value)
+  if (typeof value === 'number' && !isNaN(value)) {
+    if (value < 0) {
+      callback(new Error('Hold quantity cannot be smaller than 0'))
+    } else {
+      callback()
+    }
+  } else {
+    callback(new Error('Please enter valid pallet number'))
+  }
+}
+import { updateHoldCtns, updateLocation, updatePltLocation } from '@/api/receiving'
 
 export default {
   props: {
@@ -241,12 +286,28 @@ export default {
   },
   data() {
     return {
+      updatePltsVisible: false,
       tableHight: window.innerHeight * 0.6,
       currentPage: 1,
       pageSize: 20,
       search: '',
       totalEntries: 0,
-      localTableData: []
+      localTableData: [],
+      formData: {
+        id: 0,
+        holdQuantity: 0,
+        location: '',
+        max: 0,
+        type: ''
+      },
+      rules: {
+        holdQuantity: [
+          { validator: validateAcquaintance, trigger: 'blur' }
+        ],
+        location: [
+          { required: true, message: 'Please input a location', trigger: 'blur' }
+        ]
+      }
     }
   },
   watch: {
@@ -303,6 +364,56 @@ export default {
         }
       })
       return temp
+    },
+    doSearch() {
+      clearTimeout(this.timer) // 清除延迟执行
+      this.timer = setTimeout(() => { // 设置延迟执行
+        this.onSearchChanged(this.search)
+      }, 1000)
+    },
+    onUpdateClicked(id, holdCtns, location, availableCtns) {
+      this.formData.holdCtns = holdCtns
+      this.formData.location = location
+      this.formData.availableCtns = availableCtns
+      this.formData.id = id
+      this.updateVisible = true
+      this.formData.max = holdCtns + availableCtns
+    },
+    onUpdatePltsClicked(id, location) {
+      this.formData.id = id
+      this.formData.location = location
+      this.updatePltsVisible = true
+    },
+    onUpdateConfirmClicked() {
+      this.$refs['form-required'].validate((valid) => {
+        if (valid) {
+          updateHoldCtns(this.formData.id, this.formData.holdCtns).then(() => {
+            updateLocation(this.formData.id, this.formData.location).then(() => {
+              this.$emit('reloadOrder')
+              this.updateVisible = false
+            })
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    onUpdatePltsConfirmClicked() {
+      this.$refs['form-required-plt'].validate((valid) => {
+        if (valid) {
+          updatePltLocation(this.formData.id, this.formData.location).then(() => {
+            this.$emit('reloadOrder')
+            this.updatePltsVisible = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    onInputChange() {
+      if (this.formData.holdQuantity > this.formData.max) { this.formData.holdQuantity = this.formData.max }
     }
   }
 }
@@ -311,5 +422,18 @@ export default {
 <style lang="scss" scoped>
     .input-bar{
       text-align: right
+    }
+    .el-dropdown-link {
+      cursor: pointer;
+      color: #409EFF;
+    }
+    .el-icon-arrow-down {
+      font-size: 12px;
+    }
+    .demonstration {
+      display: block;
+      color: #8492a6;
+      font-size: 14px;
+      margin-bottom: 20px;
     }
 </style>

@@ -79,13 +79,14 @@
     </el-table>
     <div style="margin-top:10px;text-align: right;">
       <el-button @click="onFillAllClicked">Auto Fill All</el-button>
-      <el-button type="primary">Confirm Pick</el-button>
+      <el-button type="primary" @click="onConfirmPickClicked">Confirm Pick</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { getCtnsInventory } from '@/api/shipping'
+import { getCtnsInventory, confirmPickCtns } from '@/api/shipping'
+import { correctNumber } from '@/scripts/validator'
 
 export default {
   data() {
@@ -130,6 +131,30 @@ export default {
           type: 'warning'
         })
         this.loading = false
+      })
+    },
+    correct(model, name, max, min) {
+      correctNumber(model, name, max, min)
+    },
+    onConfirmPickClicked() {
+      var obj = []
+      this.ctnsInventory.forEach(x => {
+        if (x.selectedCtns > 0 && x.selectedCtns <= x.availableCtns) {
+          obj.push({
+            id: x.id,
+            pickQuantity: x.selectedCtns
+          })
+        }
+      })
+      confirmPickCtns(this.$route.params.shipOrderId, obj).then(() => {
+        this.$emit('referashPickDetails')
+        getCtnsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode).then(body => {
+          this.ctnsInventory = body.data
+        })
+        this.$message({
+          message: 'Pick Success',
+          type: 'success'
+        })
       })
     }
   }
