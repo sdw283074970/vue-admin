@@ -248,6 +248,7 @@
     <el-dialog
       title="Create/Edit"
       :visible.sync="editVisible"
+      :before-close="handleClose"
       width="750px"
       top="5vh"
       :lock-scroll="false"
@@ -380,6 +381,13 @@ export default {
     })
   },
   methods: {
+    handleClose(done) {
+      this.$confirm('Are you want to close this dialog？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
+    },
     canDelete(status) {
       return this.$store.getters.roles.indexOf('trainee') < 0 && status !== 'Shipped' && status !== 'Confirmed'
     },

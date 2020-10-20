@@ -104,6 +104,7 @@
     <el-dialog
       title="Instruction & Charging"
       :visible.sync="instructionVisible"
+      :before-close="handleClose"
       width="40%"
       top="5vh"
       :lock-scroll="false"
@@ -160,6 +161,13 @@ export default {
     "picking-wo-instructions-dialog": () => import('@/views/officeview/shipping/shipping-wo-instructions-dialog'),
   },
   methods:{
+    handleClose(done) {
+      this.$confirm('Are you want to close this dialog？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
+    },
     guide() {
       this.driver.defineSteps(csr_all_wo_instruction)
       this.driver.start()

@@ -4,6 +4,7 @@
     <div style="margin-bottom:10px">
       <div>
         <el-button id="csr-receiving-wo-push" :loading="loading" class="gb-button" type="primary" :disabled="step>2" @click="onPushClicked">Push WO</el-button>
+        <el-button class="gb-button" :loading="loading" :disabled="step<4||step>8" type="primary" @click="onSwitchClicked">Switch to Warehouse</el-button>
         <el-button id="csr-receiving-wo-recall" :loading="loading" class="gb-button" type="warning" :disabled="step!=3&&step!=4" @click="onRecallClicked">Recall WO</el-button>
         <el-button id="csr-receiving-wo-arrive" :loading="loading" :disabled="step<3" class="gb-button" type="primary" @click="arrivedVisible=true">Mark Arrived</el-button>
         <el-button class="gb-button" :loading="loading" :disabled="step!=4||masterOrder.storageType!='E-COMMERCE'" type="primary" @click="onAutoReceiveClicked">Auto Receive</el-button>
@@ -210,6 +211,9 @@ export default {
           type: 'success'
         })
       })
+    },
+    onSwitchClicked() {
+      this.$router.push({ path: '/warehouse-receiving/receiving-wo/' + this.masterOrder.id })
     },
     reloadOrder() {
       this.$emit('reloadOrder')

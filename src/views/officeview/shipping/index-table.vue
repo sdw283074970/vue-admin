@@ -280,6 +280,7 @@
       title="NOTICE"
       :visible.sync="deleteVisible"
       width="350px"
+      :before-close="handleClose"
       center
     >
       <span>WARNNING: This operation is unreversiable.</span>
@@ -392,6 +393,13 @@ export default {
   mounted() {
   },
   methods: {
+    handleClose(done) {
+      this.$confirm('Are you want to close this dialog？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
+    },
     canDelete(status) {
       return this.$store.getters.roles.indexOf('trainee') < 0 && status !== 'Shipped' && status !== 'Confirmed'
     },
