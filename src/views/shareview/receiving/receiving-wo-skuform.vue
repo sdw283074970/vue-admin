@@ -35,6 +35,9 @@
           <el-form-item label="Barcode">
             <el-input v-model="formData.barcode" />
           </el-form-item>
+          <el-form-item label="Is Oversize" prop="lotSize">
+            <el-input v-model="formData.lotSize" />
+          </el-form-item>
           <el-form-item label="Actual Quantity" prop="actualQuantity">
             <el-input v-model.number="formData.actualQuantity" :disabled="!isAdjust" />
           </el-form-item>
@@ -90,6 +93,9 @@ export default {
           quantity: [
             { required: true, message: 'Please input the quantity', trigger: 'change' },
             // { type: 'number', message: 'Field must be number', trigger: 'change' }
+          ],
+          lotSize: [
+            { required: true, message: 'Please verify if this item is over sized', trigger: 'change' },
           ],
           actualCBM: [
             { required: true, message: 'Please input the actual received CBM', trigger: 'change' },

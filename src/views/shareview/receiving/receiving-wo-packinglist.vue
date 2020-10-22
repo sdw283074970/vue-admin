@@ -82,6 +82,12 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="lotSize"
+        label="Is Oversize"
+        align="center"
+        width="90"
+      />
+      <el-table-column
         prop="remark"
         label="Remark"
       />

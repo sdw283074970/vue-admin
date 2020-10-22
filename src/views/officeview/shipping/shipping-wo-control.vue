@@ -3,6 +3,7 @@
     <h2>Control Panel {{ shipOrder.status }}</h2>
     <div style="margin-bottom:10px">
       <el-button :loading="loading" :disabled="step>2" class="gb-button" type="primary" @click="onPushClicked">Push WO</el-button>
+      <el-button class="gb-button" :loading="loading" :disabled="step<4" type="primary" @click="onSwitchClicked">Switch to Warehouse</el-button>
       <el-button :loading="loading" :disabled="step==8||step<3" class="gb-button" type="warning" @click="onCallBackClicked">Recall WO</el-button>
       <el-button :loading="loading" :disabled="step!=5" class="gb-button" type="primary" @click="onMarkReleasedClicked">Mark Released</el-button>
       <el-button :loading="loading" :disabled="true" class="gb-button" type="danger" @click="onQuickPushClicked">Push Status</el-button>
@@ -108,6 +109,9 @@ export default {
 
   },
   methods: {
+    onSwitchClicked() {
+      this.$router.push({ path: '/warehouse-shipping/shipping-wo/' + this.shipOrder.id })
+    },
     onMarkReleasedClicked() {
       this.releaseVisible = true
       this.releasedDate = ''
