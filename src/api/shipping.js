@@ -172,9 +172,9 @@ export function updateComment(id, description, isChargingItem, isInstruction) {
   })
 }
 
-export function confirmInstruction(id) {
+export function confirmInstruction(id, status) {
   return request({
-    url: 'api/warehouseindex/?chargingItemDetailId=' + id + '&operation=Confirm',
+    url: 'api/warehouseindex/?chargingItemDetailId=' + id + '&operation=' + status,
     method: 'put'
   })
 }

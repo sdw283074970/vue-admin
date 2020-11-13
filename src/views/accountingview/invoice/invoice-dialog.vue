@@ -7,7 +7,7 @@
       <el-row>
         <el-col :span="12"><div>
           <el-form-item label="Date of Cost" prop="dateOfCost">
-            <el-date-picker v-model="service.dateOfCost" :disabled="invoiceStatus=='Closed'||(service.chargingType!='Cost'&&invoiceStatus=='Generated')" type="date" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px;" />
+            <el-date-picker v-model="service.dateOfCost" :disabled="invoiceStatus=='Closed'||(service.chargingType!='Cost'&&invoiceStatus=='Generated')" type="date" :picker-options="pickerOptions" placeholder="Select Date" value-format="yyyy-MM-dd" style="width:170px;" />
           </el-form-item>
           <el-form-item label="Charging Type" prop="chargingType">
             <el-select
@@ -112,47 +112,68 @@ export default {
     }
 
     return{
-        originalPallets: 0,
-        pallets: 0,
-        cartons: 0,
-        skuNumber: 0,
-        chargingTypeOptions: [
-          {value: 'Cost', label: 'Cost'},
-          {value: 'Extra Charging', label: 'Extra Charging'}
-          ],
-        chargingItemOptions: [],
-        rules: {
-          dateOfCost: [
-            { required: true, message: 'Please select a date', trigger: 'change' }
-          ],
-          chargingType: [
-            { required: true, message: 'Please select a type', trigger: 'change' }
-          ],
-          activity: [
-            { required: true, message: 'Please select an item', trigger: 'change' }
-          ],
-          cost: [
-            { required: true, message: 'Please input cost', trigger: 'change' }
-          ],
-          rate: [
-            { validator: validatePrice, trigger: 'change'}
-          ],
-          unit: [
-            { required: true, message: 'Please select unit', trigger: 'change' }
-          ],
-          quantity: [
-            { validator: validatePrice, trigger: 'change'}
-          ],
-          originalAmount: [
-            { validator: validatePrice, trigger: 'change'}
-          ],
-          amount: [
-            { validator: validatePrice, trigger: 'change'}
-          ],
-          discount: [
-            { required: true, message: 'Please input discount', trigger: 'change' }
-          ]
-        }
+      originalPallets: 0,
+      pallets: 0,
+      cartons: 0,
+      skuNumber: 0,
+      inboundDate: '1990-1-1',
+      releasedDate: '1990-1-1',
+      chargingTypeOptions: [
+        {value: 'Cost', label: 'Cost'},
+        {value: 'Extra Charging', label: 'Extra Charging'}
+        ],
+      chargingItemOptions: [],
+      rules: {
+        dateOfCost: [
+          { required: true, message: 'Please select a date', trigger: 'change' }
+        ],
+        chargingType: [
+          { required: true, message: 'Please select a type', trigger: 'change' }
+        ],
+        activity: [
+          { required: true, message: 'Please select an item', trigger: 'change' }
+        ],
+        cost: [
+          { required: true, message: 'Please input cost', trigger: 'change' }
+        ],
+        rate: [
+          { validator: validatePrice, trigger: 'change'}
+        ],
+        unit: [
+          { required: true, message: 'Please select unit', trigger: 'change' }
+        ],
+        quantity: [
+          { validator: validatePrice, trigger: 'change'}
+        ],
+        originalAmount: [
+          { validator: validatePrice, trigger: 'change'}
+        ],
+        amount: [
+          { validator: validatePrice, trigger: 'change'}
+        ],
+        discount: [
+          { required: true, message: 'Please input discount', trigger: 'change' }
+        ]
+      },
+    }
+  },
+  computed: {
+    pickerOptions() {
+      var that = this
+      return {
+        shortcuts: [{
+          text: that.orderType==='ShipOrder'?'Released Date':'Inbound Date',
+          onClick(picker) {
+            if (that.orderType === 'ShipOrder'){
+              that.service.dateOfCost = that.releasedDate
+            }
+            else {
+              that.service.dateOfCost = that.inboundDate
+            }
+            picker.$emit('pick')
+          }
+        }]
+      }
     }
   },
   methods:{
@@ -217,6 +238,8 @@ export default {
           this.cartons = body.data.cartons
           this.originalPallets = body.data.originalPallets
           this.skuNumber = body.data.skuNumber
+          this.releasedDate = body.data.releasedDate
+          this.inboundDate = body.data.inboundDate
       })
       getChargingType(this.reference, this.orderType).then(body => {
           let that = this.chargingTypeOptions
