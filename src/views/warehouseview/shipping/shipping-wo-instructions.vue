@@ -50,9 +50,9 @@
               <!-- <el-dropdown-item :disabled="scope.row.handlingStatus==('Finished'||'Confirmed')" @click.native="onUpdateClicked(scope.row.id)">Update</el-dropdown-item>
               <el-dropdown-item :disabled="!(scope.row.handlingStatus=='Pending'||scope.row.handlingStatus=='Updated')" @click.native="onResultClicked(scope.row.id)">Result</el-dropdown-item>
               <el-dropdown-item divided @click.native="deleteHandler(scope.row.id)">Delete</el-dropdown-item> -->
-              <el-dropdown-item :disabled="step!=4" @click.native="onConfirmClicked(scope.row.id, 'Confirm')">Confirm</el-dropdown-item>
+              <!-- <el-dropdown-item :disabled="step!=4" @click.native="onConfirmClicked(scope.row.id, 'Confirm')">Confirm</el-dropdown-item> -->
               <el-dropdown-item :disabled="step!=4" @click.native="onCommentClicked(scope.row.id)">Comment</el-dropdown-item>
-              <el-dropdown-item :disabled="step!=4" @click.native="onConfirmClicked(scope.row.id, 'Finish')">Finish</el-dropdown-item>
+              <el-dropdown-item :disabled="step!=4" @click.native="onConfirmClicked(scope.row.id, 'Finished')">Finish</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>

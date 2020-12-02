@@ -37,7 +37,7 @@
         </div>
       </el-card>
     </div>
-    <div>
+    <div style="margin-top:10px">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>Change Password</span>
@@ -62,6 +62,27 @@
               <el-col>
                 <el-form-item label="Confirm Password" prop="confirmPassword">
                   <el-input v-model="passwords.confirmPassword" :type="passwordType" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          <div>
+            <el-button type="primary" @click="onConfirmClicked">Confirm</el-button>
+          </div>
+        </div>
+      </el-card>
+    </div>
+    <div style="margin-top:10px">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>OAuth Information</span>
+        </div>
+        <div>
+          <el-form ref="form-required" :model="oauthInfo">
+            <el-row>
+              <el-col>
+                <el-form-item label="API Uri">
+                  <el-input v-model="oauthInfo.uri" type="textarea" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -109,6 +130,7 @@ export default {
         return {
             email: store.getters.name,
             passwordType: 'password',
+            oauthInfo: {},
             appInfo: {
               appKey: '',
               secret: ''
