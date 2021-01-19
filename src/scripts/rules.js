@@ -28,6 +28,9 @@ const inboundOrderCreateRules = {
   ],
   containerSize: [
     { required: true, message: 'This filed is required', trigger: 'change' }
+  ],
+  warehouseLocation: [
+    { required: true, message: 'This filed is required', trigger: 'change' }
   ]
 }
 
@@ -51,6 +54,9 @@ const outboundOrderCreateRules = {
   ],
   carrier: [
     { required: true, message: 'Please specify the carrier', trigger: 'change' }
+  ],
+  warehouseLocation: [
+    { required: true, message: 'This filed is required', trigger: 'change' }
   ]
 }
 

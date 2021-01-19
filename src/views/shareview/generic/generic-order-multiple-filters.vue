@@ -1,5 +1,28 @@
 <template>
   <div>
+    <!-- <el-button @click="test">test</el-button> -->
+    <el-select
+      v-model="warehouseLocation"
+      filterable
+      collapse-tags
+      placeholder="-- Warehouse --"
+    >
+      <el-option
+        v-for="item in warehouseLocations"
+        :key="item.warehouseCode"
+        :label="item.warehouseCode + ' - ' + item.warehouseName"
+        :value="item.warehouseCode"
+      />
+    </el-select>
+    <el-date-picker
+      v-model="dateRange"
+      type="daterange"
+      range-separator="-"
+      start-placeholder="From Date"
+      end-placeholder="To Date"
+      value-format="yyyy-MM-dd"
+      :picker-options="pickerOptions"
+    />
     <el-select
       id="generic-filter-status"
       v-model="status"
@@ -66,7 +89,7 @@
       active-text="Desc"
       inactive-text="Asce"
     />
-    <el-button id="generic-filter-filter" type="primary" @click="onFilterClicked">Filter</el-button>
+    <el-button id="generic-filter-filter" type="primary" @click="onFilterClicked">Apply</el-button>
     <el-button id="generic-filter-reset" @click="onResetFilterClicked">Clean Filter</el-button>
   </div>
 </template>
@@ -74,6 +97,7 @@
 /* eslint-disable vue/require-default-prop */
 import { invoiceStatus } from '@/scripts/dropdown'
 import { eventBus } from '@/main'
+import { getWarehouseLocations } from '@/api/generic'
 
 export default {
   props: {
@@ -86,10 +110,55 @@ export default {
       sortBy: 'Id',
       isDesc: true,
       status: [],
+      warehouseLocation: '',
+      warehouseLocations: [],
+      dateRange: '',
       invoiceStatus: [],
       customerCodes: [],
-      invoiceStatusOptions: invoiceStatus
+      invoiceStatusOptions: invoiceStatus,
+      pickerOptions: {
+        shortcuts: [{
+          text: 'Last week',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: 'Last month',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: 'Last 3 months',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: 'Last year',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      }
     }
+  },
+  mounted() {
+    getWarehouseLocations().then(
+      body => {
+        this.warehouseLocations = body.data
+      }
+    )
   },
   created() {
     eventBus.$on('onClearFilterClicked', () => {
@@ -97,16 +166,28 @@ export default {
     })
   },
   methods: {
+    transferDate: function(date) {
+      return date === undefined ? '' : (date.substring(0, 4) === 1900 ? '-' : date.substring(0, 10))
+    },
     onFilterClicked() {
-      var filter = {
-        status: this.status,
-        customerCodes: this.customerCodes,
-        invoiceStatus: this.invoiceStatus,
-        sortBy: this.sortBy,
-        isDesc: this.isDesc
+      if (this.warehouseLocation === '' || this.dateRange === '') {
+        this.$message({
+          message: 'Warehouse Location and Date is required',
+          type: 'warning'
+        })
+      } else {
+        var filter = {
+          warehouseLocation: this.warehouseLocation,
+          fromDate: this.dateRange[0],
+          toDate: this.dateRange[1],
+          status: this.status,
+          customerCodes: this.customerCodes,
+          invoiceStatus: this.invoiceStatus,
+          sortBy: this.sortBy,
+          isDesc: this.isDesc
+        }
+        this.$emit('onFilterFinish', filter)
       }
-
-      this.$emit('onFilterFinish', filter)
     },
     onResetFilterClicked() {
       this.status = []

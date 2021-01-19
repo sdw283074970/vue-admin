@@ -353,7 +353,8 @@ export default {
         pickNumber: '',
         subCustomer: '',
         purchaseOrderNumber: '',
-        instruction: ''
+        instruction: '',
+        warehouseLocation: ''
       },
       statusFilters: outboundOrderStatus,
       sortByOptions: outboundOrderSortOption

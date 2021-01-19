@@ -40,7 +40,7 @@ import { getShippingOrders, getCustomerCodes, getAddressCode, getShipOrderInfo, 
 export default {
     data() {
         return {
-            loading: true,
+            loading: false,
             tableData : [],
             totalEntries: 0,
             customerCodeOptions: [],
@@ -130,12 +130,12 @@ export default {
 
     },
     mounted() {
-      getReceivingOrders().then(body => {
-        this.tableData = body.data.reverse();
-        this.filteredData = body.data;
-        this.totalEntries = body.data.length
-        this.loading = false;
-      }),
+      // getReceivingOrders().then(body => {
+      //   this.tableData = body.data.reverse();
+      //   this.filteredData = body.data;
+      //   this.totalEntries = body.data.length
+      //   this.loading = false;
+      // }),
       getCustomerCodes().then(body => {
         this.customerCodeOptions = body.data
       }),

@@ -3,6 +3,7 @@
     <h2>Inventory</h2>
     <h3>Container: {{ masterOrder.container }}</h3>
     <h3>Customer: {{ masterOrder.customerCode }}</h3>
+    <h3>Warehouse Location: {{ masterOrder.warehouseLocation }}</h3>
     <div style="margin-bottom:10px">
       <el-switch
         v-model="pltVisible"

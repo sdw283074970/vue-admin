@@ -95,6 +95,9 @@
         <el-form-item label="Latest End Date">
           <span>{{ transferDate(masterOrder.closeDate) }}</span>
         </el-form-item>
+        <el-form-item label="Warehouse Loc">
+          <span>{{ masterOrder.warehouseLocation }}</span>
+        </el-form-item>
       </el-form>
     </div>
   </div>

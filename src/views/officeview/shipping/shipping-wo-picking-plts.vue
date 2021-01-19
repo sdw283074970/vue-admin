@@ -4,6 +4,20 @@
     <label>SKU: </label><el-input v-model="sku" placeholder="SKU No." />
     <label>Amz Ref: </label><el-input v-model="amzRef" placeholder="Amz Ref Id" />
     <label>warehouse: </label><el-input v-model="warehouseCode" placeholder="Warehouse Code" />
+    <label>warehouse Location: </label>
+    <el-select
+      v-model="warehouseLocation"
+      filterable
+      collapse-tags
+      placeholder="-- Warehouse --"
+    >
+      <el-option
+        v-for="item in warehouseLocations"
+        :key="item.warehouseCode"
+        :label="item.warehouseCode + ' - ' + item.warehouseName"
+        :value="item.warehouseCode"
+      />
+    </el-select>
     <el-button type="primary" :loading="loading" @click="searchHandler()">Search</el-button>
     <el-table
       ref="pick-table-plts"
@@ -182,6 +196,7 @@
 <script>
 import { getPltsInventory, pickCtnsInPlts } from '@/api/shipping'
 import { correctNumber } from '@/scripts/validator'
+import { getWarehouseLocations } from '@/api/generic'
 
 export default {
   data() {
@@ -190,6 +205,8 @@ export default {
       container: '',
       sku: '',
       amzRef: '',
+      warehouseLocations: [],
+      warehouseLocation: '',
       warehouseCode: '',
       inventoryPlts: 0,
       newPlts: 0,
@@ -198,7 +215,11 @@ export default {
     }
   },
   mounted() {
-
+    getWarehouseLocations().then(
+      body => {
+        this.warehouseLocations = body.data
+      }
+    )
   },
   methods: {
     transferDate: function(date) {
@@ -254,26 +275,32 @@ export default {
       correctNumber(model, name, max, min)
     },
     searchHandler() {
-      this.loading = true
-      getPltsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode).then(body => {
-        this.pltsInventory = body.data
-        this.loading = false
+      if (this.warehouseLocation === '') {
         this.$message({
-          message: 'Search complete',
-          type: 'success'
-        }).catch(e => {
-          this.$message({
-            message: 'Search failed',
-            type: 'warning'
-          })
-          this.loading = false
+          message: 'Warehouse location is required',
+          type: 'warning'
         })
-      })
+      } else {
+        this.loading = true
+        getPltsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode, this.warehouseLocation).then(body => {
+          this.pltsInventory = body.data
+          this.loading = false
+          this.$message({
+            message: 'Search complete',
+            type: 'success'
+          }).catch(e => {
+            this.$message({
+              message: 'Search failed',
+              type: 'warning'
+            })
+            this.loading = false
+          })
+        })
+      }
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-
 </style>

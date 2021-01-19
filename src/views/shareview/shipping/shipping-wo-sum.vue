@@ -91,6 +91,9 @@
         <el-form-item label="Confirmed By">
           <span>{{ shipOrder.confirmedBy }}</span>
         </el-form-item>
+        <el-form-item label="Warehouse Loc">
+          <span>{{ shipOrder.warehouseLocation }}</span>
+        </el-form-item>
       </el-form>
     </div>
     <el-dialog

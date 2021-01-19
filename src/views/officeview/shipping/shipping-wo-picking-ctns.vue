@@ -4,6 +4,20 @@
     <label>SKU: </label><el-input v-model="sku" placeholder="SKU No." />
     <label>Amz Ref: </label><el-input v-model="amzRef" placeholder="Amz Ref Id" />
     <label>warehouse: </label><el-input v-model="warehouseCode" placeholder="Warehouse Code" />
+    <label>warehouse Location: </label>
+    <el-select
+      v-model="warehouseLocation"
+      filterable
+      collapse-tags
+      placeholder="-- Warehouse --"
+    >
+      <el-option
+        v-for="item in warehouseLocations"
+        :key="item.warehouseCode"
+        :label="item.warehouseCode + ' - ' + item.warehouseName"
+        :value="item.warehouseCode"
+      />
+    </el-select>
     <el-button type="primary" :loading="loading" @click="searchHandler()">Search</el-button>
     <el-table
       ref="pick-table-ctns"
@@ -104,6 +118,7 @@
 <script>
 import { getCtnsInventory, confirmPickCtns } from '@/api/shipping'
 import { correctNumber } from '@/scripts/validator'
+import { getWarehouseLocations } from '@/api/generic'
 
 export default {
   data() {
@@ -113,12 +128,18 @@ export default {
       sku: '',
       amzRef: '',
       warehouseCode: '',
+      warehouseLocations: [],
+      warehouseLocation: '',
       tableHight: window.innerHeight * 0.7,
       loading: false
     }
   },
   mounted() {
-
+    getWarehouseLocations().then(
+      body => {
+        this.warehouseLocations = body.data
+      }
+    )
   },
   methods: {
     transferDate: function(date) {
@@ -137,21 +158,28 @@ export default {
       })
     },
     searchHandler() {
-      this.loading = true
-      getCtnsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode).then(body => {
-        this.ctnsInventory = body.data
-        this.loading = false
+      if (this.warehouseLocation === '') {
         this.$message({
-          message: 'Search complete',
-          type: 'success'
-        })
-      }).catch(e => {
-        this.$message({
-          message: 'Search failed',
+          message: 'Warehouse location is required',
           type: 'warning'
         })
-        this.loading = false
-      })
+      } else {
+        this.loading = true
+        getCtnsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode).then(body => {
+          this.ctnsInventory = body.data
+          this.loading = false
+          this.$message({
+            message: 'Search complete',
+            type: 'success'
+          })
+        }).catch(e => {
+          this.$message({
+            message: 'Search failed',
+            type: 'warning'
+          })
+          this.loading = false
+        })
+      }
     },
     correct(model, name, max, min) {
       correctNumber(model, name, max, min)
@@ -182,5 +210,4 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
 </style>

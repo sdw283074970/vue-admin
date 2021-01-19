@@ -76,6 +76,21 @@
         <el-form-item label="CONTAINER SIZE" prop="containerSize">
           <el-input v-model="formData.containerSize" />
         </el-form-item>
+        <el-form-item label="WAREHOUSE LOC" prop="warehouseLocation">
+          <el-select
+            v-model="formData.warehouseLocation"
+            filterable
+            collapse-tags
+            placeholder="-- Warehouse --"
+          >
+            <el-option
+              v-for="item in warehouseLocations"
+              :key="item.warehouseCode"
+              :label="item.warehouseCode + ' - ' + item.warehouseName"
+              :value="item.warehouseCode"
+            />
+          </el-select>
+        </el-form-item>
       </el-form>
       <el-form ref="form-optional" :model="formData" label-width="150px" style="float:right;margin-right:30px">
         <el-form-item label="SUB-CUSTOMER">
@@ -110,7 +125,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div style="margin-bottom:20px;margin-left:40px">
+    <div style="margin-bottom:20px;margin-left:40px;text-align:center">
       <el-button v-if="!isEdit" :loading="localLoading" type="primary" @click="createHandler">Create</el-button>
       <el-button v-if="isEdit" :loading="localLoading" type="primary" @click="updateHandler">Update</el-button>
       <el-button :loading="localLoading" @click="onCancelClicked">Cancel</el-button>
@@ -121,6 +136,7 @@
 <script>
 import { inboundTypes, unloadingTypes, storageTypes, palletizings } from '@/scripts/dropdown'
 import { inboundOrderCreateRules } from '@/scripts/rules'
+import { getWarehouseLocations } from '@/api/generic'
 
 export default {
   props: {
@@ -146,6 +162,7 @@ export default {
   data() {
     return {
       loading: false,
+      warehouseLocations: [],
       inboundTypes: inboundTypes,
       unloadingTypes: unloadingTypes,
       storageTypes: storageTypes,
@@ -154,7 +171,11 @@ export default {
     }
   },
   mounted() {
-
+    getWarehouseLocations().then(
+      body => {
+        this.warehouseLocations = body.data
+      }
+    )
   },
   methods: {
     createHandler: function() {

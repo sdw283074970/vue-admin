@@ -32,16 +32,16 @@ export function getPickDetails(id) {
   })
 }
 
-export function getPltsInventory(id, container, sku, amzRef, warehouseCode) {
+export function getPltsInventory(id, container, sku, amzRef, warehouseCode, warehouseLocation) {
   return request({
-    url: 'api/fba/fbainventory/?shipOrderId=' + id + '&container=' + encodeURIComponent(container) + '&sku=' + encodeURIComponent(sku) + '&amzRef=' + encodeURIComponent(amzRef) + '&warehouseCode=' + encodeURIComponent(warehouseCode) + '&inventoryType=Pallet',
+    url: 'api/fba/fbainventory/?shipOrderId=' + id + '&container=' + encodeURIComponent(container) + '&sku=' + encodeURIComponent(sku) + '&amzRef=' + encodeURIComponent(amzRef) + '&warehouseCode=' + encodeURIComponent(warehouseCode) + '&warehouseLocation=' + encodeURIComponent(warehouseLocation) + '&inventoryType=Pallet',
     method: 'get'
   })
 }
 
-export function getCtnsInventory(id, container, sku, amzRef, warehouseCode) {
+export function getCtnsInventory(id, container, sku, amzRef, warehouseCode, warehouseLocation) {
   return request({
-    url: 'api/fba/fbainventory/?shipOrderId=' + id + '&container=' + encodeURIComponent(container) + '&sku=' + encodeURIComponent(sku) + '&amzRef=' + encodeURIComponent(amzRef) + '&warehouseCode=' + encodeURIComponent(warehouseCode) + '&inventoryType=Carton',
+    url: 'api/fba/fbainventory/?shipOrderId=' + id + '&container=' + encodeURIComponent(container) + '&sku=' + encodeURIComponent(sku) + '&amzRef=' + encodeURIComponent(amzRef) + '&warehouseCode=' + encodeURIComponent(warehouseCode) + '&warehouseLocation=' + encodeURIComponent(warehouseLocation) + '&inventoryType=Carton',
     method: 'get'
   })
 }

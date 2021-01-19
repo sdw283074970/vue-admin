@@ -46,7 +46,7 @@ export default {
     },
     data() {
         return {
-            loading: true,
+            loading: false,
             tableData : [],
             totalEntries: 0,
             customerCodeOptions: [],
@@ -121,13 +121,13 @@ export default {
       }
     },
     mounted() {
-      getShippingOrders().then(body => {
-          this.tableData = body.data.reverse();
-          this.totalEntries = body.data.length;
-          this.filteredData = body.data;
-          this.loading = false;
-        }
-      ),
+      // getShippingOrders().then(body => {
+      //     this.tableData = body.data.reverse();
+      //     this.totalEntries = body.data.length;
+      //     this.filteredData = body.data;
+      //     this.loading = false;
+      //   }
+      // ),
       getCustomerCodes().then(
         body => {
           this.customerCodeOptions = body.data

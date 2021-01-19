@@ -340,7 +340,8 @@ export default {
         portOfDischarge: '',
         placeOfDelivery: '',
         sealNumber: '',
-        instruction: ''
+        instruction: '',
+        warehouseLocation: ''
       },
       statusFilters: inboundOrderStatus,
       sortByOptions: inboundOrderSortOption
