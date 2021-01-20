@@ -6,9 +6,10 @@
       <el-button class="gb-button" :loading="loading" :disabled="step<3" type="primary" @click="onSwitchClicked">Switch to Warehouse</el-button>
       <el-button :loading="loading" :disabled="step==8||step<3" class="gb-button" type="warning" @click="onCallBackClicked">Recall WO</el-button>
       <el-button :loading="loading" :disabled="step!=5" class="gb-button" type="primary" @click="onMarkReleasedClicked">Mark Released</el-button>
-      <el-button :loading="loading" :disabled="true" class="gb-button" type="danger" @click="onQuickPushClicked">Push Status</el-button>
+      <el-button :loading="loading" :disabled="step!=5" class="gb-button" type="danger" @click="onCancelOrderClicked">Cancel Order</el-button>
+      <!-- <el-button :loading="loading" :disabled="true" class="gb-button" type="danger" @click="onQuickPushClicked">Push Status</el-button> -->
       <!-- <el-button :loading="loading" :disabled="step<3||step>=6" class="gb-button" type="danger" @click="onQuickPushClicked">Push Status</el-button> -->
-      <el-button :loading="loading" :disabled="step==8||step<4" class="gb-button" type="danger" @click="onCallBackClicked">Reverse Status</el-button>
+      <!-- <el-button :loading="loading" :disabled="step==8||step<4" class="gb-button" type="danger" @click="onCallBackClicked">Reverse Status</el-button> -->
     </div>
     <el-dialog
       title="Select Released Date"
@@ -109,6 +110,11 @@ export default {
 
   },
   methods: {
+    onCancelOrderClicked() {
+      this.loading = true
+      this.$emit('onCancelOrderClicked')
+      this.loading = false
+    },
     onSwitchClicked() {
       this.$router.push({ path: '/warehouse-shipping/shipping-wo/' + this.shipOrder.id })
     },

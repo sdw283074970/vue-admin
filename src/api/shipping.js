@@ -296,3 +296,11 @@ export function deleteShippingOrder(id) {
     method: 'delete'
   })
 }
+
+export function cancelOrder(reference, orderType) {
+  return request({
+    url: 'api/fba/fbashiporder/?reference=' + reference + '&orderType=' + orderType,
+    method: 'put'
+  })
+}
+

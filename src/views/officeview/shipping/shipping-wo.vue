@@ -4,7 +4,7 @@
       <shipping-wo-sum :ship-order="shipOrder" :step="step" />
     </div>
     <div class="chart-wrapper">
-      <shipping-wo-control :ship-order="shipOrder" :step="step" @reloadOrder="reloadOrder" @onCallBackClicked="onCallBackClicked" />
+      <shipping-wo-control :ship-order="shipOrder" :step="step" @reloadOrder="reloadOrder" @onCallBackClicked="onCallBackClicked" @onCancelOrderClicked="onCancelOrderClicked" />
     </div>
     <div class="chart-wrapper">
       <shipping-wo-picking :ship-order="shipOrder" :step="step" :pick-details="pickDetails" @referashPickDetails="referashPickDetails" />
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { getSO, getPickDetails, getInstructions, resetInstructions, reverseShipOrderStatus } from '@/api/shipping'
+import { getSO, getPickDetails, getInstructions, resetInstructions, reverseShipOrderStatus, cancelOrder } from '@/api/shipping'
 import { getInvoices } from '@/api/accounting'
 
 export default {
@@ -70,6 +70,11 @@ export default {
     })
   },
   methods: {
+    onCancelOrderClicked() {
+      cancelOrder(this.shipOrder.shipOrderNumber, 'ShipOrder').then(res => {
+        this.reloadOrder()
+      })
+    },
     onCallBackClicked() {
       reverseShipOrderStatus(this.$route.params.shipOrderId, this.today).then(() => {
         getSO(this.$route.params.shipOrderId).then(body => {
