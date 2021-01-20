@@ -31,17 +31,19 @@
         prop="type"
         align="center"
         label="Storage Type"
-        width="120"
+        width="70"
       />
       <el-table-column
         prop="shipmentId"
         label="Shipment Id/SKU"
-        min-width="60%"
+        align="center"
+        width="160"
       />
       <el-table-column
         prop="amzRefId"
         label="Amz Ref Id"
-        min-width="60%"
+        align="center"
+        width="160"
       />
 
       <el-table-column
@@ -104,13 +106,19 @@
       <el-table-column
         prop="location"
         label="Location"
-        width="120"
+        align="center"
+        width="80"
+      />
+      <el-table-column
+        prop="warehouseLocation"
+        label="WHS"
+        align="center"
+        width="60"
       />
       <el-table-column
         prop="operation"
         label="operation"
         align="center"
-        width="110"
       >
         <template slot-scope="scope">
           <!-- <el-button @click="onHistoryClicked(scope.row.id)">History</el-button>-->

@@ -31,6 +31,7 @@
               start-placeholder="Inbound Date"
               end-placeholder="End Date"
               value-format="yyyy-MM-dd"
+              :picker-options="pickerOptions"
             />
           </el-form-item>
         </el-col>
@@ -93,6 +94,49 @@ export default {
         closeDate: '',
         fbaCtnInventories: [],
         fbaPalletGroupInventories: []
+      },
+      pickerOptions: {
+        shortcuts: [{
+          text: 'Last week',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: 'Last month',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: 'Last 3 months',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: 'Last year',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: 'Last 3 years',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365 * 3)
+            picker.$emit('pick', [start, end])
+          }
+        }]
       },
       queryData: {
         customerCode: customerCode,

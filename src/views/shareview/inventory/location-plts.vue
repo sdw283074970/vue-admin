@@ -34,12 +34,14 @@
             <el-table-column
               prop="shipmentId"
               label="Shipment Id/SKU"
-              min-width="60%"
+              align="center"
+              width="180"
             />
             <el-table-column
               prop="amzRefId"
               label="Amz Ref Id"
-              min-width="60%"
+              align="center"
+              width="180"
             />
             <el-table-column
               prop="subCustomer"
@@ -90,13 +92,19 @@
             <el-table-column
               prop="location"
               label="Location"
-              width="120"
+              align="center"
+              width="100"
+            />
+            <el-table-column
+              prop="warehouseLocation"
+              label="WHS"
+              align="center"
+              width="60"
             />
             <el-table-column
               prop="operation"
               label="operation"
               align="center"
-              width="110"
             >
               <template slot-scope="scope">
                 <el-button @click="onCtnHistoryClicked(scope.row.id)">History</el-button>
@@ -118,11 +126,13 @@
       <el-table-column
         prop="shipmentId"
         label="Shipment Id"
+        align="center"
         width="150"
       />
       <el-table-column
         prop="amzRefId"
         label="Amz Ref. Id"
+        align="center"
         width="150"
       />
       <el-table-column
@@ -195,7 +205,7 @@
       <el-table-column
         align="center"
         label="Hold In-plt Ctns"
-        width="90"
+        width="80"
       >
         <template slot-scope="scope">
           <font>{{ obj_sum(scope.row.inPalletCtnInventories, "holdQuantity").holdQuantity }}</font>
@@ -205,12 +215,18 @@
         prop="location"
         align="center"
         label="Location"
+        width="90"
+      />
+      <el-table-column
+        prop="warehouseLocation"
+        label="WHS"
+        align="center"
+        width="50"
       />
       <el-table-column
         prop="operation"
-        label="operation"
+        label="Operation"
         align="center"
-        width="110"
       >
         <template slot-scope="scope">
           <!-- <el-button @click="onPltHistoryClicked(scope.row.pltId)">History</el-button> -->
