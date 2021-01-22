@@ -44,6 +44,12 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="warehouseAuths"
+        label="Warehouse Auth"
+        align="center"
+        width="200"
+      />
+      <el-table-column
         prop="customerCodes"
         label="Connected Customer"
         align="center"
@@ -92,7 +98,7 @@
       <div>
         <el-form ref="registerForm" :model="form" :rules="rules">
           <el-form-item label="Email" :label-width="formLabelWidth" prop="name">
-            <el-input v-model="form.name" autocomplete="on" placeholder="Email Address" :disabled="isEdit" />
+            <el-input v-model="form.name" autocomplete="on" placeholder="e.g. user@domain.us" :disabled="isEdit" />
           </el-form-item>
           <el-form-item label="Role" :label-width="formLabelWidth" prop="role">
             <el-select v-model="form.role" placeholder="-- Select Role --">
@@ -104,6 +110,9 @@
               <el-option label="Sales" value="T4" />
               <el-option label="Accounting" value="T5" />
             </el-select>
+          </el-form-item>
+          <el-form-item label="Warehouse Auth" :label-width="formLabelWidth" prop="warehouseAuths">
+            <el-input v-model="form.warehouseAuths" autocomplete="on" placeholder="e.g. W0,W1,W2,W3" :disabled="isEdit" />
           </el-form-item>
         </el-form>
         <div style="text-align:center">
@@ -129,6 +138,9 @@
               <el-option label="Sales" value="CanOperateAsT4" />
               <el-option label="Accounting" value="CanOperateAsT5" />
             </el-select>
+          </el-form-item>
+          <el-form-item label="Warehouse Auth" :label-width="formLabelWidth" prop="warehouseAuths">
+            <el-input v-model="form.warehouseAuths" autocomplete="on" placeholder="e.g. W0,W1,W2,W3" :disabled="isEdit" />
           </el-form-item>
         </el-form>
       </div>
@@ -180,7 +192,8 @@ export default {
             userId: '',
             form: {
               name: '',
-              role: ''
+              role: '',
+              warehouseAuths: ''
             },
             rules: {
               name: [
@@ -188,6 +201,9 @@ export default {
               ],
               role: [
                 { required: true, message: 'Please select a role', trigger: 'change' }
+              ],
+              warehouseAuths: [
+                { required: true, message: 'Please input warehouse code', trigger: 'change' }
               ]
             }
         };
@@ -241,7 +257,7 @@ export default {
       onCreateClicked() {
         this.$refs['registerForm'].validate((valid) => {
             if (valid) {
-                registerUser(this.form.name, this.form.role).then(() => {
+                registerUser(this.form.name, this.form.role, this.form.warehouseAuths).then(() => {
                   this.registerVisible = false
                   this.reloadUsers()
                 })
@@ -287,7 +303,7 @@ export default {
       onChangeConfirmed() {
         this.$refs['authority-form'].validate((valid) => {
             if (valid) {
-              changeAuthority(this.userId, this.form.role).then(() => {
+              changeAuthority(this.userId, this.form.role, this.form.warehouseAuths).then(() => {
                 this.reloadUsers()
                 this.authVisible = false
               })

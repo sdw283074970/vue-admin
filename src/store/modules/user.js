@@ -9,6 +9,7 @@ const state = {
   name: '',
   avatar: '',
   customerCode: '',
+  userId: '',
   roles: []
 }
 
@@ -27,6 +28,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_USERID: (state, userId) => {
+    state.userId = userId
   }
 }
 
@@ -60,6 +64,7 @@ const actions = {
         commit('SET_AVATAR', response.avatar)
         commit('SET_CUSTOMERCODE', response.customerCode)
         commit('SET_ROLES', response.roles)
+        commit('SET_USERID', state.token)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -74,6 +79,7 @@ const actions = {
         commit('SET_TOKEN', '')
         commit('SET_NAME', '')
         commit('SET_ROLES', [])
+        commit('SET_USERID', '')
         removeToken()
         resetRouter()
         resolve()
@@ -88,6 +94,7 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
+      commit('SET_USERID', '')
       removeToken()
       resolve()
     })

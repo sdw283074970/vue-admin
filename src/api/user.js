@@ -34,9 +34,9 @@ export function getAllUsers() {
   })
 }
 
-export function registerUser(email, role) {
+export function registerUser(email, role, warehouseAuths) {
   return csmRequest({
-    url: 'api/users/?email=' + email + '&tire=' + role,
+    url: 'api/users/?email=' + email + '&tire=' + role + '&warehouseAuth=' + encodeURIComponent(warehouseAuths),
     method: 'post'
   })
 }
@@ -48,9 +48,9 @@ export function deleteUser(id) {
   })
 }
 
-export function changeAuthority(id, tire) {
+export function changeAuthority(id, tire, warehouseAuths) {
   return csmRequest({
-    url: 'api/users/?userId=' + id + '&tire=' + tire,
+    url: 'api/users/?userId=' + id + '&tire=' + tire + '&warehouseAuth=' + encodeURIComponent(warehouseAuths),
     method: 'put'
   })
 }
