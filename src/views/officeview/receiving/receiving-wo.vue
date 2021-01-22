@@ -24,7 +24,7 @@
       <receiving-wo-instruction :master-order="masterOrder" :instructions="instructions" :step="step" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
     </div>
     <div class="chart-wrapper">
-      <invoice-detail :reference="masterOrder.container" :order-type="'MasterOrder'" :invoice-status="masterOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
+      <invoice-detail  v-if="!checkPermission(['trainee'])" :reference="masterOrder.container" :order-type="'MasterOrder'" :invoice-status="masterOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
     </div>
   </div>
 </template>
@@ -32,6 +32,7 @@
 <script>
 import { getRO, getOrderDetails, getPallets, getCartons, getPltsInventory, getCtnsInventory, getInstructions, resetInstructions } from '@/api/receiving'
 import { getInvoices } from '@/api/accounting'
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   components: {
@@ -94,6 +95,7 @@ export default {
     })
   },
   methods: {
+    checkPermission,
     refreshOrderDetails(payload) {
       getOrderDetails(payload).then(body => {
         this.orderDetails = body.data

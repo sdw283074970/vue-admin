@@ -13,7 +13,7 @@
       <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @referashInstructions="referashInstructions" />
     </div>
     <div class="chart-wrapper">
-      <invoice-detail :reference="shipOrder.shipOrderNumber" :order-type="'ShipOrder'" :invoice-status="shipOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
+      <invoice-detail v-if="!checkPermission(['trainee'])" :reference="shipOrder.shipOrderNumber" :order-type="'ShipOrder'" :invoice-status="shipOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
     </div>
   </div>
 </template>
@@ -21,6 +21,7 @@
 <script>
 import { getSO, getPickDetails, getInstructions, resetInstructions, reverseShipOrderStatus, cancelOrder } from '@/api/shipping'
 import { getInvoices } from '@/api/accounting'
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   components: {
@@ -70,6 +71,7 @@ export default {
     })
   },
   methods: {
+    checkPermission,
     onCancelOrderClicked() {
       cancelOrder(this.shipOrder.shipOrderNumber, 'ShipOrder').then(res => {
         this.reloadOrder()

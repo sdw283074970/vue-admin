@@ -99,13 +99,13 @@ export const asyncRoutes = [
   {
     path: '/user',
     component: Layout,
-    meta: { title: 'User', icon: 'user', role: ['office', 'trainee', 'accounting'] },
+    meta: { title: 'User', icon: 'user', role: ['office', 'accounting'] },
     children: [
       {
         path: 'index',
         name: 'User',
         component: () => import('@/views/officeview/user/index'),
-        meta: { title: 'User', icon: 'user', role: ['office', 'trainee', 'accounting'] }
+        meta: { title: 'User', icon: 'user', role: ['office', 'accounting'] }
       }
     ]
   },
@@ -152,19 +152,19 @@ export const asyncRoutes = [
         path: '/reports/inventory/index',
         name: 'InventoryReport',
         component: () => import('@/views/shareview/inventory/location'),
-        meta: { title: 'Inventory Report', icon: 'table' }
+        meta: { title: 'Inventory Report', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] }
       },
       {
         path: '/reports/expenses/index',
         name: 'ExpensesReport',
         component: () => import('@/views/officeview/reports/expenses/index'),
-        meta: { title: 'Expenses Report', icon: 'table' }
+        meta: { title: 'Expenses Report', icon: 'table', role: ['office', 'accounting'] }
       },
       {
         path: '/reports/schedule/index',
         name: 'Schedule',
         component: () => import('@/views/officeview/reports/schedule/index'),
-        meta: { title: 'Schedule', icon: 'table' }
+        meta: { title: 'Schedule', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] }
       }
     ]
   },
@@ -286,7 +286,7 @@ export const asyncRoutes = [
     path: '/accounting',
     component: Layout,
     name: 'Accounting Receiving',
-    meta: { title: 'Accounting Terminal', icon: 'table', role: ['office', 'trainee', 'accounting'] },
+    meta: { title: 'Accounting Terminal', icon: 'table', role: ['office', 'accounting'] },
     children: [
       {
         path: 'receiving',
