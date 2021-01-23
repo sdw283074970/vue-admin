@@ -20,6 +20,18 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="Is Estimating Charge">
+              <el-switch
+                style="display: block"
+                v-model="isEstimatingCharge"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="Yes"
+                inactive-text="No">
+              </el-switch>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row type="flex" class="row-bg" :gutter="12">
           <el-col :span="6">
@@ -191,6 +203,7 @@ export default {
         }
         return {
             storagePriceTable: [],
+            isEstimatingCharge: false,
             queryData: {
                 customerCode: '',
                 startDate: '',
@@ -256,7 +269,7 @@ export default {
                         spinner: 'el-icon-loading',
                         background: 'rgba(0, 0, 0, 0.7)'
                     });
-                    generateStorageInvoiceByStorageTemplate(id, this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.p1Discount, this.queryData.p2Discount).then(body => {
+                    generateStorageInvoiceByStorageTemplate(id, this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.p1Discount, this.queryData.p2Discount, this.isEstimatingCharge).then(body => {
                         fullscreenLoading.close()
                         downloadFile(body.data, "Storage Expense Report");
                     }).catch(e => {

@@ -109,9 +109,9 @@ export function generateInvoiceByCustomerCode(code, start, end, show) {
   })
 }
 
-export function generateStorageInvoiceByStorageTemplate(id, code, start, end, p1, p2) {
+export function generateStorageInvoiceByStorageTemplate(id, code, start, end, p1, p2, isEstimatingCharge) {
   return request({
-    url: 'api/fba/chargetemplate/?templateId=' + id + '&customerCode=' + code + '&lastBillingDate=' + start + '&currentBillingDate=' + end + '&p1Discount=' + p1 + '&p2Discount=' + p2,
+    url: 'api/fba/chargetemplate/?templateId=' + id + '&customerCode=' + code + '&lastBillingDate=' + start + '&currentBillingDate=' + end + '&p1Discount=' + p1 + '&p2Discount=' + p2 + '&isEstimatingCharge=' + isEstimatingCharge,
     method: 'get'
   })
 }
