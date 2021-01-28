@@ -44,7 +44,8 @@
       </div>
       <div style="margin-top:10px">
         <el-button :disabled="step>2" class="gb-button" :loading="loading" type="primary" @click="onPushClicked">Approve And Push</el-button>
-        <el-button :disabled="step!=6" class="gb-button" :loading="loading" type="primary" @click="shippedVisible=true">Set Shipped Date</el-button>
+        <el-button :disabled="step!=6" class="gb-button" :loading="loading" type="primary" @click="shippedVisible=true">Mark Shipped</el-button>
+        <el-button class="gb-button" :loading="loading" type="primary" @click="onSetAllDateClicked">Edit Dates</el-button>
       </div>
     </div>
 
@@ -115,6 +116,32 @@
         </el-popover>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="Set Date"
+      :visible.sync="setDateVisible"
+      top="5vh"
+      width="350px"
+      :lock-scroll="false"
+    >
+      <div style="text-align:right">
+        <label>Create Date:</label>
+        <el-date-picker v-model="dateFormData.createDate" :disabled="true" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
+        <label>Push Date:</label>
+        <el-date-picker v-model="dateFormData.pushDate" :disabled="dateFormData.pushDate==='1900-01-01T00:00:00'" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
+        <label>Start Date:</label>
+        <el-date-picker v-model="dateFormData.startDate" :disabled="dateFormData.startDate==='1900-01-01T00:00:00'" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
+        <label>Ready Date:</label>
+        <el-date-picker v-model="dateFormData.readyDate" :disabled="dateFormData.readyDate==='1900-01-01T00:00:00'" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
+        <label>Released Date:</label>
+        <el-date-picker v-model="dateFormData.releasedDate" :disabled="dateFormData.releasedDate==='1900-01-01T00:00:00'" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
+        <label>Ship Date:</label>
+        <el-date-picker v-model="dateFormData.shipDate" :disabled="dateFormData.shipDate==='1900-01-01T00:00:00'" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
+      </div>
+      <div style="text-align:center">
+        <el-button :loading="loading" type="primary" @click="onDateUpdateClicked">Update</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -122,7 +149,7 @@
 /* eslint-disable vue/require-prop-type-constructor */
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
-import { pushShipOrderStatus } from '@/api/shipping'
+import { pushShipOrderStatus, getDate, updateAllDate } from '@/api/shipping'
 import { generateOrderInvoice, updateOrderInvoiceStatus, markOrderShipped } from '@/api/accounting'
 
 export default {
@@ -133,6 +160,7 @@ export default {
   data() {
     return {
       closeVisible: false,
+      setDateVisible: false,
       popVisible1: false,
       popVisible2: false,
       popVisible3: false,
@@ -141,7 +169,15 @@ export default {
       isAppliedMinCharge: false,
       closeDate: '',
       loading: false,
-      shippedDate: ''
+      shippedDate: '',
+      dateFormData: {
+        shipDate: '',
+        releasedDate: '',
+        pushDate: '',
+        readyDate: '',
+        createDate: '',
+        startDate: ''
+      }
     }
   },
   computed: {
@@ -172,6 +208,20 @@ export default {
 
   },
   methods: {
+    onDateUpdateClicked() {
+      this.loading = true
+      this.setDateVisible = false
+      updateAllDate(this.shipOrder.id, this.dateFormData).then(() => {
+        this.loading = false
+        this.$emit('reloadOrder')
+      })
+    },
+    onSetAllDateClicked() {
+      this.setDateVisible = true
+      getDate(this.shipOrder.id).then(body => {
+        this.dateFormData = body.data
+      })
+    },
     onCloseClicked() {
       this.loading = true
       this.popVisible4 = false
@@ -237,6 +287,6 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="css" scoped>
 
 </style>

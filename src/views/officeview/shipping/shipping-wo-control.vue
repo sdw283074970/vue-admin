@@ -9,7 +9,7 @@
       <el-button :loading="loading" :disabled="step!=5" class="gb-button" type="danger" @click="onCancelOrderClicked">Cancel Order</el-button>
       <!-- <el-button :loading="loading" :disabled="true" class="gb-button" type="danger" @click="onQuickPushClicked">Push Status</el-button> -->
       <!-- <el-button :loading="loading" :disabled="step<3||step>=6" class="gb-button" type="danger" @click="onQuickPushClicked">Push Status</el-button> -->
-      <!-- <el-button :loading="loading" :disabled="step==8||step<4" class="gb-button" type="danger" @click="onCallBackClicked">Reverse Status</el-button> -->
+      <el-button :loading="loading" :disabled="step==8||step<4" class="gb-button" type="danger" @click="onCallBackClicked">Reverse Status</el-button>
     </div>
     <el-dialog
       title="Select Released Date"

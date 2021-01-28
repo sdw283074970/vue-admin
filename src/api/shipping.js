@@ -304,3 +304,17 @@ export function cancelOrder(reference, orderType) {
   })
 }
 
+export function getDate(shipOrderId) {
+  return request({
+    url: 'api/fba/fbashiporder/?shipOrderId=' + shipOrderId + '&operation=GetDate',
+    method: 'get'
+  })
+}
+
+export function updateAllDate(shipOrderId, data) {
+  return request({
+    url: 'api/fba/fbashiporder/?shipOrderId=' + shipOrderId + '&operation=UpdateDate',
+    method: 'put',
+    data: data
+  })
+}

@@ -23,13 +23,13 @@
           <el-col :span="6">
             <el-form-item label="Is Estimating Charge">
               <el-switch
-                style="display: block"
                 v-model="isEstimatingCharge"
+                style="display: block"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
                 active-text="Yes"
-                inactive-text="No">
-              </el-switch>
+                inactive-text="No"
+              />
             </el-form-item>
           </el-col>
         </el-row>
