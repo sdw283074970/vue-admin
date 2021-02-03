@@ -33,7 +33,7 @@
               sortable
               prop="shipmentId"
               label="SKU"
-              min-width="60%"
+              width="60%"
             />
             <el-table-column
               sortable
@@ -164,9 +164,22 @@
         min-width="30%"
       />
       <el-table-column
+        prop="locationStatus"
+        label="Status"
+        sortable=""
+        align="center"
+        width="100"
+      />
+      <el-table-column
         prop="location"
         label="Location"
         min-width="30%"
+      />
+      <el-table-column
+        prop="memo"
+        label="Memo"
+        align="center"
+        width="200"
       />
       <el-table-column
         label="Operation"

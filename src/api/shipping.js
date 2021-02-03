@@ -318,3 +318,10 @@ export function updateAllDate(shipOrderId, data) {
     data: data
   })
 }
+
+export function putbackToNewLocation(pickDetailId, newLocation) {
+  return request({
+    url: 'api/fba/fbapickdetail/?pickDetailId=' + pickDetailId + '&newLocation=' + newLocation,
+    method: 'delete'
+  })
+}

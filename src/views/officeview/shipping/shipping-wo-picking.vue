@@ -176,7 +176,8 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :disabled="step>7" @click.native="onAdjustClicked(scope.row.id)">Adjust</el-dropdown-item>
-              <el-dropdown-item :disabled="step>1" @click.native="putbackHandler(scope.row.id)">Put back</el-dropdown-item>
+              <el-dropdown-item :disabled="step>1" @click.native="putbackHandler(scope.row.id)">Put back to original location</el-dropdown-item>
+              <el-dropdown-item :disabled="step>1" @click.native="onPutbackNewLocationClicked(scope.row.id)">Put back to new location</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -185,7 +186,7 @@
     <el-dialog
       title="Inventory(Pallets View)"
       :visible.sync="pltsTableVisible"
-      width="85%"
+      width="99%"
       top="5vh"
       :lock-scroll="false"
     >
@@ -203,7 +204,7 @@
     <el-dialog
       title="Inventory(Cartons View)"
       :visible.sync="ctnsTableVisible"
-      width="85%"
+      width="99%"
       top="5vh"
       :lock-scroll="false"
     >
@@ -241,12 +242,22 @@
         @onLabelDeleteSuccess="onLabelDeleteSuccess"
       />
     </el-dialog>
+    <el-dialog
+      title="Put back to new location"
+      :visible.sync="putbackVisible"
+      width="420px"
+      :lock-scroll="false"
+    >
+      <label>New location</label>
+      <el-input v-model="newLocation" placeholder="New location" />
+      <el-button type="primary" @click="putbackToNewLocationHandler()">Put Back</el-button>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { getSO, putbackPickDetail, getUploadLabelAction, getLabelFileList, downloadFile, getOrderDetailId } from '@/api/shipping'
+import { getSO, putbackPickDetail, getUploadLabelAction, getLabelFileList, downloadFile, getOrderDetailId, putbackToNewLocation } from '@/api/shipping'
 // import {  } from '@/api/receiving'
 
 export default {
@@ -273,8 +284,11 @@ export default {
   data() {
       return {
           pickVisible: true,
+          putbackVisible: false,
           operationVisible: true,
           adjustVisible: false,
+          newLocation: '',
+          pickDetailId: 0,
           filteredData : [],
           totalEntries: 0,
           currentPage: 1,
@@ -299,6 +313,20 @@ export default {
       };
   },
   methods:{
+    onPutbackNewLocationClicked(id) {
+      this.pickDetailId = id
+      this.putbackVisible = true
+    },
+    putbackToNewLocationHandler() {
+      putbackToNewLocation(this.pickDetailId, this.newLocation).then(() => {
+        this.$message({
+          message: 'Put back success',
+          type: 'success'
+        });
+        this.putbackVisible = false;
+        this.$emit('referashPickDetails');
+      })
+    },
     filterHandler(value, row, column) {
       const property = column['property'];
       return row[property] === value;

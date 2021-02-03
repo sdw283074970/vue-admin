@@ -58,7 +58,7 @@
     <el-dialog
       title="Inventory"
       :visible.sync="inventoryVisible"
-      width="85%"
+      width="99%"
       top="5vh"
       :lock-scroll="false"
     >

@@ -82,12 +82,6 @@
         width="80"
       />
       <el-table-column
-        prop="location"
-        label="Location"
-        align="center"
-        width="80"
-      />
-      <el-table-column
         prop="inboundDate"
         label="Inbound Date"
         sortable
@@ -99,11 +93,29 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="locationStatus"
+        label="Status"
+        align="center"
+        width="100"
+        sortable=""
+      />
+      <el-table-column
+        prop="location"
+        label="Location"
+        align="center"
+        width="150"
+      />
+      <el-table-column
+        prop="memo"
+        label="Memo"
+        width="150"
+      />
+      <el-table-column
         prop="operation"
         label="operation"
       >
         <template slot-scope="scope">
-          <el-input v-model="scope.row.selectedCtns" />
+          <el-input v-model="scope.row.selectedCtns" style="width:100px" />
           <el-button @click="onPickAllClicked(scope.row.id)">All</el-button>
         </template>
       </el-table-column>
@@ -165,7 +177,7 @@ export default {
         })
       } else {
         this.loading = true
-        getCtnsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode).then(body => {
+        getCtnsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode, this.warehouseLocation).then(body => {
           this.ctnsInventory = body.data
           this.loading = false
           this.$message({
@@ -196,7 +208,7 @@ export default {
       })
       confirmPickCtns(this.$route.params.shipOrderId, obj).then(() => {
         this.$emit('referashPickDetails')
-        getCtnsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode).then(body => {
+        getCtnsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode, this.warehouseLocation).then(body => {
           this.ctnsInventory = body.data
         })
         this.$message({

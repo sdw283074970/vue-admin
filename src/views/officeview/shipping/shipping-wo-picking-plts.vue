@@ -178,8 +178,20 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="locationStatus"
+        label="Status"
+        align="center"
+        sortable=""
+        width="100"
+      />
+      <el-table-column
         prop="location"
         label="Location"
+        width="150"
+      />
+      <el-table-column
+        prop="memo"
+        label="Memo"
       />
       <!-- <el-table-column
             prop="operation"
@@ -265,7 +277,7 @@ export default {
           message: 'Success',
           type: 'success'
         })
-        getPltsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode).then(body => {
+        getPltsInventory(this.$route.params.shipOrderId, this.container, this.sku, this.amzRef, this.warehouseCode, this.warehouseLocation).then(body => {
           this.pltsInventory = body.data
         })
         this.$emit('referashPickDetails')
@@ -288,13 +300,13 @@ export default {
           this.$message({
             message: 'Search complete',
             type: 'success'
-          }).catch(e => {
-            this.$message({
-              message: 'Search failed',
-              type: 'warning'
-            })
-            this.loading = false
           })
+        }).catch(e => {
+          this.$message({
+            message: 'Search failed',
+            type: 'warning'
+          })
+          this.loading = false
         })
       }
     }

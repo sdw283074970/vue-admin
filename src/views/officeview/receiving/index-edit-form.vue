@@ -159,7 +159,7 @@ export default {
     },
     localLoading: Boolean
   },
-  data() {
+  data() {  
     return {
       loading: false,
       warehouseLocations: [],
