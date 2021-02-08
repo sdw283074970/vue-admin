@@ -2,9 +2,9 @@
   <div class="gb-maincontainer" style="text-align:right">
     <div>
       <el-form ref="form-required" :rules="rules" :model="formData">
-        <el-row type="flex" class="row-bg" :gutter="17">
+        <el-row type="flex" class="row-bg" :gutter="10">
           <el-col :span="5">
-            <el-form-item label="Customer Code" prop="customerCode" label-width="140px">
+            <el-form-item label="Customer Code" prop="customerCode" label-width="130px">
               <el-select
                 v-model="formData.customerCode"
                 filterable
@@ -19,26 +19,34 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="7">
-            <el-form-item label="End Date" prop="dateData">
+        </el-row>
+        <el-row type="flex" class="row-bg" :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="Shipment Id/SKU" prop="sku">
+              <el-input v-model="formData.sku" placeholder="Input sku" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" class="row-bg" :gutter="8">
+          <el-col :span="8">
+            <el-form-item label="Date Range" prop="dateData"  label-width="130px">
               <el-date-picker
                 v-model="formData.dateData"
                 type="daterange"
                 align="right"
                 unlink-panels
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
+                range-separator="to"
+                start-placeholder="Start Date"
+                end-placeholder="End Date"
                 :picker-options="schedulePickerOptions"
                 value-format="yyyy-MM-dd"
               />
             </el-form-item>
           </el-col>
-          <el-col :span="2">
-            <el-checkbox v-model="isAdvaceOrderOnly" border>Advance order only</el-checkbox>
-          </el-col>
-          <el-col :span="3">
-            <el-button type="primary" style="margin-left:20px" @click="onDownloadInvoiceClicked">Export & Download</el-button>
+        </el-row>
+        <el-row type="flex" class="row-bg" :gutter="10">
+          <el-col :span="1">
+            <el-button type="primary" style="margin-left:20px" @click="onDownloadReportClicked">Export & Download</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -50,7 +58,7 @@
 import { schedulePickerOptions } from '@/scripts/datepicker'
 import { downloadFile } from '@/api/receiving'
 // import { generateInvoiceByCustomerCode } from '@/api/accounting'
-import { getInboundAndOutboundSchedule } from '@/api/dashboard'
+import { getSKUReport } from '@/api/dashboard'
 
 export default {
   props: {
@@ -60,22 +68,26 @@ export default {
     }
   },
   data() {
-    return {
+    return { 
       schedulePickerOptions: schedulePickerOptions,
       isAdvaceOrderOnly: false,
       formData: {
         customerCode: '',
+        sku: '',
         dateData: []
       },
       // queryData: {
       //     startDate: '',
-      //     endDate: ''
+      //     endDate: '' 
       // },
       rules: {
         customerCode: [
           { required: true, message: 'Customer cdoe required', trigger: 'change' }
         ],
         dateData: [
+          { required: true, message: 'This filed is required', trigger: 'change' }
+        ],
+        sku: [
           { required: true, message: 'This filed is required', trigger: 'change' }
         ]
       },
@@ -86,8 +98,8 @@ export default {
     queryData() {
       var v1 = this.formData.dateData[0]
       var v2 = this.formData.dateData[1]
-      var v3 = this.isAdvaceOrderOnly
-      return { startDate: v1, endDate: v2, isAdvaceOrderOnly: v3, customerCode: this.formData.customerCode }
+      var v3 = this.formData.sku
+      return { startDate: v1, endDate: v2, sku: v3, customerCode: this.formData.customerCode }
     }
   },
   watch: {
@@ -99,7 +111,7 @@ export default {
     transferDate: function(date) {
       return date.substring(0, 10)
     },
-    onDownloadInvoiceClicked() {
+    onDownloadReportClicked() {
       this.$refs['form-required'].validate((valid) => {
         if (valid) {
           const fullscreenLoading = this.$loading({
@@ -108,9 +120,9 @@ export default {
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
           })
-          getInboundAndOutboundSchedule(this.queryData.startDate, this.queryData.endDate, this.queryData.isAdvaceOrderOnly, this.queryData.customerCode).then(body => {
+          getSKUReport(this.queryData.startDate, this.queryData.endDate, this.queryData.sku, this.queryData.customerCode).then(body => {
             fullscreenLoading.close()
-            downloadFile(body.data, 'Schedule')
+            downloadFile(body.data, 'SKU-Statement')
           }).catch(e => {
             fullscreenLoading.close()
           })

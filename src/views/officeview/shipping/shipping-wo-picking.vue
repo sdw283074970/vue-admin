@@ -318,13 +318,22 @@ export default {
       this.putbackVisible = true
     },
     putbackToNewLocationHandler() {
+      const fullscreenLoading = this.$loading({
+        lock: false,
+        text: 'Downloading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       putbackToNewLocation(this.pickDetailId, this.newLocation).then(() => {
+        fullscreenLoading.close()
         this.$message({
           message: 'Put back success',
           type: 'success'
         });
         this.putbackVisible = false;
         this.$emit('referashPickDetails');
+      }).catch(e => {
+        fullscreenLoading.close()
       })
     },
     filterHandler(value, row, column) {
@@ -347,6 +356,7 @@ export default {
       putbackPickDetail(id).then(() => {
           let index = this.pickDetails.map(o => o.id).indexOf(id)
           this.pickDetails.splice(index, 1);
+          this.$emit('referashPickDetails');
           this.$message({
             message: 'Put back success',
             type: 'success'

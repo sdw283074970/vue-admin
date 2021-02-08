@@ -161,10 +161,10 @@ export const asyncRoutes = [
         meta: { title: 'Expenses Report', icon: 'table', role: ['office', 'accounting'] }
       },
       {
-        path: '/reports/schedule/index',
-        name: 'Schedule',
-        component: () => import('@/views/officeview/reports/schedule/index'),
-        meta: { title: 'Schedule', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] }
+        path: '/reports/other/index',
+        name: 'Other Reports',
+        component: () => import('@/views/officeview/reports/other/index'),
+        meta: { title: 'Other Reports', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] }
       }
     ]
   },

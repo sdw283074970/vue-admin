@@ -30,3 +30,24 @@ export function getTransitShipmentReminder() {
     method: 'get'
   })
 }
+
+export function getSKUReport(startDate, endDate, sku, customerCode) {
+  return request({
+    url: 'api/fba/fbashiporder/?fromDate=' + startDate + '&toDate=' + endDate + '&sku=' + sku + '&customerCode=' + customerCode,
+    method: 'get'
+  })
+}
+
+export function getShipOrderLogs(shiporderId) {
+  return request({
+    url: '/api/fba/fbashiporder/?shipOrderId=' + shiporderId + '&operation=GetShipOrderLogs',
+    method: 'get'
+  })
+}
+
+export function getMasterOrderLogs(masterOrderId) {
+  return request({
+    url: '/api/fba/fbaMasterOrder/?masterOrderId=' + masterOrderId + '&operation=GetMasterOrderLogs',
+    method: 'get'
+  })
+}

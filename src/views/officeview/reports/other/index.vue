@@ -1,9 +1,13 @@
 <template>
   <div class="dashboard-editor-container">
-    <h1>Schedules</h1>
+    <h1>Other Reports</h1>
     <div class="chart-wrapper">
-      <h2>Inbound & Outbound Schedule Log</h2>
+      <h2>Inbound & Outbound Schedule Log Report</h2>
       <schedule-inbound-outbound :customer-code-options="customerCodeOptions" />
+    </div>
+    <div class="chart-wrapper">
+      <h2>SKU Statement Report</h2>
+      <sku-statement :customer-code-options="customerCodeOptions" />
     </div>
   </div>
 </template>
@@ -19,7 +23,8 @@ import { getCustomerCodes } from '@/api/shipping'
 
 export default {
   components: {
-    'schedule-inbound-outbound': () => import('@/views/officeview/reports/schedule/schedule-inbound-outbound')
+    'schedule-inbound-outbound': () => import('@/views/officeview/reports/other/schedule-inbound-outbound'),
+    'sku-statement': () => import('@/views/officeview/reports/other/sku-statement')
   },
   data() {
     return {

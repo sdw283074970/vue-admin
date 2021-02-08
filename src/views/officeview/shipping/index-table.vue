@@ -13,7 +13,7 @@
     </div>
     <div class="input-bar">
       <el-button :loading="localLoading" type="primary" icon="el-icon-plus" @click="createHandler">New SO</el-button>
-      <el-button :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
+      <el-button :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">Search</el-button>
       <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         v-model="search"
@@ -250,9 +250,9 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="Manage Efiles"
+      title="Search"
       :visible.sync="filterVisible"
-      width="300px"
+      width="600px"
       top="5vh"
       :lock-scroll="false"
     >

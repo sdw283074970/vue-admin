@@ -13,6 +13,9 @@
       <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @referashInstructions="referashInstructions" />
     </div>
     <div class="chart-wrapper">
+      <shipping-wo-operationlogs :logs="logs" :ship-order="shipOrder" />
+    </div>
+    <div class="chart-wrapper">
       <invoice-detail v-if="!checkPermission(['trainee'])" :reference="shipOrder.shipOrderNumber" :order-type="'ShipOrder'" :invoice-status="shipOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
     </div>
   </div>
@@ -21,6 +24,7 @@
 <script>
 import { getSO, getPickDetails, getInstructions, resetInstructions, reverseShipOrderStatus, cancelOrder } from '@/api/shipping'
 import { getInvoices } from '@/api/accounting'
+import { getShipOrderLogs } from '@/api/dashboard'
 import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
@@ -29,6 +33,7 @@ export default {
     'shipping-wo-control': () => import('@/views/officeview/shipping/shipping-wo-control'),
     'shipping-wo-picking': () => import('@/views/officeview/shipping/shipping-wo-picking'),
     'shipping-wo-instruction': () => import('@/views/officeview/shipping/shipping-wo-instructions'),
+    'shipping-wo-operationlogs': () => import('@/views/officeview/shipping/shipping-wo-operationlogs'),
     'invoice-detail': () => import('@/views/accountingview/invoice/invoice-detail')
   },
   data() {
@@ -37,6 +42,7 @@ export default {
       pickDetails: [],
       instructions: [],
       invoices: [],
+      logs: [],
       step: 0
     }
   },
@@ -69,6 +75,9 @@ export default {
     getInstructions(id).then(body => {
       this.instructions = body.data.operationInstructions
     })
+    getShipOrderLogs(id).then(body => {
+      this.logs = body.data
+    })
   },
   methods: {
     checkPermission,
@@ -92,10 +101,16 @@ export default {
       getPickDetails(this.$route.params.shipOrderId).then(body => {
         this.pickDetails = body.data
       })
+      getShipOrderLogs(this.$route.params.shipOrderId).then(body => {
+        this.logs = body.data
+      })
     },
     referashInstructions() {
       getInstructions(this.$route.params.shipOrderId).then(body => {
         this.instructions = body.data.operationInstructions
+      })
+      getShipOrderLogs(this.$route.params.shipOrderId).then(body => {
+        this.logs = body.data
       })
     },
     onResetClicked() {
@@ -123,7 +138,9 @@ export default {
       getInvoices(this.shipOrder.shipOrderNumber, 'ShipOrder').then(res => {
         this.invoices = res.data
       })
-
+      getShipOrderLogs(id).then(body => {
+        this.logs = body.data
+      })
       this.$message({
         message: 'Success',
         type: 'success'

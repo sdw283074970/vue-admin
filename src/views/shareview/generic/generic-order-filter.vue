@@ -1,6 +1,6 @@
 <template>
   <div style="text-align:center">
-    <label for="sku">SKU
+    <label for="sku">Shipment Id / Amz Id / SKU / Instruction / Log:
       <el-input id="sku" v-model="filter.sku" />
     </label>
     <div style="text-align:right;margin-right:30px">

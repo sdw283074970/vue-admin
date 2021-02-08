@@ -6,7 +6,7 @@
     <div class="input-bar">
       <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
       <el-button id="csr-receiving-new-inbound-order" :loading="localLoading" type="primary" icon="el-icon-plus" @click="onCreateClicked">New Inbound Order</el-button>
-      <el-button id="csr-receiving-sku-filter" :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button>
+      <el-button id="csr-receiving-sku-filter" :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">Search</el-button>
       <el-button id="csr-receiving-reset-all" :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
       <el-input
         id="csr-receiving-search"
@@ -237,9 +237,9 @@
       @current-change="handleCurrentChange"
     />
     <el-dialog
-      title="Manage Efiles"
+      title="Search"
       :visible.sync="filterVisible"
-      width="300px"
+      width="600px"
       top="5vh"
       :lock-scroll="false"
     >

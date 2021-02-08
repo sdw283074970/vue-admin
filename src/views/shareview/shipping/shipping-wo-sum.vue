@@ -70,6 +70,9 @@
         <el-form-item label="Shipped Date">
           <span>{{ transferDate(shipOrder.shipDate) }}</span>
         </el-form-item>
+        <el-form-item label="Cancelled Date">
+          <span>{{ transferDate(shipOrder.cancelDate) }}</span>
+        </el-form-item>
         <el-form-item label="Latest Invoice Generated Date">
           <span>{{ transferDate(shipOrder.closeDate) }}</span>
         </el-form-item>
