@@ -8,6 +8,7 @@
               <el-select
                 v-model="formData.customerCode"
                 filterable
+                :disabled="true"
                 placeholder="Input key word"
               >
                 <el-option
@@ -57,9 +58,11 @@
 <script>
 // import { schedulePickerOptions } from '@/scripts/datepicker'
 import { downloadFile } from '@/api/receiving'
+import store from '@/store'
 // import { generateInvoiceByCustomerCode } from '@/api/accounting'
-import { getSKUReport } from '@/api/dashboard'
 
+import { getSKUReport } from '@/api/dashboard'
+const customerCode = store.getters.customerCode
 export default {
   props: {
     customerCodeOptions: {
@@ -114,7 +117,7 @@ export default {
       },
       isAdvaceOrderOnly: false,
       formData: {
-        customerCode: '',
+        customerCode: customerCode,
         sku: '',
         dateData: []
       },
@@ -124,7 +127,7 @@ export default {
       // },
       rules: {
         customerCode: [
-          { required: true, message: 'Customer cdoe required', trigger: 'change' }
+          { required: true, message: 'Customer code required', trigger: 'change' }
         ],
         dateData: [
           { required: true, message: 'This filed is required', trigger: 'change' }
@@ -134,6 +137,9 @@ export default {
     }
   },
   computed: {
+    isDisabled: function() {
+      return customerCode !== ''
+    },
     queryData() {
       var v1 = this.formData.dateData[0]
       var v2 = this.formData.dateData[1]
@@ -144,7 +150,6 @@ export default {
   watch: {
   },
   mounted() {
-
   },
   methods: {
     transferDate: function(date) {

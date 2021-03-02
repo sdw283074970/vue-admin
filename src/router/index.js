@@ -207,10 +207,10 @@ export const asyncRoutes = [
         meta: { title: 'My inventory', icon: 'table' }
       },
       {
-        path: 'sku',
-        name: 'SKU Statistics',
-        component: () => import('@/views/shareview/inventory/sku'),
-        meta: { title: 'My SKU Statistics', icon: 'table' }
+        path: 'reports',
+        name: 'Reports',
+        component: () => import('@/views/customerview/reports/index'),
+        meta: { title: 'Reports', icon: 'table' }
       }
     ]
   },
