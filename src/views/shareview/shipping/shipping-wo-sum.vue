@@ -13,7 +13,7 @@
         <el-step title="Step4: Processing" description="Waiting for ready" />
         <el-step title="Step5: Ready" description="Waiting for releasing" />
         <el-step title="Step6: Released" description="Waiting for confirming" />
-        <el-step title="Confirmed" description="Order completed" />
+        <el-step :title="step===9?'Cancelled':'Confirmed'" :description="step===9?'Order cancelled':'Order completed'" />
       </el-steps>
     </div>
     <div>

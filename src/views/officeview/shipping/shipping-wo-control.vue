@@ -63,6 +63,18 @@
         </el-popover>
       </div>
     </el-dialog>
+    <el-dialog
+      title="Select Push Date"
+      :visible.sync="cancelVisible"
+      top="5vh"
+      width="250px"
+      :lock-scroll="false"
+    >
+      <div>
+        <el-date-picker v-model="cancelDate" type="date" placeholder="Select Cancel Date" value-format="yyyy-MM-dd" style="width:200px" />
+        <el-button slot="reference" type="primary" @click="onConfirmCancelDateClicked">Confirm</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -80,13 +92,15 @@ export default {
   data() {
     return {
       pushVisible: false,
+      cancelVisible: false,
       recallVisible: false,
       releaseVisible: false,
       popVisible: false,
       popVisible2: false,
       loading: false,
       placeTime: '',
-      releasedDate: ''
+      releasedDate: '',
+      cancelDate: ''
     }
   },
   computed: {
@@ -111,9 +125,21 @@ export default {
   },
   methods: {
     onCancelOrderClicked() {
-      this.loading = true
-      this.$emit('onCancelOrderClicked')
-      this.loading = false
+      this.cancelVisible = true
+    },
+    onConfirmCancelDateClicked() {
+      if (this.cancelDate === '')
+      {
+        this.$message({
+          message: 'Cancel Date cannot be empty.',
+          type: 'error'
+        })
+      } else {
+        this.loading = true
+        this.$emit('onCancelOrderClicked', this.cancelDate)
+        this.cancelVisible = false
+        this.loading = false
+      }
     },
     onSwitchClicked() {
       this.$router.push({ path: '/warehouse-shipping/shipping-wo/' + this.shipOrder.id })
@@ -137,10 +163,10 @@ export default {
       } else {
         pushShipOrderStatus(this.$route.params.shipOrderId, this.placeTime).then(() => {
           this.loading = false
-          this.pushVisible = false
-          this.popVisible2 = false
           this.$emit('reloadOrder')
         })
+        this.pushVisible = false
+        this.popVisible2 = false
       }
     },
     onCallBackClicked() {

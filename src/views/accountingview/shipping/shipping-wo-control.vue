@@ -137,6 +137,8 @@
         <el-date-picker v-model="dateFormData.releasedDate" :disabled="dateFormData.releasedDate==='1900-01-01T00:00:00'" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
         <label>Ship Date:</label>
         <el-date-picker v-model="dateFormData.shipDate" :disabled="dateFormData.shipDate==='1900-01-01T00:00:00'" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
+        <label>Cancel Date:</label>
+        <el-date-picker v-model="dateFormData.cancelDate" :disabled="dateFormData.cancelDate==='1900-01-01T00:00:00'" type="datetime" placeholder="Select a date" value-format="yyyy-MM-dd" style="width:180px;" />
       </div>
       <div style="text-align:center">
         <el-button :loading="loading" type="primary" @click="onDateUpdateClicked">Update</el-button>
@@ -176,7 +178,8 @@ export default {
         pushDate: '',
         readyDate: '',
         createDate: '',
-        startDate: ''
+        startDate: '',
+        cancelDate: ''
       }
     }
   },

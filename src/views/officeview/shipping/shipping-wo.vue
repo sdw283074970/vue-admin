@@ -56,7 +56,7 @@ export default {
     shipOrder: {
       handler: function(newVal, oldVal) {
         const status = this.shipOrder.status
-        if (status === 'New Created') { this.step = 1 } else if (status === 'Picking') { this.step = 1 } else if (status === 'Draft') { this.step = 2 } else if (status === 'New Order') { this.step = 3 } else if (status === 'Ready') { this.step = 5 } else if (status === 'Released') { this.step = 6 } else if (status === 'Shipped') { this.step = 8 } else { this.step = 4 }
+        if (status === 'New Created') { this.step = 1 } else if (status === 'Picking') { this.step = 1 } else if (status === 'Draft') { this.step = 2 } else if (status === 'New Order') { this.step = 3 } else if (status === 'Ready') { this.step = 5 } else if (status === 'Released') { this.step = 6 } else if (status === 'Shipped') { this.step = 8 } else if (status === 'Cancelled') { this.step = 9 } else { this.step = 4 }
       },
       deep: true
     }
@@ -81,8 +81,8 @@ export default {
   },
   methods: {
     checkPermission,
-    onCancelOrderClicked() {
-      cancelOrder(this.shipOrder.shipOrderNumber, 'ShipOrder').then(res => {
+    onCancelOrderClicked(cancelDate) {
+      cancelOrder(this.shipOrder.shipOrderNumber, cancelDate, 'ShipOrder').then(res => {
         this.reloadOrder()
       })
     },
