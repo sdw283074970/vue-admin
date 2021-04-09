@@ -124,6 +124,14 @@ export function generateStorageInvoiceByStorageTemplate(id, code, start, end, p1
   })
 }
 
+export function generateStorageInvoiceByStorageTemplateThroughPayload(data) {
+  return request({
+    url: 'api/fba/chargetemplate/',
+    method: 'post',
+    data: data
+  })
+}
+
 export function changeChargingStatus(id) {
   return request({
     url: 'api/fba/fbainvoicedetail/?chargingItemDetailId=' + id,

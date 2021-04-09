@@ -57,6 +57,27 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row type="flex" class="row-bg" :gutter="12">
+          <el-col :span="6">
+            <el-form-item label="Warehouse Location" style="text-align:right" prop="warehouseLocations">
+              <el-select
+                id="generic-filter-warehouseLocations-code"
+                v-model="queryData.warehouseLocation"
+                multiple
+                collapse-tags
+                filterable
+                placeholder="Select whs Locs"
+              >
+                <el-option
+                  v-for="item in warehouseLocations"
+                  :key="item.warehouseCode"
+                  :label="item.warehouseCode + ' - ' + item.warehouseName"
+                  :value="item.warehouseCode"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
     <div>
@@ -178,8 +199,9 @@
 <script>
 /* eslint-disable */
 import { downloadFile } from '@/api/receiving'
-import { generateStorageInvoiceByStorageTemplate } from '@/api/accounting'
+import { generateStorageInvoiceByStorageTemplateThroughPayload } from '@/api/accounting'
 import { getCustomerStoragePriceTableByCustomerCode } from '@/api/customer'
+import { getWarehouseLocations } from '@/api/generic'
 
 export default {
     props: {
@@ -203,11 +225,16 @@ export default {
         }
         return {
             storagePriceTable: [],
+            warehouseLocations: [],
             isEstimatingCharge: false,
             queryData: {
+                templateId: 0,
                 customerCode: '',
                 startDate: '',
                 closeDate: '',
+                lastBillingDate: '',
+                currentBillingDate: '',
+                warehouseLocation: '',
                 p1Discount: 1,
                 p2Discount: 1
             },
@@ -269,7 +296,10 @@ export default {
                         spinner: 'el-icon-loading',
                         background: 'rgba(0, 0, 0, 0.7)'
                     });
-                    generateStorageInvoiceByStorageTemplate(id, this.queryData.customerCode, this.queryData.startDate, this.queryData.closeDate, this.queryData.p1Discount, this.queryData.p2Discount, this.isEstimatingCharge).then(body => {
+                    this.queryData.templateId = id
+                    this.queryData.lastBillingDate = this.queryData.startDate
+                    this.queryData.currentBillingDate = this.queryData.closeDate
+                    generateStorageInvoiceByStorageTemplateThroughPayload(this.queryData).then(body => {
                         fullscreenLoading.close()
                         downloadFile(body.data, "Storage Expense Report");
                     }).catch(e => {
@@ -307,7 +337,11 @@ export default {
         // }
     },
     mounted() {
-
+      getWarehouseLocations().then(
+        body => {
+          this.warehouseLocations = body.data
+        }
+      )
     }
 }
 </script>

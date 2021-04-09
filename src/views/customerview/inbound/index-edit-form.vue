@@ -76,6 +76,21 @@
         <el-form-item label="CONTAINER SIZE" prop="containerSize">
           <el-input v-model="formData.containerSize" />
         </el-form-item>
+        <el-form-item label="WAREHOUSE LOC" prop="warehouseLocation">
+          <el-select
+            v-model="formData.warehouseLocation"
+            filterable
+            collapse-tags
+            placeholder="-- Warehouse --"
+          >
+            <el-option
+              v-for="item in warehouseLocations"
+              :key="item.warehouseCode"
+              :label="item.warehouseCode + ' - ' + item.warehouseName"
+              :value="item.warehouseCode"
+            />
+          </el-select>
+        </el-form-item>
       </el-form>
       <el-form ref="form-optional" :model="formData" :rules="rules" label-width="150px" style="float:right;margin-right:30px">
         <el-form-item label="SUB-CUSTOMER">
@@ -121,6 +136,7 @@
 <script>
 import { inboundTypes, unloadingTypes, storageTypes, palletizings } from '@/scripts/dropdown'
 import { inboundOrderCreateRules } from '@/scripts/rules'
+import { getWarehouseLocations } from '@/api/generic'
 
 export default {
   props: {
@@ -150,11 +166,16 @@ export default {
       unloadingTypes: unloadingTypes,
       storageTypes: storageTypes,
       palletizings: palletizings,
-      rules: inboundOrderCreateRules
+      rules: inboundOrderCreateRules,
+      warehouseLocations: []
     }
   },
   mounted() {
-
+    getWarehouseLocations().then(
+      body => {
+        this.warehouseLocations = body.data
+      }
+    )
   },
   methods: {
     createHandler: function() {

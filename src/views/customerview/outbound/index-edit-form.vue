@@ -20,6 +20,21 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="Warehouse loc" prop="warehouseLocation">
+        <el-select
+          v-model="formData.warehouseLocation"
+          filterable
+          collapse-tags
+          placeholder="-- Warehouse --"
+        >
+          <el-option
+            v-for="item in warehouseLocations"
+            :key="item.warehouseCode"
+            :label="item.warehouseCode + ' - ' + item.warehouseName"
+            :value="item.warehouseCode"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="Order Type">
         <el-radio-group v-model="formData.orderType">
           <el-radio label="Standard" />
@@ -91,6 +106,7 @@
 
 <script>
 import { outboundOrderCreateRules } from '@/scripts/rules'
+import { getWarehouseLocations } from '@/api/generic'
 
 export default {
   props: {
@@ -115,11 +131,16 @@ export default {
   data() {
     return {
       loading: false,
+      warehouseLocations: [],
       rules: outboundOrderCreateRules
     }
   },
   mounted() {
-
+    getWarehouseLocations().then(
+      body => {
+        this.warehouseLocations = body.data
+      }
+    )
   },
   methods: {
     createHandler: function() {

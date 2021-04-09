@@ -112,7 +112,7 @@ export const asyncRoutes = [
   {
     path: '/customer',
     component: Layout,
-    meta: { title: 'Customer', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD'] },
+    meta: { title: 'Customer', icon: 'user', role: ['office', 'accounting', 'TBD'] },
     children: [
       {
         path: 'index',
@@ -126,7 +126,7 @@ export const asyncRoutes = [
     path: '/quiz',
     component: Layout,
     name: 'Quizs',
-    meta: { title: 'Quiz', icon: 'table', role: ['office', 'trainee', 'accounting'] },
+    meta: { title: 'Quiz', icon: 'table', role: ['office', 'accounting'] },
     children: [
       {
         path: '/quiz/1',
@@ -146,7 +146,7 @@ export const asyncRoutes = [
     path: '/reports',
     component: Layout,
     name: 'Reports',
-    meta: { title: 'Reports', icon: 'table', role: ['office', 'trainee', 'accounting', 'TBD'] },
+    meta: { title: 'Reports', icon: 'table', role: ['office', 'accounting', 'TBD'] },
     children: [
       {
         path: '/reports/inventory/index',
@@ -252,7 +252,7 @@ export const asyncRoutes = [
     path: '/warehouse',
     component: Layout,
     name: 'Warehouse Terminal',
-    meta: { title: 'Warehouse Terminal', icon: 'table', role: ['office', 'trainee', 'accounting', 'warehouse'] },
+    meta: { title: 'Warehouse Terminal', icon: 'table', role: ['office', 'accounting', 'warehouse'] },
     children: [
       {
         path: 'inbound',
@@ -286,7 +286,7 @@ export const asyncRoutes = [
     path: '/accounting',
     component: Layout,
     name: 'Accounting Receiving',
-    meta: { title: 'Accounting Terminal', icon: 'table', role: ['office', 'accounting'] },
+    meta: { title: 'Accounting Terminal', icon: 'table', role: ['accounting'] },
     children: [
       {
         path: 'receiving',
