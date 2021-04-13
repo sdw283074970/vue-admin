@@ -215,10 +215,10 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/csr',
+    path: '/oms',
     component: Layout,
-    name: 'CSR Terminal',
-    meta: { title: 'CSR Terminal', icon: 'table', role: ['office', 'trainee', 'accounting', 'admin'] },
+    name: 'OMS',
+    meta: { title: 'OMS', icon: 'table', role: ['office', 'trainee', 'accounting', 'admin'] },
     children: [
       {
         path: 'receiving',
@@ -249,10 +249,10 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/warehouse',
+    path: '/wms',
     component: Layout,
-    name: 'Warehouse Terminal',
-    meta: { title: 'Warehouse Terminal', icon: 'table', role: ['office', 'accounting', 'warehouse'] },
+    name: 'WMS',
+    meta: { title: 'WMS', icon: 'table', role: ['office', 'accounting', 'warehouse'] },
     children: [
       {
         path: 'inbound',
@@ -285,8 +285,8 @@ export const asyncRoutes = [
   {
     path: '/accounting',
     component: Layout,
-    name: 'Accounting Receiving',
-    meta: { title: 'Accounting Terminal', icon: 'table', role: ['accounting'] },
+    name: 'Accounting',
+    meta: { title: 'Accounting', icon: 'table', role: ['accounting'] },
     children: [
       {
         path: 'receiving',

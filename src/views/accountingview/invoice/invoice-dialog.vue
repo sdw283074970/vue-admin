@@ -162,13 +162,37 @@ export default {
       var that = this
       return {
         shortcuts: [{
-          text: that.orderType==='ShipOrder'?'Released Date':'Inbound Date',
+          text: that.orderType==='ShipOrder'?'Rls Date':'Inbound Date',
           onClick(picker) {
             if (that.orderType === 'ShipOrder'){
               that.service.dateOfCost = that.releasedDate
             }
             else {
               that.service.dateOfCost = that.inboundDate
+            }
+            picker.$emit('pick')
+          }
+        },
+        {
+          text: 'Cancel Date',
+          onClick(picker) {
+            if (that.orderType === 'ShipOrder'){
+              that.service.dateOfCost = that.cancelDate
+            }
+            else {
+              that.service.dateOfCost = that.cancelDate
+            }
+            picker.$emit('pick')
+          }
+        },
+{
+          text: 'Create date',
+          onClick(picker) {
+            if (that.orderType === 'ShipOrder'){
+              that.service.dateOfCost = that.createDate
+            }
+            else {
+              that.service.dateOfCost = that.createDate
             }
             picker.$emit('pick')
           }
