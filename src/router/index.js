@@ -252,7 +252,7 @@ export const asyncRoutes = [
     path: '/wms',
     component: Layout,
     name: 'WMS',
-    meta: { title: 'WMS', icon: 'table', role: ['office', 'accounting', 'warehouse'] },
+    meta: { title: 'WMS', icon: 'table', role: ['office', 'trainee', 'accounting', 'warehouse'] },
     children: [
       {
         path: 'inbound',

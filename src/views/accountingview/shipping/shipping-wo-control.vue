@@ -44,7 +44,7 @@
       </div>
       <div style="margin-top:10px">
         <el-button :disabled="step>2" class="gb-button" :loading="loading" type="primary" @click="onPushClicked">Approve And Push</el-button>
-        <el-button :disabled="step!=6" class="gb-button" :loading="loading" type="primary" @click="shippedVisible=true">Mark Shipped</el-button>
+        <el-button :disabled="step!=6 || invoiceStatus != 'Closed'" class="gb-button" :loading="loading" type="primary" @click="shippedVisible=true">Mark Shipped</el-button>
         <el-button class="gb-button" :loading="loading" type="primary" @click="onSetAllDateClicked">Edit Dates</el-button>
       </div>
     </div>

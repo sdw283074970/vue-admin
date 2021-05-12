@@ -408,6 +408,9 @@ export default {
               return false;
           }
       });
+    },
+    onInputChange() {
+      if (this.formData.holdQuantity > this.formData.max) { this.formData.holdQuantity = this.formData.max }
     }
   },
   mounted() {

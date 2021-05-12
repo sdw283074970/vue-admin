@@ -110,7 +110,7 @@
       </el-table-column>
       <el-table-column
         prop="costConfirm"
-        label="COST FONFIRM"
+        label="COST CFRM"
         align="center"
         width="115"
       >
@@ -136,6 +136,16 @@
       >
         <template slot-scope="scope">
           <el-button style="width:80px" :type="scope.row.collectionStatus==true?'success':'info'" @click="onBtnClicked(scope.row.id, 'Collection')">{{ scope.row.collectionStatus==true?'YES':'NO' }}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="bonusStatus"
+        label="BONUS CFRM"
+        width="115"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-button style="width:80px" :type="scope.row.bonusStatus==true?'success':'info'" @click="onBtnClicked(scope.row.id, 'Bonus')">{{ scope.row.bonusStatus==true?'YES':'NO' }}</el-button>
         </template>
       </el-table-column>
       <el-table-column

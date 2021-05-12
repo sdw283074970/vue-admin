@@ -116,8 +116,10 @@ export default {
       pallets: 0,
       cartons: 0,
       skuNumber: 0,
-      inboundDate: '1990-1-1',
-      releasedDate: '1990-1-1',
+      inboundDate: '1900-1-1',
+      releasedDate: '1900-1-1',
+      cancelDate: '1900-1-1',
+      createDate: '1900-1-1',
       chargingTypeOptions: [
         {value: 'Cost', label: 'Cost'},
         {value: 'Extra Charging', label: 'Extra Charging'}
@@ -165,36 +167,33 @@ export default {
           text: that.orderType==='ShipOrder'?'Rls Date':'Inbound Date',
           onClick(picker) {
             if (that.orderType === 'ShipOrder'){
-              that.service.dateOfCost = that.releasedDate
+              picker.$emit('pick', that.releasedDate)
             }
             else {
-              that.service.dateOfCost = that.inboundDate
+              picker.$emit('pick', that.inboundDate)
             }
-            picker.$emit('pick')
           }
         },
         {
           text: 'Cancel Date',
           onClick(picker) {
             if (that.orderType === 'ShipOrder'){
-              that.service.dateOfCost = that.cancelDate
+              picker.$emit('pick', that.cancelDate)
             }
             else {
-              that.service.dateOfCost = that.cancelDate
+              picker.$emit('pick', that.cancelDate)
             }
-            picker.$emit('pick')
           }
         },
-{
+        {
           text: 'Create date',
           onClick(picker) {
             if (that.orderType === 'ShipOrder'){
-              that.service.dateOfCost = that.createDate
+              picker.$emit('pick', that.createDate)
             }
             else {
-              that.service.dateOfCost = that.createDate
+              picker.$emit('pick', that.createDate)
             }
-            picker.$emit('pick')
           }
         }]
       }
@@ -264,6 +263,8 @@ export default {
           this.skuNumber = body.data.skuNumber
           this.releasedDate = body.data.releasedDate
           this.inboundDate = body.data.inboundDate
+          this.cancelDate = body.date.cancelDate
+          this.createDate = body.date.createDate
       })
       getChargingType(this.reference, this.orderType).then(body => {
           let that = this.chargingTypeOptions
