@@ -17,7 +17,7 @@
       :height="tableHight"
       style="width: 100%"
     >
-      <el-table-column type="expand">
+      <el-table-column type="expand" fixed="left">
         <template slot-scope="props">
           <el-table
             ref="pick-table-plts-ctns"
@@ -90,8 +90,8 @@
               width="100"
             />
             <el-table-column
-              prop="location"
-              label="Location"
+              prop="memo"
+              label="Memo"
               align="center"
               width="100"
             />
@@ -105,9 +105,18 @@
               prop="operation"
               label="operation"
               align="center"
+              width="100"
             >
               <template slot-scope="scope">
-                <el-button @click="onCtnHistoryClicked(scope.row.id)">History</el-button>
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    Options<i class="el-icon-arrow-down el-icon--right" />
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :disabled="scope.row.residualQuantity==0&&scope.row.holdQuantity==0" @click.native="onUpdateClicked(scope.row.id, scope.row.holdCtns, scope.row.location, scope.row.availableCtns, scope.row.memo)">Update</el-dropdown-item>
+                    <el-dropdown-item @click.native="onCtnHistoryClicked(scope.row.id)">History</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </template>
             </el-table-column>
           </el-table>
@@ -218,6 +227,12 @@
         width="90"
       />
       <el-table-column
+        prop="memo"
+        label="Memo"
+        align="center"
+        width="90"
+      />
+      <el-table-column
         prop="warehouseLocation"
         label="WHS"
         align="center"
@@ -227,6 +242,7 @@
         prop="operation"
         label="Operation"
         align="center"
+        fixed="right"
       >
         <template slot-scope="scope">
           <!-- <el-button @click="onPltHistoryClicked(scope.row.pltId)">History</el-button> -->
@@ -272,6 +288,32 @@
         <el-button @click="updatePltsVisible=false">Cancel</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      title="Update Cartons"
+      :visible.sync="ctnUpdateVisible"
+      width="400px"
+      top="8vh"
+      :lock-scroll="false"
+      append-to-body
+    >
+      <el-form ref="form-required" :rules="rules" :model="formData" label-width="150px">
+        <el-col>
+          <el-form-item label="Hold Ctns" prop="holdQuantity">
+            <el-input v-model="formData.holdQuantity" type="number" :max="formData.residualQuantity" @input="onInputChange" />
+          </el-form-item>
+          <el-form-item label="Location" prop="location">
+            <el-input v-model="formData.location" disabled />
+          </el-form-item>
+          <el-form-item label="Memo" prop="memo">
+            <el-input v-model="formData.memo" />
+          </el-form-item>
+          <p style="text-align:center">{{ 'Max holdable quantity: ' + formData.max + ' ctns' }}</p>
+        </el-col></el-form>
+      <div style="text-align:center">
+        <el-button type="primary" @click="onUpdateConfirmClicked">Update</el-button>
+        <el-button @click="updateVisible=false">Cancel</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -303,6 +345,7 @@ export default {
   data() {
     return {
       updatePltsVisible: false,
+      ctnUpdateVisible: false,
       tableHight: window.innerHeight * 0.6,
       currentPage: 1,
       pageSize: 20,
@@ -314,6 +357,7 @@ export default {
         holdQuantity: 0,
         location: '',
         max: 0,
+        memo: '',
         type: ''
       },
       rules: {
@@ -387,13 +431,14 @@ export default {
         this.onSearchChanged(this.search)
       }, 1000)
     },
-    onUpdateClicked(id, holdCtns, location, availableCtns) {
+    onUpdateClicked(id, holdCtns, location, availableCtns, memo) {
       this.formData.holdCtns = holdCtns
-      this.formData.location = location
+      this.formData.location = 'Pallet'
       this.formData.availableCtns = availableCtns
       this.formData.id = id
-      this.updateVisible = true
+      this.ctnUpdateVisible = true
       this.formData.max = holdCtns + availableCtns
+      this.formData.memo = memo
     },
     onUpdatePltsClicked(id, location) {
       this.formData.id = id
@@ -403,10 +448,10 @@ export default {
     onUpdateConfirmClicked() {
       this.$refs['form-required'].validate((valid) => {
         if (valid) {
-          updateHoldCtns(this.formData.id, this.formData.holdCtns).then(() => {
+          updateHoldCtns(this.formData.id, this.formData.holdQuantity, this.formData.memo).then(() => {
             updateLocation(this.formData.id, this.formData.location).then(() => {
               this.$emit('reloadOrder')
-              this.updateVisible = false
+              this.ctnUpdateVisible = false
             })
           })
         } else {

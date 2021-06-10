@@ -48,36 +48,49 @@
             <el-table-column
               prop="warehouseCode"
               label="Whse Code"
+              align="center"
               width="100"
             />
             <el-table-column
               prop="grossWeightPerCtn"
               label="GW/Ctn"
+              align="center"
               width="100"
             />
             <el-table-column
               prop="cbmPerCtn"
               label="CBM/Ctn"
+              align="center"
               width="100"
             />
             <el-table-column
               prop="actualQuantity"
               label="Org Ctns"
+              align="center"
               width="100"
             />
             <el-table-column
               prop="availableCtns"
+              align="center"
               label="Ava Ctns"
               width="100"
             />
             <el-table-column
               prop="pickingCtns"
               label="Picking Ctns"
-              width="120"
+              align="center"
+              width="100"
             />
             <el-table-column
               prop="labelFileNumbers"
               label="Label Files"
+              align="center"
+              width="100"
+            />
+            <el-table-column
+              prop="memo"
+              align="center"
+              label="Memo"
               width="120"
             />
             <el-table-column

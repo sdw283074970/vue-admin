@@ -149,6 +149,14 @@ export default {
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 365)
             picker.$emit('pick', [start, end])
           }
+        }, {
+          text: 'Last 3 years',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365 * 3)
+            picker.$emit('pick', [start, end])
+          }
         }]
       }
     }

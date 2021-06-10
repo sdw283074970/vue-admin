@@ -96,12 +96,28 @@ export default {
       isEdit: Boolean,
       orderType: String,
       service: Object,
-      invoiceStatus: String
+      invoiceStatus: String,
+      orderDate: Object
   },
   data(){
     const validatePrice = (rule, value, callback) => {
       if (value === undefined || value === null || value === '') {
         callback(new Error('This filed is required'))
+      }
+      value = Number(value)
+      if (typeof value === 'number' && !isNaN(value)) {
+        callback()
+      } else {
+        callback(new Error('Please enter valid number'))
+      }
+    }
+
+    const validateQuantity = (rule, value, callback) => {
+      if (value === undefined || value === null || value === '') {
+        callback(new Error('This filed is required'))
+      }
+      if (value === 0) {
+        callback(new Error('Quantity cannot be 0'))
       }
       value = Number(value)
       if (typeof value === 'number' && !isNaN(value)) {
@@ -138,25 +154,25 @@ export default {
         cost: [
           { required: true, message: 'Please input cost', trigger: 'change' }
         ],
-        rate: [
-          { validator: validatePrice, trigger: 'change'}
-        ],
-        unit: [
-          { required: true, message: 'Please select unit', trigger: 'change' }
-        ],
-        quantity: [
-          { validator: validatePrice, trigger: 'change'}
-        ],
-        originalAmount: [
-          { validator: validatePrice, trigger: 'change'}
-        ],
-        amount: [
-          { validator: validatePrice, trigger: 'change'}
-        ],
         discount: [
           { required: true, message: 'Please input discount', trigger: 'change' }
+        ],
+        rate: [
+          { required: true, validator: validatePrice, trigger: 'change'}
+        ],
+        unit: [
+          { required: true, required: true, message: 'Please select unit', trigger: 'change' }
+        ],
+        quantity: [
+          { required: true, validator: validateQuantity, trigger: 'change'}
+        ],
+        originalAmount: [
+          { required: true, validator: validatePrice, trigger: 'change'}
+        ],
+        amount: [
+          { required: true, validator: validatePrice, trigger: 'change'}
         ]
-      },
+      }
     }
   },
   computed: {
@@ -255,7 +271,7 @@ export default {
       this.service.amount = (this.service.rate * this.service.quantity * this.service.discount).toFixed(2)
     }
   },
-  mounted() {
+  created() {
       getQuantityInfo(this.reference, this.orderType).then(body => {
           this.pallets = body.data.pallets
           this.cartons = body.data.cartons
@@ -263,8 +279,8 @@ export default {
           this.skuNumber = body.data.skuNumber
           this.releasedDate = body.data.releasedDate
           this.inboundDate = body.data.inboundDate
-          this.cancelDate = body.date.cancelDate
-          this.createDate = body.date.createDate
+          this.cancelDate = body.data.cancelDate
+          this.createDate = body.data.createDate
       })
       getChargingType(this.reference, this.orderType).then(body => {
           let that = this.chargingTypeOptions

@@ -89,6 +89,12 @@
               width="100"
             />
             <el-table-column
+              prop="memo"
+              align="center"
+              label="Memo"
+              width="100"
+            />
+            <el-table-column
               prop="operation"
               label="operation"
               align="center"
@@ -100,7 +106,7 @@
                     Options<i class="el-icon-arrow-down el-icon--right" />
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :disabled="scope.row.availableCtns==0&&scope.row.holdCtns==0" @click.native="onUpdateClicked(scope.row.id, scope.row.holdCtns, scope.row.location, scope.row.availableCtns)">Update</el-dropdown-item>
+                    <el-dropdown-item :disabled="scope.row.residualQuantity==0&&scope.row.holdQuantity==0" @click.native="onUpdateClicked(scope.row.id, scope.row.holdCtns, scope.row.location, scope.row.availableCtns, scope.row.memo)">Update</el-dropdown-item>
                     <el-dropdown-item @click.native="onCtnHistoryClicked(scope.row.id)">History</el-dropdown-item>
                     <el-dropdown-item disabled @click.native="onHoldClicked(scope.row.id)">Hold</el-dropdown-item>
                   </el-dropdown-menu>
@@ -236,6 +242,9 @@
           <el-form-item label="Location" prop="location">
             <el-input v-model="formData.location" :disabled="formData.location=='Pallet'" />
           </el-form-item>
+          <el-form-item label="Memo" prop="memo">
+            <el-input v-model="formData.memo" />
+          </el-form-item>
           <p style="text-align:center">{{ 'Max holdable quantity: ' + formData.max + ' ctns' }}</p>
         </el-col></el-form>
       <div style="text-align:center">
@@ -270,9 +279,9 @@ import { getPltHistories, getCtnHistories } from '@/api/inventory'
 import { relocateItems, updateHoldCtns, updateLocation, updatePltLocation } from '@/api/receiving'
 
 const validateAcquaintance = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('Please enter valid hold ctns quanity'))
-  }
+  // if (!value) {
+  //   callback(new Error('Please enter valid hold ctns quanity'))
+  // }
   value = Number(value)
   if (typeof value === 'number' && !isNaN(value)) {
     if (value < 0) {
@@ -309,7 +318,8 @@ export default {
         id: 0,
         holdCtns: 0,
         location: '',
-        max: 0
+        max: 0,
+        memo: ''
       },
       historySum: {
         container: '',
@@ -368,13 +378,14 @@ export default {
         })
       })
     },
-    onUpdateClicked(id, holdCtns, location, availableCtns) {
+    onUpdateClicked(id, holdCtns, location, availableCtns, memo) {
       this.formData.holdCtns = holdCtns
       this.formData.location = location
       this.formData.availableCtns = availableCtns
       this.formData.id = id
       this.updateVisible = true
       this.formData.max = holdCtns + availableCtns
+      this.formData.memo = memo
     },
     onUpdatePltsClicked(id, location) {
       this.formData.id = id
@@ -384,7 +395,7 @@ export default {
     onUpdateConfirmClicked() {
       this.$refs['form-required'].validate((valid) => {
           if (valid) {
-            updateHoldCtns(this.formData.id, this.formData.holdCtns).then(() => {
+            updateHoldCtns(this.formData.id, this.formData.holdCtns, this.formData.memo).then(() => {
               updateLocation(this.formData.id, this.formData.location).then(() => {
                 this.$emit('reloadOrder')
                 this.updateVisible = false

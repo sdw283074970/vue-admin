@@ -84,6 +84,11 @@
               min-width="30%"
             />
             <el-table-column
+              prop="memo"
+              label="Memo"
+              min-width="30%"
+            />
+            <el-table-column
               prop="operation"
               label="operation"
             >

@@ -105,9 +105,15 @@
       />
       <el-table-column
         prop="location"
-        label="Location"
+        label="Plt Lct"
         align="center"
         width="80"
+      />
+      <el-table-column
+        prop="memo"
+        align="center"
+        label="Memo"
+        width="70"
       />
       <el-table-column
         prop="warehouseLocation"
@@ -118,7 +124,9 @@
       <el-table-column
         prop="operation"
         label="operation"
+        fixed="right"
         align="center"
+        
       >
         <template slot-scope="scope">
           <!-- <el-button @click="onHistoryClicked(scope.row.id)">History</el-button>-->
@@ -127,7 +135,7 @@
               More<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :disabled="scope.row.residualQuantity==0&&scope.row.holdQuantity==0" @click.native="onUpdateClicked(scope.row.id, scope.row.holdQuantity, scope.row.location, scope.row.residualQuantity, scope.row.type)">Update</el-dropdown-item>
+              <el-dropdown-item :disabled="scope.row.residualQuantity==0&&scope.row.holdQuantity==0" @click.native="onUpdateClicked(scope.row.id, scope.row.holdQuantity, scope.row.location, scope.row.residualQuantity, scope.row.type, scope.row.memo)">Update</el-dropdown-item>
               <el-dropdown-item @click.native="onHistoryClicked(scope.row.id)">History</el-dropdown-item>
               <!-- <el-dropdown-item :disabled="(scope.row.type==='InPallet')||(scope.row.actualQuantity!==scope.row.availableCtns)" @click.native="onReallocateClicked(scope.row.id)">Re-allocate</el-dropdown-item> -->
             </el-dropdown-menu>
@@ -161,6 +169,9 @@
           <el-form-item label="Location" prop="location">
             <el-input v-model="formData.location" :disabled="formData.type=='InPallet'" />
           </el-form-item>
+          <el-form-item label="Memo" prop="memo">
+            <el-input v-model="formData.memo" />
+          </el-form-item>
           <p style="text-align:center">{{ 'Max holdable quantity: ' + formData.max + ' ctns' }}</p>
         </el-col></el-form>
       <div style="text-align:center">
@@ -174,9 +185,9 @@
 import { updateHoldCtns, updateLocation } from '@/api/receiving'
 
 const validateAcquaintance = (rule, value, callback) => {
-  if (!value && value !== 0) {
-    callback(new Error('Please enter valid hold ctns quanity'))
-  }
+  // if (!value && value !== 0) {
+  //   callback(new Error('Please enter valid hold ctns quanity'))
+  // }
   value = Number(value)
   if (typeof value === 'number' && !isNaN(value)) {
     if (value < 0) {
@@ -210,6 +221,7 @@ export default {
         holdQuantity: 0,
         location: '',
         max: 0,
+        memo: '',
         type: ''
       },
       rules: {
@@ -261,7 +273,7 @@ export default {
     onHistoryClicked(id) {
       this.$emit('onCtnHistoryClicked', id)
     },
-    onUpdateClicked(id, holdQuantity, location, availableCtns, type) {
+    onUpdateClicked(id, holdQuantity, location, availableCtns, type, memo) {
       this.formData.holdQuantity = holdQuantity
       this.formData.location = type === 'InPallet' ? 'Pallet' : location
       this.formData.availableCtns = availableCtns
@@ -269,11 +281,12 @@ export default {
       this.updateVisible = true
       this.formData.max = holdQuantity + availableCtns
       this.formData.type = type
+      this.formData.memo = memo
     },
     onUpdateConfirmClicked() {
       this.$refs['form-required'].validate((valid) => {
         if (valid) {
-          updateHoldCtns(this.formData.id, this.formData.holdQuantity).then(() => {
+          updateHoldCtns(this.formData.id, this.formData.holdQuantity, this.formData.memo).then(() => {
             updateLocation(this.formData.id, this.formData.location).then(() => {
               this.$emit('reloadOrder')
               this.updateVisible = false

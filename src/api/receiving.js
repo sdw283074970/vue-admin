@@ -330,9 +330,9 @@ export function relocateItems(id, type) {
   })
 }
 
-export function updateHoldCtns(id, ctns) {
+export function updateHoldCtns(id, ctns, memo) {
   return request({
-    url: 'api/FBAInventory/?cartonId=' + id + '&holdCtns=' + ctns,
+    url: 'api/FBAInventory/?cartonId=' + id + '&holdCtns=' + ctns + '&memo=' + encodeURIComponent(memo),
     method: 'put'
   })
 }
