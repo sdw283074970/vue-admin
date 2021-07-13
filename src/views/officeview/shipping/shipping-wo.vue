@@ -10,7 +10,7 @@
       <shipping-wo-picking :ship-order="shipOrder" :step="step" :pick-details="pickDetails" @referashPickDetails="referashPickDetails" />
     </div>
     <div class="chart-wrapper">
-      <shipping-wo-instruction :instructions="instructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @referashInstructions="referashInstructions" />
+      <shipping-wo-instruction :instructions="filteredInstructions" :ship-order="shipOrder" :step="step" @onResetClicked="onResetClicked" @referashInstructions="referashInstructions" />
     </div>
     <div class="chart-wrapper">
       <shipping-wo-operationlogs :logs="logs" :ship-order="shipOrder" />
@@ -50,6 +50,12 @@ export default {
     today: function() {
       var date = new Date()
       return date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString()
+    },
+    filteredInstructions() {
+      if (checkPermission(['trainee']))
+        return this.instructions.filter(x => x.visibleToAgent==true);
+      else
+        return this.instructions
     }
   },
   watch: {

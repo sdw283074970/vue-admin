@@ -161,6 +161,12 @@ export const asyncRoutes = [
         meta: { title: 'Expenses Report', icon: 'table', role: ['office', 'accounting'] }
       },
       {
+        path: '/reports/container/index',
+        name: 'ContainerReport',
+        component: () => import('@/views/officeview/reports/container/index'),
+        meta: { title: 'Container Report', icon: 'table', role: ['office', 'accounting'] }
+      },
+      {
         path: '/reports/other/index',
         name: 'Other Reports',
         component: () => import('@/views/officeview/reports/other/index'),

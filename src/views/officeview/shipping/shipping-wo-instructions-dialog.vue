@@ -7,7 +7,7 @@
         </el-form-item>
       </div>
       <div>
-        <el-form-item v-if="!isResult&&!isWarehouse" id="all-all-wo-instruction-instruction" label-width="550px" label="Is customer's instruction(visible to warehouse, office, customer)">
+        <el-form-item v-if="!isResult&&!isWarehouse" id="all-all-wo-instruction-instruction" label-width="550px" label="Customer's instruction(visible to warehouse, office, customer)">
           <el-switch
             v-model="instruction.isInstruction"
             style="margin-left:10px"
@@ -20,7 +20,7 @@
         </el-form-item>
       </div>
       <div id="all-all-wo-instruction-operation">
-        <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is inner operation(visible to warehouse, office)">
+        <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Inner operation(visible to warehouse, office)">
           <el-switch
             v-model="instruction.isOperation"
             style="margin-left:10px"
@@ -33,9 +33,21 @@
         </el-form-item>
       </div>
       <div id="all-all-wo-instruction-charging">
-        <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Is charging item(visible to office only)">
+        <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="charging item(visible to office)">
           <el-switch
             v-model="instruction.isChargingItem"
+            style="margin-left:10px"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="Yes"
+            inactive-text="No"
+          />
+        </el-form-item>
+      </div>
+      <div id="all-all-wo-instruction-charging" v-if="!checkPermission(['trainee'])">
+        <el-form-item v-if="!isResult&&!isWarehouse" label-width="550px" label="Visible to Agent">
+          <el-switch
+            v-model="instruction.visibleToAgent"
             style="margin-left:10px"
             active-color="#13ce66"
             inactive-color="#ff4949"
@@ -65,6 +77,7 @@
 import { createNewInstruction, updateInstruction, resultInstruction, updateComment, createNewInstructionByModel, updateInstructionbyModel } from '@/api/shipping'
 import { ALPN_ENABLED } from 'constants';
 import { all_all_wo_instruction_dialog } from '@/guide/steps'
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   props: {
@@ -100,6 +113,7 @@ export default {
 //     isChargingItem: function(val){ this.isChargingItemLocal = val}
 //   },
   methods:{
+    checkPermission,
     guide() {
       this.driver.defineSteps(all_all_wo_instruction_dialog)
       this.driver.start()

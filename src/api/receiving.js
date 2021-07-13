@@ -372,3 +372,18 @@ export function sendFile(id) {
     method: 'post'
   })
 }
+
+export function generateBOL(id, freightCharge, operator, bolInfo) {
+  return request({
+    url: '/api/fba/fbamasterorder/?masterOrderId=' + id + '&freightCharge=' + freightCharge + '&operatorName=' + operator,
+    method: 'post',
+    data: bolInfo
+  })
+}
+
+export function getContainerReportByDate(code, startDate, endDate) {
+  return request({
+    url: 'api/fba/fbamasterorder/?customerCode=' + code + '&startDate=' + startDate + '&endDate=' + endDate,
+    method: 'get'
+  })
+}

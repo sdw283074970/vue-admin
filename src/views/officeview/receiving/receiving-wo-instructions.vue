@@ -68,6 +68,16 @@
             <font>{{ scope.row.isInstruction||scope.row.isOperation ? '√' : 'X' }}</font>
           </template>
         </el-table-column>
+        <el-table-column
+          label="Agent"
+          align="center"
+          width="100"
+          v-if="!checkPermission(['trainee'])"
+        >
+          <template slot-scope="scope">
+            <font>{{ scope.row.visibleToAgent? '√' : 'X' }}</font>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column
         prop="status"
@@ -131,6 +141,7 @@ import { getInstructions } from '@/api/receiving'
 import { deleteInstruction } from '@/api/shipping'
 import { changeChargingStatus } from '@/api/accounting'
 import { csr_all_wo_instruction } from '@/guide/steps'
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   props: {
@@ -149,6 +160,7 @@ export default {
           isChargingItem: true,
           isInstruction: false,
           isOperation: false,
+          visibleToAgent: true,
           result: '',
           reference: '',
           orderType: 'MasterOrder'
@@ -161,6 +173,7 @@ export default {
     "picking-wo-instructions-dialog": () => import('@/views/officeview/shipping/shipping-wo-instructions-dialog'),
   },
   methods:{
+    checkPermission,
     handleClose(done) {
       this.$confirm('Are you want to close this dialog？')
         .then(_ => {
