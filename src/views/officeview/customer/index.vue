@@ -93,6 +93,16 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="payableAmounts"
+        align="center"
+        label="Payable Amounts"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <font :color="scope.row.payableAmounts==0?'blue':'red'">{{ '$ ' + scope.row.payableAmounts }}</font>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="Status"
         align="center"
         width="100"
@@ -110,17 +120,22 @@
       <el-table-column
         prop="operation"
         label="operation"
+        align="center"
       >
         <template slot-scope="scope">
-          <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
+          <!-- <el-button @click="editHandler(scope.row.id, scope.$index)">Edit</el-button>
           <el-button v-if="scope.row.status=='Inactive'" style="width:80px" @click="activeHandler(scope.row.id, scope.$index)">Active</el-button>
           <el-button v-if="scope.row.status=='Active'" style="width:80px" @click="activeHandler(scope.row.id, scope.$index)">Deactive</el-button>
-          <el-button @click="onLinkToUserClicked(scope.row.id)">Link to User</el-button>
+          <el-button @click="onLinkToUserClicked(scope.row.id)">Link to User</el-button> -->
           <el-dropdown style="margin-left:10px">
             <el-button>
-              More<i class="el-icon-arrow-down el-icon--right" />
+              Operations<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="editHandler(scope.row.id, scope.$index)">Edit</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status=='Inactive'" @click.native="activeHandler(scope.row.id, scope.$index)">Active</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.status=='Active'" @click.native="activeHandler(scope.row.id, scope.$index)">Deactive</el-dropdown-item>
+              <el-dropdown-item @click.native="onLinkToUserClicked(scope.row.id)">Link to User</el-dropdown-item>
               <el-dropdown-item @click.native="onInstructionsClicked(scope.row.id)">Instructions</el-dropdown-item>
               <el-dropdown-item @click.native="onServicesClicked(scope.row.id)">Services</el-dropdown-item>
               <el-dropdown-item @click.native="onStorageClicked(scope.row.id, scope.row.customerCode)">Storage</el-dropdown-item>

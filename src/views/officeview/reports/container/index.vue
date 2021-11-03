@@ -1,51 +1,63 @@
 <template>
   <div class="gb-maincontainer">
     <h1>Container Fee Report</h1>
-    <el-form ref="form-required" :rules="rules" :model="queryData">
-      <el-row type="flex" class="row-bg" :gutter="20">
-        <el-col :span="5">
-          <el-form-item label="Customer Code" prop="customerCode">
-            <el-select
-              v-model="queryData.customerCode"
-              :disabled="isDisabled"
-              filterable
-              size="small"
-              placeholder="Input key word"
-            >
-              <el-option
-                v-for="item in customerCodeOptions"
-                :key="item"
-                :label="item"
-                :value="item"
+    <div>
+      <el-form ref="form-required" :rules="rules" :model="queryData">
+        <el-row type="flex" class="row-bg">
+          <el-col :span="7">
+            <el-form-item label="Customer Code" prop="customerCode">
+              <el-select
+                v-model="queryData.customerCode"
+                :disabled="isDisabled"
+                filterable
+                size="small"
+                placeholder="Input key word"
+              >
+                <el-option
+                  v-for="item in customerCodeOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="Date Range" prop="dateRange">
+              <el-date-picker
+                v-model="queryData.dateRange"
+                type="daterange"
+                size="small"
+                range-separator="-"
+                start-placeholder="Start Date"
+                end-placeholder="End Date"
+                value-format="yyyy-MM-dd"
+                :picker-options="pickerOptions"
               />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="7">
-          <el-form-item label="Date Range" prop="dateRange">
-            <el-date-picker
-              v-model="queryData.dateRange"
-              type="daterange"
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-button type="primary" :loading="loading" @click="onQueryClicked">Query</el-button>
+            <el-button type="primary" :loading="loading" @click="onDownloadClicked" disabled>Download</el-button>
+          </el-col>
+          <el-col :span="5">
+            <el-input
+              id="csr-receiving-search"
+              v-model="search"
+              style="width:250px"
               size="small"
-              range-separator="-"
-              start-placeholder="Start Date"
-              end-placeholder="End Date"
-              value-format="yyyy-MM-dd"
-              :picker-options="pickerOptions"
+              placeholder="Search in results..."
+              :disabled="loading"
             />
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-button type="primary" :loading="loading" @click="onQueryClicked">Query</el-button>
-          <el-button type="primary" :loading="loading" @click="onDownloadClicked" disabled>Download</el-button>
-        </el-col>
-      </el-row>
-    </el-form>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
     <div>
         <el-table
         ref="container-report"
         show-summary
-        :data="localTableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        :data="filteredData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         stripe
         border
         :height="tableHight"
@@ -263,6 +275,7 @@ export default {
       search: '',
       totalEntries: 0,
       localTableData: [],
+      filteredData: [],
       pickerOptions: {
         shortcuts: [{
           text: 'Last week',
@@ -328,6 +341,16 @@ export default {
     }
   },
   watch: {
+    localTableData: function(val, oldVal) {
+      this.filteredData = val
+    },
+    search: function(val, oldVal) {
+      this.filteredData = this.localTableData.filter(data => {
+        return Object.keys(data).some(key => {
+          return String(data[key]).toLowerCase().indexOf(val.toLowerCase()) > -1
+        })
+      })
+    }
   },
   mounted() {
     getCustomerCodes().then(

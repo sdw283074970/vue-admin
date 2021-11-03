@@ -2,14 +2,23 @@
   <div>
     <div class="input-bar">
       <!-- <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button> -->
-      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
+      <el-button id="csr-receiving-sku-filter" :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">Search</el-button>
+      <el-input
+        v-model="containerNumber"
+        style="width:250px"
+        size="small"
+        :disabled="loading"
+        placeholder="Input Container number"
+      />
+      <el-button :loading="localLoading" type="primary" @click="onSearchClicked">Search</el-button>
       <el-input
         v-model="search"
         style="width:250px"
-        size="large"
+        size="small"
         :disabled="loading"
-        placeholder="Search..."
+        placeholder="Search in current page..."
       />
+      <el-button :loading="localLoading" icon="el-icon-refresh" type="warning" @click="clearFilter">Reset All</el-button>
     </div>
     <el-table
       ref="table"
@@ -188,10 +197,19 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-    <el-dialog
+    <!-- <el-dialog
       title="Manage Efiles"
       :visible.sync="filterVisible"
       width="300px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <generic-order-filter @onFilterConfirmed="onFilterConfirmed" />
+    </el-dialog> -->
+    <el-dialog
+      title="Search"
+      :visible.sync="filterVisible"
+      width="600px"
       top="5vh"
       :lock-scroll="false"
     >
@@ -202,6 +220,7 @@
 <script>
 /* eslint-disable */
 import { inboundOrderStatus } from '@/scripts/dropdown'
+import { getContainerIdByContainerNumber } from '@/api/receiving'
 
 export default {
     props:{
@@ -211,6 +230,7 @@ export default {
     },
     data() {
         return {
+            containerNumber: "",
             currentPage: 1,
             pageSize: 20,
             search: '',
@@ -311,6 +331,27 @@ export default {
       onFilterConfirmed(filter) {
         this.filterVisible = false;
         this.$emit('onFilterConfirmed', filter);
+      },
+      onSearchClicked() {
+        if (this.containerNumber == "")
+        {
+          alert("Container cannot be null")
+          return
+        }
+        getContainerIdByContainerNumber(this.containerNumber).then(x => {
+          var id = x.data
+
+          if (id === 0)
+          {
+            this.$message({
+            message: 'Container ' + this.containerNumber + ' not found in database',
+            type: 'warning'
+            });
+          }
+
+          if (id !== 0)
+            this.$router.push({path: '/warehouse-receiving/receiving-wo/' + id});
+        })
       }
     },
     mounted() {

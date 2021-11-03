@@ -4,7 +4,7 @@
     <el-button @click="btnBackClicked">Back</el-button>
     <el-button id="all-receiving-wo-summary-wo" class="gb-button" :disabled="step<3" :loading="loading" @click="downloadWOHandler">Download WO</el-button>
     <el-button id="all-receiving-wo-summary-receipt" class="gb-button" :disabled="step<8" :loading="loading" @click="onDownloadReceiptClicked">Download Receipt</el-button>
-    <el-button id="all-receiving-wo-summary-receipt" class="gb-button" :disabled="step<8" :loading="loading" @click="onDownloadBOLClicked">Download BOL</el-button>
+    <el-button id="all-receiving-wo-summary-receipt" class="gb-button" :loading="loading" @click="onDownloadBOLClicked">Download BOL</el-button>
     <el-button icon="el-icon-info" @click.prevent.stop="guide">Guide</el-button>
     <div id="all-receiving-wo-summary-status" style="margin-top:20px">
       <el-steps :active="step" finish-status="success" align-center>
@@ -105,7 +105,7 @@
       title="Select SKUs from Packing List"
       :visible.sync="bolVisible"
       top="5vh"
-      width="1400px"
+      width="1500px"
       :lock-scroll="false"
     >
       <el-table
@@ -191,13 +191,15 @@
         >
           <template slot-scope="scope">
             <el-input v-model="scope.row.selectedQuantity" style="width:80px" />
-            <el-button @click="onAllClicked(scope.row.id)">All</el-button>
+            <el-button @click="onReceivedClicked(scope.row.id)">Received</el-button>
+            <el-button @click="onReceivableClicked(scope.row.id)">Receivable</el-button>
             <el-button @click="onClearClicked(scope.row.id)">Clear</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div style="margin-top:10px;text-align:right">
-        <el-button :loading="loading" @click="onSelectAllClicked">Select All</el-button>
+        <el-button :loading="loading" @click="onSelectAllReceivedClicked">Set All Received Qty</el-button>
+        <el-button :loading="loading" @click="onSelectAllReceivableClicked">Set All Receivable Qty</el-button>
         <el-button :loading="loading" @click="onClearAllClicked">Clear All</el-button>
       </div>
       <div style="margin-top:10px;text-align:right">
@@ -290,10 +292,17 @@ export default {
     this.driver = new this.$driver()
   },
   methods: {
-    onAllClicked(id) {
+    onReceivedClicked(id) {
       this.orderDetails.find(function(i) {
         if (i.id === id) {
           i.selectedQuantity = i.actualQuantity
+        }
+      })
+    },
+    onReceivableClicked(id) {
+      this.orderDetails.find(function(i) {
+        if (i.id === id) {
+          i.selectedQuantity = i.quantity
         }
       })
     },
@@ -320,9 +329,14 @@ export default {
         type: 'warning'
       })
     },
-    onSelectAllClicked() {
+    onSelectAllReceivedClicked() {
       this.orderDetails.forEach(i => {
         i.selectedQuantity = i.actualQuantity
+      })
+    },
+    onSelectAllReceivableClicked() {
+      this.orderDetails.forEach(i => {
+        i.selectedQuantity = i.quantity
       })
     },
     onClearAllClicked() {

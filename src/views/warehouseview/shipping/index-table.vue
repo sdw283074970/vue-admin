@@ -2,6 +2,7 @@
   <div>
     <div class="input-bar">
       <!-- <el-button type="primary" icon="el-icon-document" @click="filterVisible=true">SKU Filter</el-button> -->
+      <el-button id="csr-receiving-sku-filter" :loading="localLoading" type="primary" icon="el-icon-document" @click="filterVisible=true">Search</el-button>
       <el-button :loading="localLoading" type="warning" @click="onNewOrderClicked">New Order</el-button>
       <el-button :loading="localLoading" type="danger" @click="onProcessingClicked">Processing</el-button>
       <el-button :loading="localLoading" type="success" @click="onReadyClicked">Ready</el-button>
@@ -161,10 +162,19 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-    <el-dialog
+    <!-- <el-dialog
       title="Manage Efiles"
       :visible.sync="filterVisible"
       width="300px"
+      top="5vh"
+      :lock-scroll="false"
+    >
+      <generic-order-filter @onFilterConfirmed="onFilterConfirmed" />
+    </el-dialog> -->
+    <el-dialog
+      title="Search"
+      :visible.sync="filterVisible"
+      width="600px"
       top="5vh"
       :lock-scroll="false"
     >

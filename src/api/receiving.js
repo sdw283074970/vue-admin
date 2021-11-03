@@ -387,3 +387,10 @@ export function getContainerReportByDate(code, startDate, endDate) {
     method: 'get'
   })
 }
+
+export function getContainerIdByContainerNumber(containerNumber) {
+  return request({
+    url: 'api/fba/warehouseinboundlog/?containerNumber=' + containerNumber,
+    method: 'get'
+  })
+}
