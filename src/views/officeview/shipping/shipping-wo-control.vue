@@ -19,6 +19,15 @@
       :lock-scroll="false"
     >
       <el-date-picker v-model="releasedDate" type="date" placeholder="Select Released Date" value-format="yyyy-MM-dd" style="width:200px" />
+      <label style="margin-left:10px">Is Pre-releasing?</label>
+      <el-switch
+        v-model="isPrereleasing"
+        style="margin-left:10px"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="Yes"
+        inactive-text="No"
+      />
       <div style="text-align:right">
         <el-popover
           v-model="popVisible"
@@ -82,7 +91,7 @@
 /* eslint-disable vue/require-prop-type-constructor */
 /* eslint-disable vue/require-default-prop */
 /* eslint-disable vue/require-prop-types */
-import { pushShipOrderStatus } from '@/api/shipping'
+import { pushShipOrderStatus, markShipOrderReleased } from '@/api/shipping'
 
 export default {
   props: {
@@ -91,6 +100,7 @@ export default {
   },
   data() {
     return {
+      isPrereleasing: false,
       pushVisible: false,
       cancelVisible: false,
       recallVisible: false,
@@ -183,7 +193,7 @@ export default {
     onConfirmReleasedClicked() {
       this.loading = true
       if (this.releasedDate !== '') {
-        pushShipOrderStatus(this.$route.params.shipOrderId, this.releasedDate).then(() => {
+        markShipOrderReleased(this.$route.params.shipOrderId, this.releasedDate, this.isPrereleasing).then(() => {
           this.$emit('reloadOrder')
           this.loading = false
           this.releaseVisible = false

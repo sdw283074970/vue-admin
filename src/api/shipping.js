@@ -200,6 +200,13 @@ export function pushShipOrderStatus(shipOrderId, operationDate) {
   })
 }
 
+export function markShipOrderReleased(shipOrderId, operationDate, isPrereleasing) {
+  return request({
+    url: 'api/fba/fbashiporder/?shipOrderId=' + shipOrderId + '&operationDate=' + operationDate + '&isPrereleasing=' + isPrereleasing,
+    method: 'put'
+  })
+}
+
 export function reverseShipOrderStatus(shipOrderId, operationDate) {
   return request({
     url: 'api/fba/fbashiporder/?shipOrderId=' + shipOrderId + '&operationDate=' + operationDate + '&operation=ReverseStatus',

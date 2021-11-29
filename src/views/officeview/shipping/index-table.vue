@@ -126,7 +126,7 @@
         min-width="20%"
       >
         <template slot-scope="scope">
-          <font :color="changeStatusColor(scope.row.status)">{{ scope.row.status }}</font>
+          <font :color="changeStatusColor(scope.row.status)">{{ scope.row.isPrereleasing && scope.row.status === 'Released' ? 'Pre-released' : scope.row.status }}</font>
         </template>
       </el-table-column>
       <el-table-column
