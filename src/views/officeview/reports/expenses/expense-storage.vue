@@ -21,9 +21,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="Is Estimating Charge">
+            <el-form-item label="Include Pre-released Order">
               <el-switch
-                v-model="isEstimatingCharge"
+                v-model="queryData.includePrereleasedOrder"
                 style="display: block"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
@@ -226,7 +226,6 @@ export default {
         return {
             storagePriceTable: [],
             warehouseLocations: [],
-            isEstimatingCharge: false,
             queryData: {
                 templateId: 0,
                 customerCode: '',
@@ -236,7 +235,8 @@ export default {
                 currentBillingDate: '',
                 warehouseLocation: '',
                 p1Discount: 1,
-                p2Discount: 1
+                p2Discount: 1,
+                includePrereleasedOrder: false
             },
             rules: {
                 customerCode: [

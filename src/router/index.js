@@ -214,7 +214,7 @@ export const asyncRoutes = [
       },
       {
         path: 'reports',
-        name: 'Reports',
+        name: 'Customer Reports',
         component: () => import('@/views/customerview/reports/index'),
         meta: { title: 'Reports', icon: 'table' }
       }
@@ -326,6 +326,40 @@ export const asyncRoutes = [
         component: () => import('@/views/officeview/reports/expenses/index'),
         meta: { title: 'Expenses Report', icon: 'table' }
       }
+    ]
+  },
+  {
+    path: '/usprime',
+    component: Layout,
+    meta: { title: 'US PRIME', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD'] },
+    children: [
+      // {
+      //   path: 'grandchannel',
+      //   component: () => import('@/views/othersystemsview/grandchannel'),
+      //   name: 'Grand Channel',
+      //   meta: { title: 'GRAND CHANNEL', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD', 'customer'] }
+      // },
+      // {
+      //   path: 'usprime',
+      //   component: () => import('@/views/othersystemsview/usprime/dnsender'),
+      //   name: 'us prime',
+      //   meta: { title: 'US PRIME', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD', 'customer'] },
+      //   children: [
+
+      //   ]
+      // }
+      {
+        path: 'dn-sender',
+        component: () => import('@/views/othersystemsview/usprime/dnsender'),
+        name: 'DN Sender',
+        meta: { title: 'DN Sender', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD', 'customer'] },
+      },
+      {
+        path: 'soa',
+        component: () => import('@/views/othersystemsview/usprime/soa/index'),
+        name: 'SOA',
+        meta: { title: 'SOA', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD', 'customer'] },
+      },
     ]
   },
   // {
