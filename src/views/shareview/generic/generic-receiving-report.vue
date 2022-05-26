@@ -19,6 +19,9 @@
         <el-form-item label="Dock Number" prop="dockNumber">
           <el-input v-model="report.dockNumber" />
         </el-form-item>
+        <el-form-item label="Damaged Box Qty" prop="damagedBox">
+          <el-input v-model="report.damagedBox" />
+        </el-form-item>
         <el-form-item label="Verified By" prop="verifiedBy">
           <el-input v-model="report.verifiedBy" />
         </el-form-item>
@@ -84,6 +87,7 @@ export default {
                         this.masterOrder.verifiedBy = this.report.verifiedBy
                         this.masterOrder.status = 'Received'
                         this.reportVisible = false
+                        this.masterOrder.damagedBox = this.report.damagedBox
                         this.$emit('onOperationSuccess')
                     })
                 } else {
@@ -108,6 +112,7 @@ export default {
                         this.masterOrder.dockNumber = this.report.dockNumber
                         this.masterOrder.verifiedBy = this.report.verifiedBy
                         this.masterOrder.status = 'Received'
+                        this.masterOrder.damagedBox = this.report.damagedBox
                         this.$emit('onOperationSuccess')
                     })
                 } else {

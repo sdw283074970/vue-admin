@@ -24,7 +24,7 @@
       <receiving-wo-instruction :master-order="masterOrder" :instructions="filteredInstructions" :step="step" @referashInstructions="referashInstructions" @onResetClicked="onResetClicked" />
     </div>
     <div class="chart-wrapper">
-      <invoice-detail v-if="!checkPermission(['trainee'])" :reference="masterOrder.container" :order-type="'MasterOrder'" :invoice-status="masterOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
+      <invoice-detail v-if="checkPermission(['accounting', 'admin', 'office'])" :reference="masterOrder.container" :order-type="'MasterOrder'" :invoice-status="masterOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
     </div>
   </div>
 </template>

@@ -16,7 +16,7 @@
       <shipping-wo-operationlogs :logs="logs" :ship-order="shipOrder" />
     </div>
     <div class="chart-wrapper">
-      <invoice-detail v-if="!checkPermission(['trainee'])" :reference="shipOrder.shipOrderNumber" :order-type="'ShipOrder'" :invoice-status="shipOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
+      <invoice-detail v-if="checkPermission(['accounting', 'admin', 'office'])" :reference="shipOrder.shipOrderNumber" :order-type="'ShipOrder'" :invoice-status="shipOrder.invoiceStatus" :invoices="invoices" @reloadOrder="reloadOrder" />
     </div>
   </div>
 </template>

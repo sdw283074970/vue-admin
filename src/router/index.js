@@ -331,7 +331,7 @@ export const asyncRoutes = [
   {
     path: '/usprime',
     component: Layout,
-    meta: { title: 'US PRIME', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD'] },
+    meta: { title: 'US PRIME', icon: 'user', role: ['office', 'trainee', 'accounting', 'TBD', 'customer'] },
     children: [
       // {
       //   path: 'grandchannel',

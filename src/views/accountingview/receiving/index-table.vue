@@ -162,10 +162,10 @@
         width="90"
       />
       <el-table-column
-        prop="skuNumber"
-        label="SKU #"
+        prop="actualSKU"
+        label="Actual SKU Qty"
         align="center"
-        width="80"
+        width="90"
       />
       <el-table-column
         label="Amount"

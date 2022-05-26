@@ -3,6 +3,7 @@
     <h1>Customer Manager</h1>
     <div class="input-bar">
       <el-button type="primary" icon="el-icon-plus" @click="onNewCustomerClicked">New Customer</el-button>
+      <el-button type="primary" icon="el-icon-download" @click="onDownloadExcelClicked">Download Excel</el-button>
       <el-button @click="clearFilter">Clear All Filters</el-button>
       <el-input
         v-model="search"
@@ -231,7 +232,8 @@
 
 <script>
 /* eslint-disable */
-import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates, getCustomerServices, getCustomerStoragePriceTable, swithCustomerStatus } from '@/api/customer'
+import { getCustomerDB, createCustomer, updateCustomer, linkToUser, getInstructionTemplates, getCustomerServices, getCustomerStoragePriceTable, swithCustomerStatus, GetAllCustomerInfoUrl } from '@/api/customer'
+import { downloadFile, } from '@/api/receiving'
 
 export default {
     data() {
@@ -367,6 +369,20 @@ export default {
                 return false;
             }
         });
+      },
+      onDownloadExcelClicked() {
+        const fullscreenLoading = this.$loading({
+          lock: false,
+          text: 'Downloading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        GetAllCustomerInfoUrl().then(body => {
+          fullscreenLoading.close()
+          downloadFile(body.data, 'Customer Report')
+        }).catch(e => {
+          fullscreenLoading.close()
+        })
       },
       onNewCustomerClicked() {
         // this.$refs.form-required.resetFields()

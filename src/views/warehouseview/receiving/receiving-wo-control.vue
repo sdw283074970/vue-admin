@@ -101,6 +101,7 @@ export default {
         inboundDate: '',
         outTime: '',
         unloadFinishTime: '',
+        damagedBox: '',
         verifiedBy: ''
       }
     }
@@ -172,6 +173,7 @@ export default {
       this.report.dockNumber = this.masterOrder.dockNumber
       this.report.outTime = this.masterOrder.outTime.substring(0, 4) === '1900' ? '' : this.masterOrder.outTime
       this.report.inboundDate = this.masterOrder.inboundDate.substring(0, 4) === '1900' ? '' : this.masterOrder.inboundDate
+      this.report.damagedBox = this.masterOrder.damagedBox
     },
     onOperationSuccess() {
       this.reportVisible = false

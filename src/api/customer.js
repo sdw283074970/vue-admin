@@ -10,6 +10,14 @@ export function getCustomerDB() {
   })
 }
 
+export function GetAllCustomerInfoUrl()
+{
+  return request({
+    url: 'api/fba/fbaindex/?operation=INSTOCKCUSTOMER',
+    method: 'get'
+  })
+}
+
 export function createCustomer(data) {
   return request({
     url: 'api/customermanagement/',
