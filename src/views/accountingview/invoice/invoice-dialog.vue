@@ -2,7 +2,7 @@
   <div>
     <h3>Reference: {{ reference }}</h3>
     <h3>Invoice from: {{ orderType }}</h3>
-    <h3>ORG PLTS: {{ originalPallets }} | SKU#: {{ skuNumber }} | PLTS: {{ pallets }} | CTNS: {{ cartons }}</h3>
+    <h3>ORG PLTS: {{ originalPallets }} | Actual SKU Qty: {{ actualSKU }} | PLTS: {{ pallets }} | CTNS: {{ cartons }}</h3>
     <el-form ref="form-required" :rules="rules" :model="service" label-width="150px">
       <el-row>
         <el-col :span="12"><div>
@@ -130,6 +130,7 @@ export default {
     return{
       originalPallets: 0,
       pallets: 0,
+      actualSKU: 0,
       cartons: 0,
       skuNumber: 0,
       inboundDate: '1900-1-1',
@@ -281,6 +282,7 @@ export default {
           this.inboundDate = body.data.inboundDate
           this.cancelDate = body.data.cancelDate
           this.createDate = body.data.createDate
+          this.actualSKU = body.data.actualSKU
       })
       getChargingType(this.reference, this.orderType).then(body => {
           let that = this.chargingTypeOptions

@@ -424,7 +424,7 @@ export default {
           return
         }
 
-        if (index === 5 || index === 7 || index === 12 || index === 13 || index === 11 || index === 14)
+        if (index === 5 || index === 7 ||  index === 12 || index === 13 || index === 11 || index === 14 || index === 15)
         {
           sums[index] = '-'
           return

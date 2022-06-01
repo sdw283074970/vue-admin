@@ -2,7 +2,7 @@
   <div>
     <h3>Reference: {{ reference }}</h3>
     <h3>Invoice from: {{ orderType }}</h3>
-    <h3>ORG PLTS: {{ originalPallets }} | SKU#: {{ skuNumber }} | PLTS: {{ pallets }} | CTNS: {{ cartons }}</h3>
+    <h3>ORG PLTS: {{ originalPallets }} | Actual SKU Qty: {{ actualSKU }} | PLTS: {{ pallets }} | CTNS: {{ cartons }}</h3>
     <el-form ref="form-required" :rules="rules" :model="service" label-width="150px">
       <el-row>
         <el-col :span="12"><div>
@@ -100,6 +100,7 @@ export default {
 
     return{
         originalPallets: 0,
+        actualSKU: 0,
         pallets: 0,
         cartons: 0,
         skuNumber: 0,
@@ -201,6 +202,7 @@ export default {
           this.cartons = body.data.cartons
           this.originalPallets = body.data.originalPallets
           this.skuNumber = body.data.skuNumber
+          this.actualSKU = body.data.actualSKU
       })
       getChargingType(this.reference, this.orderType).then(body => {
           let that = this.chargingTypeOptions
